@@ -1,0 +1,798 @@
+<title>__RUN_TITLE__</title>
+<style>
+.noo { --page:#0e0d0a; --deep:#05060c; --tile:#17140e; --hair:#2a2721;
+  --ink:#f2ede2; --ink2:#b5ad9c; --muted:#8a8478;
+  --gold:#eda100; --gold-deep:#c98500; --blue:#3987e5; --aqua:#199e70;
+  background:var(--deep); color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+.noo * { box-sizing:border-box; margin:0; }
+.noo #snap { height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+.noo section.plate { position:relative; height:100vh; scroll-snap-align:start; overflow:hidden; }
+.noo canvas.sky { position:absolute; inset:0; display:block; cursor:grab; }
+.noo canvas.sky.drag { cursor:grabbing; }
+
+.noo #mast { position:fixed; top:14px; left:20px; z-index:30; pointer-events:none; }
+.noo #mast .t { font-size:13px; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
+.noo #mast .s { font-size:10.5px; color:var(--muted); letter-spacing:0.06em; margin-top:3px; }
+
+.noo #dots { position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:30;
+  display:flex; flex-direction:column; gap:12px; }
+.noo #dots button { width:10px; height:10px; border-radius:50%; border:1px solid var(--muted);
+  background:transparent; cursor:pointer; padding:0; }
+.noo #dots button.on { background:var(--gold); border-color:var(--gold); }
+
+.noo .plateHead { position:absolute; top:64px; left:20px; z-index:5; max-width:430px; pointer-events:none; }
+.noo .plateHead .pl { font-size:10px; letter-spacing:0.3em; color:var(--gold-deep); }
+.noo .plateHead h2 { font-size:19px; letter-spacing:0.14em; font-weight:600; margin-top:4px; }
+.noo .plateHead .sub { font-size:11.5px; color:var(--ink2); margin-top:6px; line-height:1.45; }
+.noo .plateHead .method { font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:0.04em; }
+
+.noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 200px);
+  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px;
+  display:flex; flex-direction:column; }
+.noo .key .kh { font-size:10px; letter-spacing:0.2em; color:var(--muted); padding:10px 12px 8px;
+  border-bottom:1px solid var(--hair); text-transform:uppercase; }
+.noo .key .rows { overflow-y:auto; padding:4px 0; scrollbar-width:thin; }
+.noo .key .row { display:grid; grid-template-columns:14px 1fr 46px; gap:8px; align-items:center;
+  padding:6px 12px; cursor:pointer; border-left:2px solid transparent; }
+.noo .key .row:hover, .noo .key .row.hl { background:rgba(237,161,0,0.06); border-left-color:var(--gold-deep); }
+.noo .key .row .dot { width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 6px rgba(237,161,0,0.8); }
+.noo .key .row .nm { font-size:11px; color:var(--ink2); line-height:1.3; overflow:hidden;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.noo .key .row.hl .nm { color:var(--ink); }
+.noo .key .row .rt { text-align:right; }
+.noo .key .row .n { font:10px ui-monospace,Menlo,monospace; color:var(--muted); display:block; }
+.noo .key .row canvas.spark { width:46px; height:14px; display:block; margin-top:2px; }
+.noo .key .chip { display:inline-block; font-size:8.5px; letter-spacing:0.1em; text-transform:uppercase;
+  padding:1px 5px; border-radius:3px; margin-right:5px; vertical-align:1px; }
+.noo .chip.emerging { color:#0e0d0a; background:var(--gold); }
+.noo .chip.established { color:#0e0d0a; background:var(--blue); }
+.noo .chip.buzzword { color:#0e0d0a; background:var(--muted); }
+.noo .key .legend { font-size:9.5px; color:var(--muted); padding:8px 12px; border-top:1px solid var(--hair); line-height:1.5; }
+
+.noo .bar { position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:6;
+  display:flex; align-items:center; gap:12px; padding:8px 14px;
+  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px; }
+.noo .bar button.play { width:26px; height:26px; border-radius:6px; border:1px solid var(--hair);
+  background:transparent; color:var(--gold); cursor:pointer; font-size:12px; line-height:1; }
+.noo .bar button.play:hover { border-color:var(--gold-deep); }
+.noo .bar input[type=range] { width:210px; accent-color:var(--gold); cursor:pointer; }
+.noo .bar .stopLab { font:11px ui-monospace,Menlo,monospace; color:var(--ink); min-width:150px; }
+.noo .bar .count { font:10px ui-monospace,Menlo,monospace; color:var(--muted); min-width:170px; text-align:right; }
+
+.noo .capt { position:absolute; left:20px; bottom:16px; z-index:5;
+  max-width:clamp(210px, calc(50vw - 350px), 400px);
+  font-size:9.5px; color:var(--muted); line-height:1.5; pointer-events:none; }
+.noo .capt b { color:var(--ink2); font-weight:600; }
+
+.noo .detail { position:absolute; left:20px; bottom:88px; z-index:8; width:360px; max-height:44vh; overflow-y:auto;
+  background:rgba(23,20,14,0.96); border:1px solid var(--gold-deep); border-radius:8px;
+  padding:12px 14px; display:none; scrollbar-width:thin; }
+.noo .detail.on { display:block; }
+.noo .detail .dn { font-size:13px; color:var(--ink); letter-spacing:0.04em; margin-bottom:5px; }
+.noo .detail .dm { font-size:10px; color:var(--muted); margin-bottom:7px; }
+.noo .detail .dx { font-size:11px; color:var(--ink2); line-height:1.5; margin-bottom:8px; }
+.noo .detail .dt { font-size:10px; color:var(--muted); line-height:1.5; }
+.noo .detail .dt em { color:var(--ink2); font-style:normal; }
+.noo .detail .close { position:absolute; top:6px; right:9px; background:none; border:none;
+  color:var(--muted); cursor:pointer; font-size:13px; }
+
+.noo #tip { position:fixed; z-index:40; pointer-events:none; display:none; max-width:300px;
+  background:rgba(23,20,14,0.97); border:1px solid var(--hair); border-radius:6px;
+  padding:7px 10px; font-size:10.5px; color:var(--ink); line-height:1.4; }
+.noo #tip .ts { color:var(--muted); font:9.5px ui-monospace,Menlo,monospace; margin-top:3px; }
+
+.noo .keyToggle { display:none; position:absolute; top:64px; right:16px; z-index:7;
+  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:6px;
+  color:var(--ink2); font-size:10px; letter-spacing:0.15em; padding:6px 10px; cursor:pointer; }
+@media (max-width:980px) {
+  .noo .key { display:none; }
+  .noo .key.open { display:flex; top:100px; }
+  .noo .keyToggle { display:block; }
+  .noo .plateHead { max-width:300px; }
+  .noo .bar .count { display:none; }
+  .noo .capt { bottom:84px; max-width:320px; }
+}
+.noo.rec #dots, .noo.rec #tip, .noo.rec .keyToggle { display:none !important; }
+</style>
+
+<div class="noo" id="noo">
+  <header id="mast">
+    <div class="t">Armillary Noosphere</div>
+    <div class="s" id="mastSub"></div>
+  </header>
+  <nav id="dots" aria-label="plates"></nav>
+  <main id="snap"></main>
+  <div id="tip"></div>
+</div>
+
+<script>
+(() => {
+"use strict";
+const DATA = /*__DATA_JSON__*/;
+const REC = location.hash.includes("record");
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches && !REC;
+const SPHERE = (location.hash.match(/sphere=(\w+)/) || [])[1] === "pca" ? "pca" : "umap";
+
+const C = { page:"#0e0d0a", deep:"#05060c", ink:"#f2ede2", ink2:"#b5ad9c", muted:"#8a8478",
+  gold:"#eda100", goldDeep:"#c98500", blue:"#3987e5", aqua:"#199e70" };
+const RGB = { gold:"237,161,0", blue:"57,135,229", muted:"138,132,120", pale:"205,196,178" };
+const BAND_RGB = { emerging:RGB.gold, established:RGB.blue, buzzword:RGB.muted };
+const BAND_HEX = { emerging:C.gold, established:C.blue, buzzword:C.muted };
+
+/* doc spaces: 0 = full corpus, 1 = the week-only projector export (own embedding map) */
+const SPACES = DATA.spaces.map(b => ({ N: b.title.length,
+  XYZ: Float32Array.from(b[SPHERE] || b.umap), PUB: b.pub, SRC: b.src, TITLES: b.title }));
+const SRC_NAME = ["arXiv", "X", "web"];
+const BASE_MS = Date.parse(DATA.meta.base_date + "T00:00:00Z");
+const fmtD = (iso, style) => new Intl.DateTimeFormat("en-GB",
+  style === "wd" ? { weekday:"short", day:"numeric", month:"short", timeZone:"UTC" }
+  : style === "mo" ? { month:"long", year:"numeric", timeZone:"UTC" }
+  : style === "moShort" ? { month:"short", year:"numeric", timeZone:"UTC" }
+  : { day:"numeric", month:"short", timeZone:"UTC" }).format(new Date(iso + "T00:00:00Z"));
+const pubDayISO = d => new Date(BASE_MS + d * 864e5).toISOString().slice(0, 10);
+const nf = n => n.toLocaleString("en-US");
+const mixLine = m => Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  .map(([k, v]) => `${v} ${k === "Twitter/Grok" ? "X" : k}`).join(" · ") + " + blogs";
+
+document.getElementById("mastSub").textContent =
+  `the idea-sky of AI research & discourse · every star is a real document — drag to turn the sphere`;
+
+/* ---------- per-view copy ---------- */
+const VC = {
+  arxiv: {
+    plate:"PLATE I", title:"THE RESEARCH SKY",
+    sub:"What researchers are working on — six months of arXiv, one star per paper, revealed month by month.",
+    method:"trend-detection run · clusters: TF-IDF → SVD → UMAP → HDBSCAN · constellation names: TF-IDF top terms",
+    real:v => `<b>real</b> — every star is one arXiv paper (${nf(v.docs_total)} papers, Feb – Aug 2026); clusters, names and monthly counts come from the trend-detection TF-IDF run; the reveal follows true submission months.`,
+    simp:v => `<b>simplified</b> — the ${v.total_clusters} clusters are trimmed to the ${v.clusters.length} largest, shown complete (${nf(v.named_docs)} papers); the remaining clusters are sampled 1-in-3 as pale stars, the ${nf(v.dust_total)} unclustered papers 1-in-5 as dust; positions from this run's own projection; August is days old.`,
+    legend:"brightness = recency · lines sketch each constellation · pale stars = sampled papers from unnamed clusters · dust = sampled unclustered papers",
+  },
+  social: {
+    plate:"PLATE II", title:"THE ATTENTION SKY",
+    sub:"What the discourse is looking at right now — one week across X, Hacker News, LessWrong and the blogs, revealed day by day.",
+    method:"charted on its own week-only embedding map · clusters: HDBSCAN · constellation names: raw TF-IDF keywords",
+    real:v => `<b>real</b> — every star is one document from ${fmtD(v.stops[0])} – ${fmtD(v.stops[v.stops.length - 1])} 2026 (${v.n_docs} docs: ${mixLine(v.srcmix)}); all ${v.clusters.length} clusters shown; the day-by-day reveal follows true publish dates.`,
+    simp:v => `<b>simplified</b> — this plate is charted on its own week-only projection, so star positions are not comparable with Plates I & III; ${v.noise} unclustered documents shown as dust; TF-IDF names are raw, glitches and all.`,
+    legend:"brightness = recency · lines join each constellation (spanning tree) · dust = this week's unclustered documents",
+  },
+  meta: {
+    plate:"PLATE III", title:"THE EMERGENT SKY",
+    sub:"Metaconcepts as they assemble — clusters whose meaning is running ahead of shared vocabulary, named before the crowd names them.",
+    method:"names: 4-model panel → Claude Fable synthesis · band = name gap (semantic − lexical coherence)",
+    real:v => `<b>real</b> — the ${v.clusters.length} final-week clusters with the highest name gap; sizes, dates and memberships are the pipeline's; each name synthesizes 4 independent model readings.`,
+    simp:() => "<b>simplified</b> — the names are interpretive syntheses, not corpus text; <span style='color:#eda100'>gold = emerging</span> · <span style='color:#3987e5'>blue = established</span> · <span style='color:#8a8478'>grey = buzzword</span>.",
+    legend:"band colors: gold emerging · blue established · grey buzzword · click a constellation for its Fable reading",
+  },
+};
+
+/* ---------- bloom sprites ---------- */
+function sprite(rgb) {
+  const s = document.createElement("canvas"); s.width = s.height = 64;
+  const g = s.getContext("2d").createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, "rgba(255,250,236,0.95)");
+  g.addColorStop(0.18, `rgba(${rgb},0.75)`);
+  g.addColorStop(0.45, `rgba(${rgb},0.16)`);
+  g.addColorStop(1, `rgba(${rgb},0)`);
+  const cx = s.getContext("2d"); cx.fillStyle = g; cx.fillRect(0, 0, 64, 64);
+  return s;
+}
+const SPR = Object.fromEntries(Object.entries(RGB).map(([k, v]) => [k, sprite(v)]));
+
+/* ---------- geometry helpers ---------- */
+function mstEdges(rows, XYZ) {
+  const m = rows.length; if (m < 2) return [];
+  const px = i => [XYZ[3 * i], XYZ[3 * i + 1], XYZ[3 * i + 2]];
+  const P = rows.map(px);
+  const inT = new Uint8Array(m), dist = new Float64Array(m).fill(1e9), par = new Int32Array(m).fill(0);
+  const d2 = (a, b) => { const dx = a[0]-b[0], dy = a[1]-b[1], dz = a[2]-b[2]; return dx*dx + dy*dy + dz*dz; };
+  inT[0] = 1;
+  for (let j = 1; j < m; j++) dist[j] = d2(P[0], P[j]);
+  const out = [];
+  for (let k = 1; k < m; k++) {
+    let bi = -1, bd = 1e9;
+    for (let j = 0; j < m; j++) if (!inT[j] && dist[j] < bd) { bd = dist[j]; bi = j; }
+    if (bi < 0) break;
+    inT[bi] = 1;
+    if (bd < 0.30) out.push([rows[par[bi]], rows[bi]]);   // skip edges > ~32° arc
+    for (let j = 0; j < m; j++) if (!inT[j]) {
+      const nd = d2(P[bi], P[j]);
+      if (nd < dist[j]) { dist[j] = nd; par[j] = bi; }
+    }
+  }
+  return out;
+}
+function centroidOf(rows, XYZ) {
+  let x = 0, y = 0, z = 0;
+  rows.forEach(i => { x += XYZ[3*i]; y += XYZ[3*i+1]; z += XYZ[3*i+2]; });
+  const l = Math.hypot(x, y, z) || 1;
+  return [x/l, y/l, z/l];
+}
+
+/* ---------- sky ---------- */
+const skies = [];
+const snap = document.getElementById("snap");
+const tip = document.getElementById("tip");
+
+function makeSky(view, idx) {
+  const cfg = VC[view.id];
+  const sp = SPACES[view.space || 0];
+  const N = sp.N, XYZ = sp.XYZ, PUB = sp.PUB, SRC = sp.SRC, TITLES = sp.TITLES;
+  const sec = document.createElement("section");
+  sec.className = "plate"; sec.id = "s-" + view.id;
+  sec.innerHTML = `
+    <canvas class="sky"></canvas>
+    <div class="plateHead">
+      <div class="pl">${cfg.plate}</div><h2>${cfg.title}</h2>
+      <div class="sub">${cfg.sub}</div><div class="method">${cfg.method}</div>
+    </div>
+    <button class="keyToggle">KEY</button>
+    <aside class="key">
+      <div class="kh">constellations · ${view.clusters.length}</div>
+      <div class="rows"></div>
+      <div class="legend">${cfg.legend}</div>
+    </aside>
+    <div class="capt">${typeof cfg.real === "function" ? cfg.real(view) : cfg.real}<br>${typeof cfg.simp === "function" ? cfg.simp(view) : cfg.simp}</div>
+    <div class="bar">
+      <button class="play" aria-label="play">${RM ? "▸" : "❚❚"}</button>
+      <input type="range" min="0" max="${view.stops.length - 1}" step="1" value="0">
+      <div class="stopLab"></div><div class="count"></div>
+    </div>
+    <div class="detail"><button class="close">✕</button><div class="body"></div></div>`;
+  snap.appendChild(sec);
+
+  const cv = sec.querySelector("canvas.sky"), ctx = cv.getContext("2d");
+  const slider = sec.querySelector("input"), stopLab = sec.querySelector(".stopLab"),
+        countEl = sec.querySelector(".count"), playBtn = sec.querySelector(".play"),
+        keyEl = sec.querySelector(".key"), rowsEl = sec.querySelector(".rows"),
+        detailEl = sec.querySelector(".detail"), detailBody = detailEl.querySelector(".body");
+
+  /* precompute membership + reveal stops */
+  const memberOf = new Int16Array(N).fill(-1);
+  view.members.forEach(i => { memberOf[i] = -2; });
+  const stopDays = view.stops.map(s => Math.round((Date.parse(s + "T00:00:00Z") - BASE_MS) / 864e5));
+  const pubStop = new Int16Array(N);
+  view.members.forEach(i => {
+    let s = 0;
+    while (s < stopDays.length - 1 && PUB[i] > stopDays[s]) s++;
+    pubStop[i] = s;
+  });
+  const HEAVY = view.members.length > 4000;
+  const dShow = i => view.stopUnit === "month" ? fmtD(pubDayISO(PUB[i]), "moShort") : fmtD(pubDayISO(PUB[i]));
+  /* heavy skies: at most SPRITE_CAP bloom sprites per stop (deterministic pick) */
+  const spriteOK = new Uint8Array(N);
+  if (HEAVY) {
+    const SPRITE_CAP = 1400, perStop = new Int32Array(view.stops.length);
+    view.members.forEach(i => {
+      if (memberOf[i] >= 0 && perStop[pubStop[i]]++ < SPRITE_CAP) spriteOK[i] = 1;
+    });
+  }
+  const clusters = view.clusters.map((c, k) => {
+    c.rows.forEach(i => { memberOf[i] = k; });
+    const cen = centroidOf(c.rows, XYZ);
+    let alpha = c.rows[0], bd = -2;
+    c.rows.forEach(i => {
+      const d = XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
+      if (d > bd) { bd = d; alpha = i; }
+    });
+    const rgb = view.id === "meta" ? BAND_RGB[c.band] : RGB.gold;
+    const dotc = i => XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
+    const eRows = HEAVY ? [...c.rows].sort((a, b) => dotc(b) - dotc(a)).slice(0, 60) : c.rows;
+    return { ...c, k, cen, alpha, rgb,
+      hex: view.id === "meta" ? BAND_HEX[c.band] : C.gold,
+      spr: view.id === "meta" ? (c.band === "established" ? "blue" : c.band === "buzzword" ? "muted" : "gold") : "gold",
+      edges: mstEdges(eRows, XYZ),
+      short: view.id === "meta"
+        ? (c.name.length > 30 ? c.name.slice(0, 28).replace(/\s+\S*$/, "") + "…" : c.name)
+        : c.name.split(" · ").slice(0, 2).join(" · ") };
+  });
+  /* per-stop member counts */
+  const stopTotals = view.stops.map((_, s) => {
+    let on = 0, fresh = 0;
+    view.members.forEach(i => { if (pubStop[i] <= s) on++; if (pubStop[i] === s) fresh++; });
+    return [on, fresh];
+  });
+
+  /* home pose: open facing this view's member centroid */
+  const mc = centroidOf(view.members, XYZ);
+  const homeTheta = Math.atan2(-mc[0], mc[2]);
+  const homePhi = Math.max(-0.9, Math.min(0.9, Math.atan2(mc[1], Math.hypot(mc[0], mc[2]))));
+  const st = { theta: homeTheta, phi: homePhi, spin: 0, t: 0,
+    stop: RM ? view.stops.length - 1 : 0, playing: !RM, playAcc: 0,
+    hover: -1, focus: -1, drag: null, idleAt: 0,
+    fTheta: null, fPhi: null, ease: 0 };
+  let W = 0, H = 0, R = 0, cx0 = 0, cy0 = 0, bg = null;
+  const SX = new Float32Array(N), SY = new Float32Array(N), SZ = new Float32Array(N);
+
+  function resize() {
+    const r = sec.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+    if (!r.width) return;
+    W = Math.round(r.width); H = Math.round(r.height);
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const keyW = W > 980 ? 330 : 0;
+    R = Math.min((W - keyW) * 0.42, H * 0.365);
+    cx0 = (W - keyW) / 2; cy0 = H * 0.52;
+    bg = ctx.createRadialGradient(cx0, cy0, R * 0.2, cx0, cy0, Math.max(W, H) * 0.85);
+    bg.addColorStop(0, "#0d0f17"); bg.addColorStop(0.55, "#080a10"); bg.addColorStop(1, C.deep);
+  }
+
+  /* rotation of the star sphere (rings stay fixed) */
+  function project() {
+    const th = st.theta + st.spin, ph = st.phi;
+    const cT = Math.cos(th), sT = Math.sin(th), cP = Math.cos(ph), sP = Math.sin(ph);
+    for (let i = 0; i < N; i++) {
+      const x = XYZ[3*i], y = XYZ[3*i+1], z = XYZ[3*i+2];
+      const x1 = x * cT + z * sT, z1 = -x * sT + z * cT;
+      const y2 = y * cP - z1 * sP, z2 = y * sP + z1 * cP;
+      SX[i] = cx0 + x1 * R; SY[i] = cy0 - y2 * R; SZ[i] = z2;
+    }
+  }
+  function projectVec(v) {
+    const th = st.theta + st.spin, ph = st.phi;
+    const cT = Math.cos(th), sT = Math.sin(th), cP = Math.cos(ph), sP = Math.sin(ph);
+    const x1 = v[0] * cT + v[2] * sT, z1 = -v[0] * sT + v[2] * cT;
+    const y2 = v[1] * cP - z1 * sP, z2 = v[1] * sP + z1 * cP;
+    return [cx0 + x1 * R, cy0 - y2 * R, z2];
+  }
+
+  /* armillary rings: fixed instrument frame around the turning sky */
+  const TILT = 0.32;
+  function ringPts(nx, ny, nz, rad) {
+    let ux = -ny, uy = nx, uz = 0;
+    const ul = Math.hypot(ux, uy, uz) || 1; ux /= ul; uy /= ul;
+    const vx = ny * uz - nz * uy, vy = nz * ux - nx * uz, vz = nx * uy - ny * ux;
+    const pts = [];
+    for (let a = 0; a <= 128; a++) {
+      const t = a / 128 * Math.PI * 2, c = Math.cos(t), s = Math.sin(t);
+      const x = rad * (ux * c + vx * s), y = rad * (uy * c + vy * s), z = rad * (uz * c + vz * s);
+      pts.push([cx0 + x * R, cy0 - y * R, z]);
+    }
+    return pts;
+  }
+  const cosT = Math.cos(TILT), sinT = Math.sin(TILT);
+  const AXES = {
+    eq: [sinT * 0.4, cosT, sinT * 0.9],
+    ecl: [sinT * 0.4 + 0.38, cosT - 0.1, sinT * 0.9],
+    mer: [cosT, -sinT * 0.35, 0.28],
+  };
+  Object.values(AXES).forEach(v => { const l = Math.hypot(...v); v[0]/=l; v[1]/=l; v[2]/=l; });
+  const RINGS = [
+    { n: AXES.eq, r: 1.055, w: 1.4, ticks: true },
+    { n: AXES.eq, r: 1.10, w: 1.0, ticks: false },
+    { n: AXES.ecl, r: 1.135, w: 0.8, ticks: false },
+    { n: AXES.mer, r: 1.08, w: 0.8, ticks: false },
+  ];
+  function drawRings(front) {
+    ctx.lineCap = "round";
+    RINGS.forEach(rg => {
+      const pts = ringPts(...rg.n, rg.r);
+      ctx.strokeStyle = front ? "rgba(201,133,0,0.5)" : "rgba(201,133,0,0.14)";
+      ctx.lineWidth = rg.w;
+      ctx.beginPath();
+      let pen = false;
+      pts.forEach(p => {
+        const ok = front ? p[2] >= 0 : p[2] < 0;
+        if (ok) { pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); pen = true; }
+        else pen = false;
+      });
+      ctx.stroke();
+      if (rg.ticks) {
+        const inner = ringPts(...rg.n, rg.r), outer = ringPts(...rg.n, rg.r + 0.045);
+        ctx.strokeStyle = front ? "rgba(237,161,0,0.55)" : "rgba(237,161,0,0.15)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let a = 0; a < 128; a += 4) {
+          const ok = front ? inner[a][2] >= 0 : inner[a][2] < 0;
+          if (!ok) continue;
+          ctx.moveTo(inner[a][0], inner[a][1]); ctx.lineTo(outer[a][0], outer[a][1]);
+        }
+        ctx.stroke();
+      }
+    });
+    if (front) {  /* polar axis + finials */
+      const [ax, ay, az] = AXES.eq;
+      const top = [cx0 + ax * R * 1.22, cy0 - ay * R * 1.22], bot = [cx0 - ax * R * 1.22, cy0 + ay * R * 1.22];
+      ctx.strokeStyle = "rgba(138,132,120,0.35)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(bot[0], bot[1]); ctx.stroke();
+      ctx.fillStyle = "rgba(237,161,0,0.8)";
+      [top, bot].forEach(p => {
+        ctx.beginPath();
+        ctx.moveTo(p[0], p[1] - 4); ctx.lineTo(p[0] + 3, p[1]); ctx.lineTo(p[0], p[1] + 4); ctx.lineTo(p[0] - 3, p[1]);
+        ctx.closePath(); ctx.fill();
+      });
+    }
+  }
+
+  function render() {
+    if (!W) resize();
+    if (!W) return;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    project();
+    drawRings(false);
+
+    /* corpus dust (non-members) — one path per bucket, not one fill per star */
+    ctx.fillStyle = "rgba(168,178,212,0.05)";
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) if (memberOf[i] === -1 && SZ[i] < 0) ctx.rect(SX[i], SY[i], 1.3, 1.3);
+    ctx.fill();
+    ctx.fillStyle = "rgba(168,178,212,0.11)";
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) if (memberOf[i] === -1 && SZ[i] >= 0) ctx.rect(SX[i], SY[i], 1.3, 1.3);
+    ctx.fill();
+
+    const hl = st.focus >= 0 ? st.focus : st.hover;
+
+    /* member stars */
+    ctx.globalCompositeOperation = "lighter";
+    const s0 = st.stop;
+    if (!HEAVY) {
+      for (let m = 0; m < view.members.length; m++) {
+        const i = view.members[m], ps = pubStop[i];
+        if (ps > s0) continue;
+        const k = memberOf[i];
+        const z = SZ[i];
+        const fresh = ps === s0;
+        const ageF = fresh ? 1 : Math.max(0.34, 1 - 0.055 * (s0 - ps));
+        const depthF = z >= 0 ? 0.75 + 0.25 * z : 0.22;
+        const dimF = hl >= 0 && k !== hl ? 0.25 : 1;
+        const tw = fresh && !RM ? 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7) : 1;
+        const sz = (fresh ? 5.2 : 3.4) * (z >= 0 ? 1 : 0.65) * tw;
+        ctx.globalAlpha = Math.min(1, 0.9 * ageF * depthF * dimF);
+        const sp = k >= 0 ? clusters[k].spr : "pale";
+        ctx.drawImage(SPR[sp], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+      }
+      ctx.globalAlpha = 1;
+    } else {
+      /* tens of thousands of stars: flat pixels for the mass, blooms only
+         where they matter (this stop's named-cluster papers, highlight) */
+      const dimAll = hl >= 0;
+      ctx.fillStyle = `rgba(233,186,94,${dimAll ? 0.06 : 0.15})`;
+      ctx.beginPath();
+      for (let m = 0; m < view.members.length; m++) {
+        const i = view.members[m];
+        if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
+        ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+      }
+      ctx.fill();
+      ctx.fillStyle = `rgba(240,200,118,${dimAll ? 0.10 : 0.42})`;
+      ctx.beginPath();
+      for (let m = 0; m < view.members.length; m++) {
+        const i = view.members[m];
+        if (pubStop[i] >= s0 || SZ[i] < 0) continue;
+        ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
+      }
+      ctx.fill();
+      /* this stop's papers: capped sprite budget, bright pixels for the rest */
+      ctx.fillStyle = `rgba(250,225,160,${dimAll ? 0.15 : 0.72})`;
+      ctx.beginPath();
+      for (let m = 0; m < view.members.length; m++) {
+        const i = view.members[m];
+        if (pubStop[i] !== s0) continue;
+        if (memberOf[i] >= 0 && spriteOK[i] && !dimAll) continue;
+        const sc = SZ[i] >= 0 ? 1 : 0.3;
+        ctx.rect(SX[i] - 1.2 * sc, SY[i] - 1.2 * sc, 2.4 * sc, 2.4 * sc);
+      }
+      ctx.fill();
+      if (!dimAll) for (let m = 0; m < view.members.length; m++) {
+        const i = view.members[m];
+        if (pubStop[i] !== s0 || memberOf[i] < 0 || !spriteOK[i]) continue;
+        const z = SZ[i];
+        const tw = RM ? 1 : 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7);
+        const sz = 3.6 * (z >= 0 ? 1 : 0.6) * tw;
+        ctx.globalAlpha = Math.min(1, 0.92 * (z >= 0 ? 0.8 + 0.2 * z : 0.22));
+        ctx.drawImage(SPR[clusters[memberOf[i]].spr], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+      }
+      ctx.globalAlpha = 1;
+      if (hl >= 0) {
+        const c = clusters[hl];
+        for (const i of c.rows) {
+          if (pubStop[i] > s0) continue;
+          const z = SZ[i], fresh = pubStop[i] === s0;
+          const sz = (fresh ? 4.6 : 3.0) * (z >= 0 ? 1 : 0.65);
+          ctx.globalAlpha = Math.min(1, (fresh ? 0.95 : 0.6) * (z >= 0 ? 1 : 0.3));
+          ctx.drawImage(SPR[c.spr], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    /* constellation lines */
+    clusters.forEach(c => {
+      const boost = hl === c.k ? 0.42 : 0.13;
+      ctx.strokeStyle = `rgba(${c.rgb},${boost})`;
+      ctx.lineWidth = hl === c.k ? 1.2 : 0.8;
+      ctx.beginPath();
+      c.edges.forEach(([a, b]) => {
+        if (pubStop[a] > s0 || pubStop[b] > s0) return;
+        if (SZ[a] < 0.02 || SZ[b] < 0.02) return;
+        ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[b], SY[b]);
+      });
+      ctx.stroke();
+    });
+
+    /* diffraction spikes on each constellation's alpha star */
+    ctx.strokeStyle = "rgba(255,244,214,0.5)"; ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    clusters.forEach(c => {
+      const i = c.alpha;
+      if (pubStop[i] > s0 || SZ[i] < 0.05) return;
+      if (hl >= 0 && c.k !== hl) return;
+      const L = 8;
+      ctx.moveTo(SX[i] - L, SY[i]); ctx.lineTo(SX[i] + L, SY[i]);
+      ctx.moveTo(SX[i], SY[i] - L); ctx.lineTo(SX[i], SY[i] + L);
+    });
+    ctx.stroke();
+    ctx.globalCompositeOperation = "source-over";
+
+    /* constellation labels, collision-culled, biggest first */
+    ctx.font = "10px ui-sans-serif, system-ui, sans-serif";
+    ctx.letterSpacing = "0.12em";
+    ctx.textAlign = "center";
+    const placed = [];
+    [...clusters].sort((a, b) => b.size - a.size).forEach(c => {
+      const p = projectVec(c.cen);
+      if (p[2] < 0.18) return;
+      let vis = 0;
+      for (const i of c.rows) if (pubStop[i] <= s0) { if (++vis > 1) break; }
+      if (vis < 2) return;
+      const txt = c.short.toUpperCase();
+      const w = ctx.measureText(txt).width;
+      const bx = { x0: p[0] - w/2 - 4, x1: p[0] + w/2 + 4, y0: p[1] - 18, y1: p[1] - 2 };
+      if (placed.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0)) return;
+      placed.push(bx);
+      const on = hl === c.k;
+      ctx.fillStyle = "rgba(5,6,12,0.55)";
+      ctx.fillRect(bx.x0, bx.y0 + 2, bx.x1 - bx.x0, 13);
+      ctx.fillStyle = on ? C.ink : `rgba(${c.rgb},0.82)`;
+      ctx.fillText(txt, p[0], p[1] - 7);
+    });
+    ctx.letterSpacing = "0em";
+
+    drawRings(true);
+  }
+
+  /* ---------- state advance ---------- */
+  function setStop(s, fromSlider) {
+    st.stop = Math.max(0, Math.min(view.stops.length - 1, s));
+    if (!fromSlider) slider.value = st.stop;
+    const iso = view.stops[st.stop], nStops = view.stops.length;
+    stopLab.textContent = (view.stopUnit === "week"
+      ? `week ending ${fmtD(iso)} · ${st.stop + 1}/${nStops}`
+      : view.stopUnit === "month"
+      ? `${fmtD(iso, "mo")} · ${st.stop + 1}/${nStops}`
+      : `${fmtD(iso, "wd")} · day ${st.stop + 1}/${nStops}`)
+      + (view.partialLast && st.stop === nStops - 1 ? " · partial" : "");
+    const [on, fresh] = stopTotals[st.stop];
+    countEl.textContent = `${nf(on)} on sky · +${nf(fresh)} new`;
+    drawSparks();
+  }
+  function setPlaying(p) {
+    st.playing = p && !RM;
+    playBtn.textContent = st.playing ? "❚❚" : "▸";
+    st.playAcc = 0;
+  }
+  function tick(dt) {
+    st.t += dt;
+    if (!st.drag && st.focus < 0 && !RM && st.t - st.idleAt > 2.5) st.spin += dt * 0.05;
+    if (st.fTheta !== null) {
+      st.ease = Math.min(1, st.ease + dt / 0.7);
+      const e = 1 - Math.pow(1 - st.ease, 3);
+      st.theta = st.eTheta0 + (st.fTheta - st.eTheta0) * e;
+      st.phi = st.ePhi0 + (st.fPhi - st.ePhi0) * e;
+      if (st.ease >= 1) st.fTheta = null;
+    }
+    if (st.playing) {
+      st.playAcc += dt;
+      if (st.playAcc > 1.6) {
+        st.playAcc = 0;
+        if (st.stop < view.stops.length - 1) setStop(st.stop + 1);
+        else setPlaying(false);
+      }
+    }
+  }
+
+  /* ---------- key panel ---------- */
+  const sparks = [];
+  view.clusters.forEach((c, k) => {
+    const row = document.createElement("div");
+    row.className = "row"; row.dataset.k = k;
+    const cl = clusters[k];
+    const chip = view.id === "meta" ? `<span class="chip ${c.band}">${c.band}</span>` : "";
+    row.innerHTML = `<span class="dot" style="background:${cl.hex};box-shadow:0 0 6px rgba(${cl.rgb},0.8)"></span>
+      <div class="nm">${chip}${c.name}</div>
+      <div class="rt"><span class="n">${c.size}</span><canvas class="spark" width="92" height="28"></canvas></div>`;
+    rowsEl.appendChild(row);
+    sparks.push([row.querySelector(".spark"), c.wk, cl]);
+    row.addEventListener("mouseenter", () => { st.hover = k; markRows(); });
+    row.addEventListener("mouseleave", () => { st.hover = -1; markRows(); });
+    row.addEventListener("click", () => focusCluster(k));
+  });
+  function markRows() {
+    const hl = st.focus >= 0 ? st.focus : st.hover;
+    rowsEl.querySelectorAll(".row").forEach(r => r.classList.toggle("hl", +r.dataset.k === hl));
+  }
+  function drawSparks() {
+    sparks.forEach(([scv, wk, cl]) => {
+      const g = scv.getContext("2d");
+      g.clearRect(0, 0, 92, 28);
+      const mx = Math.max(1, ...wk), bw = 92 / wk.length;
+      wk.forEach((v, j) => {
+        const h = Math.max(v ? 3 : 1, v / mx * 24);
+        g.fillStyle = j === st.stop ? cl.hex : j < st.stop ? `rgba(${cl.rgb},0.45)` : "rgba(138,132,120,0.25)";
+        g.fillRect(j * bw + 1, 28 - h, Math.max(1.5, bw - 2), h);
+      });
+    });
+  }
+
+  function focusCluster(k) {
+    st.focus = k;
+    const c = clusters[k];
+    st.eTheta0 = st.theta + st.spin; st.spin = 0; st.ePhi0 = st.phi; st.ease = 0;
+    const [x, y, z] = c.cen, h = Math.hypot(x, z);
+    let tt = Math.atan2(-x, z);
+    const cur = ((st.eTheta0 % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    st.eTheta0 = cur;
+    let dlt = tt - cur;
+    while (dlt > Math.PI) dlt -= 2 * Math.PI;
+    while (dlt < -Math.PI) dlt += 2 * Math.PI;
+    st.fTheta = cur + dlt;
+    st.fPhi = Math.atan2(y, h);
+    markRows();
+    const fullDesc = (c.attractor || c.excerpt || "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/^#+\s*/gm, "")
+      .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+      .replace(/\*([^*]+)\*/g, "<i>$1</i>")
+      .split(/\n{2,}/).map(p => `<div class="dx">${p.trim().replace(/\n/g, " ")}</div>`).join("");
+    const src = view.id === "meta"
+      ? `<div class="dm"><span class="chip ${c.band}">${c.band}</span> name gap ${c.gap} · ${c.size} documents · keywords: ${c.kw}</div>
+         ${fullDesc}
+         <div class="dm">panel: ${c.panel.join(" · ")} → Fable synthesis</div>`
+      : `<div class="dm">${c.size} documents · raw TF-IDF name</div>`;
+    const latest = [...c.rows].sort((a, b) => PUB[b] - PUB[a]).slice(0, 3)
+      .map(i => `<em>${TITLES[i]}</em> — ${SRC_NAME[SRC[i]]}, ${dShow(i)}`).join("<br>");
+    detailBody.innerHTML = `<div class="dn">${c.name}</div>${src}<div class="dt">${latest}</div>`;
+    detailEl.classList.add("on");
+  }
+  function unfocus() {
+    if (st.focus < 0) return;
+    st.focus = -1; st.fTheta = null; st.idleAt = st.t;
+    detailEl.classList.remove("on"); markRows();
+  }
+  detailEl.querySelector(".close").addEventListener("click", unfocus);
+
+  /* ---------- pointer ---------- */
+  let moved = false;
+  cv.addEventListener("pointerdown", e => {
+    st.drag = { x: e.clientX, y: e.clientY }; moved = false;
+    st.theta += st.spin; st.spin = 0; st.fTheta = null;
+    cv.classList.add("drag"); cv.setPointerCapture(e.pointerId);
+  });
+  cv.addEventListener("pointermove", e => {
+    if (st.drag) {
+      const dx = e.clientX - st.drag.x, dy = e.clientY - st.drag.y;
+      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+      st.theta += dx * 0.005;
+      st.phi = Math.max(-1.25, Math.min(1.25, st.phi + dy * 0.005));
+      st.drag = { x: e.clientX, y: e.clientY };
+      st.idleAt = st.t;
+      return;
+    }
+    /* hover tooltip */
+    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    let bi = -1, bd = 100;
+    for (const i of view.members) {
+      if (pubStop[i] > st.stop || SZ[i] < 0) continue;
+      const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
+      if (d < bd) { bd = d; bi = i; }
+    }
+    if (bi >= 0) {
+      tip.style.display = "block";
+      tip.style.left = Math.min(innerWidth - 310, e.clientX + 14) + "px";
+      tip.style.top = (e.clientY + 12) + "px";
+      tip.innerHTML = `${TITLES[bi]}<div class="ts">${SRC_NAME[SRC[bi]]} · ${dShow(bi)}${memberOf[bi] >= 0 ? " · " + clusters[memberOf[bi]].short : ""}</div>`;
+    } else tip.style.display = "none";
+  });
+  cv.addEventListener("pointerup", e => {
+    cv.classList.remove("drag");
+    const wasDrag = moved; st.drag = null; st.idleAt = st.t;
+    if (wasDrag) return;
+    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    let bi = -1, bd = 120;
+    for (const i of view.members) {
+      if (pubStop[i] > st.stop || SZ[i] < 0) continue;
+      const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
+      if (d < bd) { bd = d; bi = i; }
+    }
+    if (bi >= 0 && memberOf[bi] >= 0) focusCluster(memberOf[bi]);
+    else unfocus();
+  });
+  cv.addEventListener("pointerleave", () => { tip.style.display = "none"; });
+
+  slider.addEventListener("input", () => { setPlaying(false); setStop(+slider.value, true); });
+  playBtn.addEventListener("click", () => {
+    if (!st.playing && st.stop >= view.stops.length - 1) setStop(0);
+    setPlaying(!st.playing);
+  });
+  sec.querySelector(".keyToggle").addEventListener("click", () => keyEl.classList.toggle("open"));
+
+  setStop(st.stop); setPlaying(st.playing && !RM);
+  const sky = { id: view.id, sec, resize, render, tick, st, setStop, setPlaying, view, unfocus,
+    home: [homeTheta, homePhi] };
+  skies.push(sky);
+  return sky;
+}
+
+DATA.views.forEach((v, i) => makeSky(v, i));
+
+/* ---------- dots nav + activation ---------- */
+const dots = document.getElementById("dots");
+skies.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.title = VC[s.id].plate + " — " + VC[s.id].title;
+  b.addEventListener("click", () => s.sec.scrollIntoView({ behavior: "smooth" }));
+  dots.appendChild(b);
+});
+let active = skies[0];
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.5) {
+      active = skies.find(s => s.sec === e.target) || active;
+      dots.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", skies[i] === active));
+      if (!RM && !REC && active.st.stop === 0 && !active.st.playing) active.setPlaying(true);
+    }
+  });
+}, { root: snap, threshold: [0.55] });
+skies.forEach(s => io.observe(s.sec));
+dots.querySelector("button").classList.add("on");
+
+addEventListener("keydown", e => {
+  if (e.key === "Escape") active.unfocus();
+  if (e.key === "ArrowRight") { active.setPlaying(false); active.setStop(active.st.stop + 1); }
+  if (e.key === "ArrowLeft") { active.setPlaying(false); active.setStop(active.st.stop - 1); }
+});
+addEventListener("resize", () => skies.forEach(s => { s.resize(); s.render(); }));
+
+/* ---------- loop ---------- */
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (!document.hidden && active) { active.tick(dt); active.render(); }
+  requestAnimationFrame(loop);
+}
+skies.forEach(s => { s.resize(); s.render(); });
+if (!REC) requestAnimationFrame(loop);
+
+/* ---------- deterministic record hook ---------- */
+if (REC) {
+  document.getElementById("noo").classList.add("rec");
+  let dt = 1 / 24, recT = 0;
+  window.__rec = {
+    init(fps) { dt = 1 / fps; recT = 0; this.view(active.id); },
+    view(id) {
+      active = skies.find(s => s.id === id) || active;
+      active.sec.scrollIntoView({ behavior: "instant" });
+      recT = 0;
+      active.st.theta = active.home[0]; active.st.phi = active.home[1];
+      active.st.spin = 0; active.st.t = 0;
+      active.setPlaying(false); active.setStop(0);
+      const stops = active.view.stops.length;
+      this.total = stops * 1.8 + 5;
+      active.resize(); active.render();
+    },
+    frame() {
+      recT += dt;
+      const stops = active.view.stops.length;
+      active.st.t = recT; active.st.spin = recT * 0.05;
+      active.setStop(Math.min(stops - 1, Math.floor(recT / 1.8)));
+      active.render();
+      return recT;
+    },
+    total: 0,
+  };
+}
+})();
+</script>
