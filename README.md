@@ -25,7 +25,9 @@ source data) vs **simplified** (windows, sampling, and labeling choices made her
   sliders, deterministic `#record` hooks; data is injected at the `/*__DATA_JSON__*/` token
 - `noosphere_data.json` — the packed data (3 document-spaces + 3 view definitions)
 - `build_noosphere.py` — injects the JSON into the template:
-  `python3 build_noosphere.py --out index.html`
+  `python3 build_noosphere.py --standalone --out index.html`
+  (`--standalone` wraps the page in a full `<!doctype html>` document; without it
+  you get the bare fragment used for claude.ai artifact publishing)
 - `build/build_noosphere_data.py` — provenance copy of the data-prep script; it reads
   the private scraping/clustering pipelines (trend-detection + mindspace) and is **not
   runnable from this repo** — it documents exactly how `noosphere_data.json` was made
@@ -42,7 +44,7 @@ Pure static site — no framework, no build.
 Change the template, then rebuild the page:
 
 ```
-python3 build_noosphere.py --out index.html
+python3 build_noosphere.py --standalone --out index.html
 ```
 
 Refreshing the *data* (new pipeline runs) happens in the source repos; regenerate
