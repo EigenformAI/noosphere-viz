@@ -178,10 +178,10 @@ const VC = {
   arxiv: {
     plate:"PLATE I", title:"THE RESEARCH SKY",
     sub:"What researchers are working on — six months of arXiv, one star per paper, revealed month by month.",
-    method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords",
+    method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month",
     real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; the reveal follows true submission dates.`,
-    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}; August is days old.`,
-    legend:"colour = that month's activity (white few → yellow → red many) · brightness = recency · lines sketch each constellation · dust = unclustered papers · key rows are sorted by size — click one to fly to it",
+    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August), and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August's rate rests on only ${v.days[v.days.length - 1]} days of papers; read its ranking loosely.`,
+    legend:"colour = that month's publishing rate, papers per day (white quiet → yellow → red busy) · brightness = recency · lines sketch each constellation · dust = unclustered papers · key rows are sorted by size — click one to fly to it",
   },
   social: {
     plate:"PLATE II", title:"THE ATTENTION SKY",
@@ -354,8 +354,15 @@ function makeSky(view, idx) {
     });
   }
   /* per-view color scale: meta = name-gap ramp, social = size heat, arxiv = that month's activity heat */
-  const wkMax = Math.max(1, ...view.clusters.map(c => Math.max(...c.wk)));
-  const actT = v => Math.round(Math.sqrt(Math.min(1, v / wkMax)) * 12) / 12; // 12-bucket, keeps sprite cache small
+  /* activity reads as a rate — papers per weekday-equivalent day — so the two
+     clipped months at the ends of the window (Feb starts on the 4th, Aug stops
+     on the 3rd) are measured on the same footing as the full ones. Without it
+     August sat at 6% of the May peak on volume alone; on rate it is 71%. */
+  const dayEq = view.dayEq || view.stops.map(() => 1);
+  const rateOf = (c, s) => c.wk[s] / dayEq[s];
+  const rateMax = Math.max(1e-9,
+    ...view.clusters.map(c => Math.max(...c.wk.map((_, s) => rateOf(c, s)))));
+  const actT = v => Math.round(Math.sqrt(Math.min(1, v / rateMax)) * 12) / 12; // 12-bucket, keeps sprite cache small
   /* size heat is normalised inside each week and log-scaled: cluster sizes are
      long-tailed, so one absolute ramp across all weeks paints a single red
      constellation and leaves the rest white. Each frame now runs the full ramp
@@ -372,7 +379,7 @@ function makeSky(view, idx) {
   };
   const clusterRGB = (c, stop) =>
     view.id === "meta" ? rampRGB(GAP, c.gap)
-    : view.id === "arxiv" ? rampRGB(HEAT, actT(c.wk[stop]))
+    : view.id === "arxiv" ? rampRGB(HEAT, actT(rateOf(c, stop)))
     : rampRGB(HEAT, szT(c));
   const clusters = view.clusters.map((c, k) => {
     c.rows.forEach(i => { memberOf[i] = k; if (FRAMED) pubStop[i] = c.fr; });
@@ -389,7 +396,7 @@ function makeSky(view, idx) {
       hex: `rgb(${rgb})`,
       spr: spriteFor(rgb),
       sprF: spriteFocusFor(rgb),
-      stopRgb: view.id === "arxiv" ? view.stops.map((_, s) => rampRGB(HEAT, actT(c.wk[s]))) : null,
+      stopRgb: view.id === "arxiv" ? view.stops.map((_, s) => rampRGB(HEAT, actT(rateOf(c, s)))) : null,
       edges: mstEdges(eRows, XYZ),
       short: view.id === "meta" && c.panel
         /* these are the only labels the emergent sky paints — room to spell them out */
@@ -874,7 +881,8 @@ function makeSky(view, idx) {
       <div class="rt"><span class="n">${c.size}</span><canvas class="spark" width="92" height="28"></canvas></div>`;
     rowsEl.appendChild(row);
     cl.dotEl = row.querySelector(".dot");
-    sparks.push([row.querySelector(".spark"), c.wk, cl]);
+    /* the bars are rates too, so the sparkline and the dot tell one story */
+    sparks.push([row.querySelector(".spark"), c.wk.map((_, s) => rateOf(c, s)), cl]);
     row.addEventListener("mouseenter", () => { st.hover = k; markRows(); });
     row.addEventListener("mouseleave", () => { st.hover = -1; markRows(); });
     row.addEventListener("click", () => focusCluster(k));

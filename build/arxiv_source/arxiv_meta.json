@@ -5,70 +5,91 @@
   "min_cluster_size": 100,
   "noise": 17383,
   "months": {
-    "2026-02": 6265,
-    "2026-03": 7812,
-    "2026-04": 7578,
-    "2026-05": 11318,
-    "2026-06": 8638,
-    "2026-07": 6936,
-    "2026-08": 588
+    "2026-02": {
+      "papers": 6265,
+      "days": 25
+    },
+    "2026-03": {
+      "papers": 7812,
+      "days": 31
+    },
+    "2026-04": {
+      "papers": 7578,
+      "days": 30
+    },
+    "2026-05": {
+      "papers": 11318,
+      "days": 31
+    },
+    "2026-06": {
+      "papers": 8638,
+      "days": 30
+    },
+    "2026-07": {
+      "papers": 6936,
+      "days": 31
+    },
+    "2026-08": {
+      "papers": 588,
+      "days": 5
+    }
   },
   "partial_last_month": true,
   "clusters": [
     {
       "cluster_id": 52,
       "size": 1350,
-      "keywords": "reasoning \u00b7 visual \u00b7 models \u00b7 multimodal \u00b7 video"
+      "keywords": "visual \u00b7 reasoning \u00b7 multimodal \u00b7 video \u00b7 models"
     },
     {
       "cluster_id": 27,
       "size": 1120,
-      "keywords": "segmentation \u00b7 models \u00b7 medical \u00b7 model \u00b7 learning"
+      "keywords": "segmentation \u00b7 medical \u00b7 clinical \u00b7 mri \u00b7 image"
     },
     {
       "cluster_id": 32,
       "size": 931,
-      "keywords": "speech \u00b7 audio \u00b7 models \u00b7 model \u00b7 music"
+      "keywords": "speech \u00b7 audio \u00b7 music \u00b7 emotion \u00b7 speaker"
     },
     {
       "cluster_id": 36,
       "size": 916,
-      "keywords": "inference \u00b7 model \u00b7 training \u00b7 models \u00b7 pruning"
+      "keywords": "pruning \u00b7 inference \u00b7 compression \u00b7 gpu \u00b7 hardware"
     },
     {
       "cluster_id": 87,
       "size": 884,
-      "keywords": "reasoning \u00b7 models \u00b7 model \u00b7 cot \u00b7 language"
+      "keywords": "reasoning \u00b7 cot \u00b7 models \u00b7 language \u00b7 chain-of-thought"
     },
     {
       "cluster_id": 7,
       "size": 830,
-      "keywords": "molecular \u00b7 models \u00b7 protein \u00b7 model \u00b7 design"
+      "keywords": "molecular \u00b7 protein \u00b7 chemical \u00b7 materials \u00b7 prediction"
     },
     {
       "cluster_id": 99,
       "size": 816,
-      "keywords": "reasoning \u00b7 policy \u00b7 reward \u00b7 learning \u00b7 training"
+      "keywords": "policy \u00b7 reward \u00b7 reasoning \u00b7 reinforcement \u00b7 rlvr"
     },
     {
       "cluster_id": 76,
       "size": 674,
-      "keywords": "safety \u00b7 models \u00b7 model \u00b7 attacks \u00b7 alignment"
+      "keywords": "safety \u00b7 attacks \u00b7 attack \u00b7 jailbreak \u00b7 models"
     },
     {
       "cluster_id": 90,
       "size": 657,
-      "keywords": "llms \u00b7 models \u00b7 llm \u00b7 human \u00b7 evaluation"
+      "keywords": "llms \u00b7 llm \u00b7 models \u00b7 human \u00b7 language"
     },
     {
       "cluster_id": 55,
       "size": 600,
-      "keywords": "conformal \u00b7 prediction \u00b7 calibration \u00b7 data \u00b7 clustering"
+      "keywords": "conformal \u00b7 prediction \u00b7 calibration \u00b7 clustering \u00b7 coverage"
     },
     {
       "cluster_id": 103,
       "size": 579,
-      "keywords": "governance \u00b7 systems \u00b7 human \u00b7 framework \u00b7 intelligence"
+      "keywords": "governance \u00b7 systems \u00b7 human \u00b7 intelligence \u00b7 artificial"
     },
     {
       "cluster_id": 98,
@@ -78,467 +99,467 @@
     {
       "cluster_id": 4,
       "size": 559,
-      "keywords": "quantum \u00b7 learning \u00b7 classical \u00b7 models \u00b7 data"
+      "keywords": "quantum \u00b7 classical \u00b7 circuit \u00b7 reservoir \u00b7 learning"
     },
     {
       "cluster_id": 81,
       "size": 557,
-      "keywords": "vla \u00b7 manipulation \u00b7 models \u00b7 action \u00b7 learning"
+      "keywords": "vla \u00b7 manipulation \u00b7 robot \u00b7 vision-language-action \u00b7 action"
     },
     {
       "cluster_id": 43,
       "size": 538,
-      "keywords": "graph \u00b7 graphs \u00b7 learning \u00b7 neural \u00b7 networks"
+      "keywords": "graph \u00b7 graphs \u00b7 gnns \u00b7 node \u00b7 networks"
     },
     {
       "cluster_id": 30,
       "size": 532,
-      "keywords": "clinical \u00b7 models \u00b7 medical \u00b7 reasoning \u00b7 llms"
+      "keywords": "clinical \u00b7 medical \u00b7 patient \u00b7 reasoning \u00b7 llms"
     },
     {
       "cluster_id": 49,
       "size": 503,
-      "keywords": "causal \u00b7 data \u00b7 discovery \u00b7 treatment \u00b7 models"
+      "keywords": "causal \u00b7 treatment \u00b7 discovery \u00b7 data \u00b7 effects"
     },
     {
       "cluster_id": 9,
       "size": 496,
-      "keywords": "memory \u00b7 agents \u00b7 agent \u00b7 retrieval \u00b7 llm"
+      "keywords": "memory \u00b7 agents \u00b7 retrieval \u00b7 agent \u00b7 long-term"
     },
     {
       "cluster_id": 102,
       "size": 479,
-      "keywords": "agents \u00b7 agent \u00b7 attack \u00b7 security \u00b7 systems"
+      "keywords": "agents \u00b7 security \u00b7 attack \u00b7 agent \u00b7 attacks"
     },
     {
       "cluster_id": 68,
       "size": 471,
-      "keywords": "forecasting \u00b7 time \u00b7 series \u00b7 models \u00b7 temporal"
+      "keywords": "forecasting \u00b7 series \u00b7 time \u00b7 temporal \u00b7 time-series"
     },
     {
       "cluster_id": 12,
       "size": 452,
-      "keywords": "federated \u00b7 learning \u00b7 data \u00b7 model \u00b7 client"
+      "keywords": "federated \u00b7 client \u00b7 clients \u00b7 learning \u00b7 data"
     },
     {
       "cluster_id": 10,
       "size": 446,
-      "keywords": "retrieval \u00b7 rag \u00b7 generation \u00b7 evidence \u00b7 knowledge"
+      "keywords": "rag \u00b7 retrieval \u00b7 retrieval-augmented \u00b7 generation \u00b7 knowledge"
     },
     {
       "cluster_id": 35,
       "size": 439,
-      "keywords": "forecasting \u00b7 model \u00b7 models \u00b7 weather \u00b7 data"
+      "keywords": "forecasting \u00b7 weather \u00b7 climate \u00b7 precipitation \u00b7 atmospheric"
     },
     {
       "cluster_id": 79,
       "size": 439,
-      "keywords": "driving \u00b7 navigation \u00b7 autonomous \u00b7 models \u00b7 model"
+      "keywords": "driving \u00b7 navigation \u00b7 autonomous \u00b7 trajectory \u00b7 perception"
     },
     {
       "cluster_id": 11,
       "size": 438,
-      "keywords": "recommendation \u00b7 user \u00b7 model \u00b7 semantic \u00b7 models"
+      "keywords": "recommendation \u00b7 user \u00b7 item \u00b7 recommender \u00b7 ranking"
     },
     {
       "cluster_id": 61,
       "size": 436,
-      "keywords": "networks \u00b7 neural \u00b7 training \u00b7 learning \u00b7 deep"
+      "keywords": "networks \u00b7 neural \u00b7 grokking \u00b7 relu \u00b7 training"
     },
     {
       "cluster_id": 101,
       "size": 429,
-      "keywords": "learning \u00b7 policy \u00b7 reinforcement \u00b7 offline \u00b7 value"
+      "keywords": "policy \u00b7 learning \u00b7 reinforcement \u00b7 offline \u00b7 policies"
     },
     {
       "cluster_id": 24,
       "size": 378,
-      "keywords": "eeg \u00b7 brain \u00b7 decoding \u00b7 models \u00b7 neural"
+      "keywords": "eeg \u00b7 brain \u00b7 decoding \u00b7 neural \u00b7 fmri"
     },
     {
       "cluster_id": 46,
       "size": 344,
-      "keywords": "regret \u00b7 bandits \u00b7 learning \u00b7 algorithm \u00b7 bandit"
+      "keywords": "regret \u00b7 bandits \u00b7 bandit \u00b7 algorithm \u00b7 arm"
     },
     {
       "cluster_id": 57,
       "size": 335,
-      "keywords": "diffusion \u00b7 models \u00b7 score \u00b7 sampling \u00b7 generative"
+      "keywords": "diffusion \u00b7 sampling \u00b7 score \u00b7 generative \u00b7 models"
     },
     {
       "cluster_id": 16,
       "size": 331,
-      "keywords": "transformers \u00b7 transformer \u00b7 models \u00b7 attention \u00b7 model"
+      "keywords": "transformers \u00b7 transformer \u00b7 attention \u00b7 looped \u00b7 depth"
     },
     {
       "cluster_id": 72,
       "size": 328,
-      "keywords": "gaussian \u00b7 scene \u00b7 models \u00b7 reconstruction \u00b7 model"
+      "keywords": "scene \u00b7 gaussian \u00b7 splatting \u00b7 reconstruction \u00b7 object"
     },
     {
       "cluster_id": 63,
       "size": 314,
-      "keywords": "gradient \u00b7 stochastic \u00b7 optimization \u00b7 adam \u00b7 convergence"
+      "keywords": "gradient \u00b7 stochastic \u00b7 convergence \u00b7 adam \u00b7 sgd"
     },
     {
       "cluster_id": 37,
       "size": 306,
-      "keywords": "quantization \u00b7 models \u00b7 bit \u00b7 training \u00b7 model"
+      "keywords": "quantization \u00b7 bit \u00b7 ptq \u00b7 quantized \u00b7 low-bit"
     },
     {
       "cluster_id": 22,
       "size": 301,
-      "keywords": "learning \u00b7 continual \u00b7 data \u00b7 forgetting \u00b7 model"
+      "keywords": "continual \u00b7 forgetting \u00b7 learning \u00b7 scaling \u00b7 data"
     },
     {
       "cluster_id": 18,
       "size": 300,
-      "keywords": "attention \u00b7 sparse \u00b7 models \u00b7 memory \u00b7 linear"
+      "keywords": "attention \u00b7 softmax \u00b7 transformer \u00b7 long-context \u00b7 transformers"
     },
     {
       "cluster_id": 58,
       "size": 298,
-      "keywords": "flow \u00b7 matching \u00b7 models \u00b7 generative \u00b7 sampling"
+      "keywords": "flow \u00b7 matching \u00b7 generative \u00b7 sampling \u00b7 velocity"
     },
     {
       "cluster_id": 1,
       "size": 290,
-      "keywords": "moe \u00b7 expert \u00b7 routing \u00b7 experts \u00b7 models"
+      "keywords": "moe \u00b7 expert \u00b7 experts \u00b7 routing \u00b7 mixture-of-experts"
     },
     {
       "cluster_id": 23,
       "size": 282,
-      "keywords": "lora \u00b7 fine-tuning \u00b7 adaptation \u00b7 low-rank \u00b7 rank"
+      "keywords": "lora \u00b7 low-rank \u00b7 fine-tuning \u00b7 adaptation \u00b7 rank"
     },
     {
       "cluster_id": 51,
       "size": 262,
-      "keywords": "diffusion \u00b7 video \u00b7 generation \u00b7 models \u00b7 attention"
+      "keywords": "diffusion \u00b7 video \u00b7 generation \u00b7 attention \u00b7 image"
     },
     {
       "cluster_id": 56,
       "size": 252,
-      "keywords": "knowledge \u00b7 reasoning \u00b7 graph \u00b7 data \u00b7 models"
+      "keywords": "knowledge \u00b7 graph \u00b7 reasoning \u00b7 graphs \u00b7 kgs"
     },
     {
       "cluster_id": 40,
       "size": 249,
-      "keywords": "diffusion \u00b7 models \u00b7 decoding \u00b7 language \u00b7 generation"
+      "keywords": "diffusion \u00b7 decoding \u00b7 masked \u00b7 generation \u00b7 models"
     },
     {
       "cluster_id": 8,
       "size": 247,
-      "keywords": "skill \u00b7 skills \u00b7 agent \u00b7 agents \u00b7 tasks"
+      "keywords": "skill \u00b7 skills \u00b7 agent \u00b7 agents \u00b7 reusable"
     },
     {
       "cluster_id": 0,
       "size": 244,
-      "keywords": "unlearning \u00b7 knowledge \u00b7 model \u00b7 data \u00b7 models"
+      "keywords": "unlearning \u00b7 forget \u00b7 knowledge \u00b7 editing \u00b7 erasure"
     },
     {
       "cluster_id": 39,
       "size": 241,
-      "keywords": "hallucination \u00b7 hallucinations \u00b7 models \u00b7 detection \u00b7 model"
+      "keywords": "hallucination \u00b7 hallucinations \u00b7 models \u00b7 detection \u00b7 visual"
     },
     {
       "cluster_id": 85,
       "size": 241,
-      "keywords": "proof \u00b7 mathematical \u00b7 reasoning \u00b7 lean \u00b7 models"
+      "keywords": "proof \u00b7 mathematical \u00b7 lean \u00b7 mathematics \u00b7 proofs"
     },
     {
       "cluster_id": 60,
       "size": 238,
-      "keywords": "neural \u00b7 dynamics \u00b7 systems \u00b7 data \u00b7 model"
+      "keywords": "dynamics \u00b7 equations \u00b7 neural \u00b7 dynamical \u00b7 systems"
     },
     {
       "cluster_id": 45,
       "size": 232,
-      "keywords": "channel \u00b7 wireless \u00b7 semantic \u00b7 learning \u00b7 framework"
+      "keywords": "channel \u00b7 wireless \u00b7 csi \u00b7 radio \u00b7 communication"
     },
     {
       "cluster_id": 28,
       "size": 231,
-      "keywords": "ecg \u00b7 models \u00b7 model \u00b7 learning \u00b7 data"
+      "keywords": "ecg \u00b7 cardiac \u00b7 physiological \u00b7 clinical \u00b7 ppg"
     },
     {
       "cluster_id": 65,
       "size": 214,
-      "keywords": "neural \u00b7 operator \u00b7 operators \u00b7 learning \u00b7 pde"
+      "keywords": "operator \u00b7 neural \u00b7 operators \u00b7 pde \u00b7 pdes"
     },
     {
       "cluster_id": 104,
       "size": 214,
-      "keywords": "students \u00b7 genai \u00b7 generative \u00b7 learning \u00b7 education"
+      "keywords": "students \u00b7 genai \u00b7 generative \u00b7 education \u00b7 literacy"
     },
     {
       "cluster_id": 80,
       "size": 213,
-      "keywords": "world \u00b7 models \u00b7 latent \u00b7 action \u00b7 model"
+      "keywords": "world \u00b7 action \u00b7 latent \u00b7 models \u00b7 video"
     },
     {
       "cluster_id": 84,
       "size": 213,
-      "keywords": "gui \u00b7 agents \u00b7 tasks \u00b7 agent \u00b7 task"
+      "keywords": "gui \u00b7 agents \u00b7 agent \u00b7 mobile \u00b7 web"
     },
     {
       "cluster_id": 97,
       "size": 208,
-      "keywords": "agents \u00b7 agent \u00b7 benchmark \u00b7 tasks \u00b7 evaluation"
+      "keywords": "agents \u00b7 agent \u00b7 benchmark \u00b7 agentic \u00b7 evaluation"
     },
     {
       "cluster_id": 64,
       "size": 206,
-      "keywords": "estimation \u00b7 matrix \u00b7 data \u00b7 gaussian \u00b7 models"
+      "keywords": "matrix \u00b7 gaussian \u00b7 estimation \u00b7 pca \u00b7 principal"
     },
     {
       "cluster_id": 86,
       "size": 201,
-      "keywords": "agents \u00b7 multi-agent \u00b7 debate \u00b7 reasoning \u00b7 llm"
+      "keywords": "multi-agent \u00b7 agents \u00b7 debate \u00b7 llm \u00b7 reasoning"
     },
     {
       "cluster_id": 94,
       "size": 201,
-      "keywords": "agents \u00b7 financial \u00b7 research \u00b7 models \u00b7 data"
+      "keywords": "financial \u00b7 agents \u00b7 research \u00b7 agent \u00b7 benchmark"
     },
     {
       "cluster_id": 95,
       "size": 200,
-      "keywords": "research \u00b7 scientific \u00b7 data \u00b7 agents \u00b7 discovery"
+      "keywords": "scientific \u00b7 research \u00b7 agents \u00b7 discovery \u00b7 autonomous"
     },
     {
       "cluster_id": 67,
       "size": 199,
-      "keywords": "detection \u00b7 iot \u00b7 learning \u00b7 intrusion \u00b7 network"
+      "keywords": "detection \u00b7 iot \u00b7 intrusion \u00b7 traffic \u00b7 network"
     },
     {
       "cluster_id": 62,
       "size": 197,
-      "keywords": "model \u00b7 neural \u00b7 models \u00b7 learning \u00b7 surrogate"
+      "keywords": "surrogate \u00b7 neural \u00b7 simulations \u00b7 flow \u00b7 physics-informed"
     },
     {
       "cluster_id": 77,
       "size": 195,
-      "keywords": "traffic \u00b7 mobility \u00b7 prediction \u00b7 forecasting \u00b7 data"
+      "keywords": "traffic \u00b7 mobility \u00b7 urban \u00b7 forecasting \u00b7 prediction"
     },
     {
       "cluster_id": 17,
       "size": 194,
-      "keywords": "cache \u00b7 compression \u00b7 memory \u00b7 attention \u00b7 eviction"
+      "keywords": "cache \u00b7 eviction \u00b7 compression \u00b7 memory \u00b7 caching"
     },
     {
       "cluster_id": 29,
       "size": 189,
-      "keywords": "clinical \u00b7 data \u00b7 models \u00b7 prediction \u00b7 model"
+      "keywords": "clinical \u00b7 patient \u00b7 health \u00b7 prediction \u00b7 data"
     },
     {
       "cluster_id": 69,
       "size": 181,
-      "keywords": "anomaly \u00b7 detection \u00b7 graph \u00b7 time \u00b7 data"
+      "keywords": "anomaly \u00b7 detection \u00b7 anomalies \u00b7 series \u00b7 graph"
     },
     {
       "cluster_id": 100,
       "size": 180,
-      "keywords": "policy \u00b7 learning \u00b7 safety \u00b7 safe \u00b7 offline"
+      "keywords": "policy \u00b7 reinforcement \u00b7 safe \u00b7 learning \u00b7 policies"
     },
     {
       "cluster_id": 92,
       "size": 177,
-      "keywords": "uncertainty \u00b7 confidence \u00b7 models \u00b7 model \u00b7 llms"
+      "keywords": "uncertainty \u00b7 confidence \u00b7 llms \u00b7 models \u00b7 language"
     },
     {
       "cluster_id": 14,
       "size": 173,
-      "keywords": "teacher \u00b7 distillation \u00b7 opd \u00b7 student \u00b7 on-policy"
+      "keywords": "teacher \u00b7 on-policy \u00b7 opd \u00b7 distillation \u00b7 student"
     },
     {
       "cluster_id": 66,
       "size": 167,
-      "keywords": "neural \u00b7 physics-informed \u00b7 pinns \u00b7 pinn \u00b7 networks"
+      "keywords": "physics-informed \u00b7 pinns \u00b7 neural \u00b7 pinn \u00b7 networks"
     },
     {
       "cluster_id": 54,
       "size": 165,
-      "keywords": "detection \u00b7 text \u00b7 models \u00b7 model \u00b7 multimodal"
+      "keywords": "detection \u00b7 text \u00b7 ai-generated \u00b7 hate \u00b7 news"
     },
     {
       "cluster_id": 75,
       "size": 157,
-      "keywords": "control \u00b7 learning \u00b7 planning \u00b7 model \u00b7 mpc"
+      "keywords": "control \u00b7 planning \u00b7 mpc \u00b7 mapf \u00b7 learning"
     },
     {
       "cluster_id": 89,
       "size": 155,
-      "keywords": "preference \u00b7 reward \u00b7 optimization \u00b7 alignment \u00b7 models"
+      "keywords": "preference \u00b7 reward \u00b7 dpo \u00b7 alignment \u00b7 optimization"
     },
     {
       "cluster_id": 50,
       "size": 153,
-      "keywords": "optimization \u00b7 bayesian \u00b7 design \u00b7 model \u00b7 framework"
+      "keywords": "optimization \u00b7 bayesian \u00b7 design \u00b7 surrogate \u00b7 black-box"
     },
     {
       "cluster_id": 26,
       "size": 149,
-      "keywords": "explanations \u00b7 xai \u00b7 explanation \u00b7 model \u00b7 models"
+      "keywords": "explanations \u00b7 xai \u00b7 explanation \u00b7 explainable \u00b7 explainability"
     },
     {
       "cluster_id": 25,
       "size": 148,
-      "keywords": "tabular \u00b7 data \u00b7 models \u00b7 learning \u00b7 relational"
+      "keywords": "tabular \u00b7 foundation \u00b7 relational \u00b7 data \u00b7 tabpfn"
     },
     {
       "cluster_id": 6,
       "size": 147,
-      "keywords": "perturbation \u00b7 single-cell \u00b7 models \u00b7 gene \u00b7 data"
+      "keywords": "single-cell \u00b7 gene \u00b7 perturbation \u00b7 cell \u00b7 biological"
     },
     {
       "cluster_id": 38,
       "size": 147,
-      "keywords": "data \u00b7 ood \u00b7 synthetic \u00b7 detection \u00b7 models"
+      "keywords": "ood \u00b7 data \u00b7 synthetic \u00b7 detection \u00b7 out-of-distribution"
     },
     {
       "cluster_id": 73,
       "size": 145,
-      "keywords": "search \u00b7 optimization \u00b7 evolutionary \u00b7 evolution \u00b7 learning"
+      "keywords": "search \u00b7 evolutionary \u00b7 evolution \u00b7 optimization \u00b7 heuristic"
     },
     {
       "cluster_id": 20,
       "size": 143,
-      "keywords": "fairness \u00b7 learning \u00b7 model \u00b7 data \u00b7 framework"
+      "keywords": "fairness \u00b7 fair \u00b7 recourse \u00b7 learning \u00b7 demographic"
     },
     {
       "cluster_id": 91,
       "size": 142,
-      "keywords": "review \u00b7 feedback \u00b7 peer \u00b7 reviews \u00b7 learning"
+      "keywords": "review \u00b7 peer \u00b7 reviews \u00b7 feedback \u00b7 reviewers"
     },
     {
       "cluster_id": 33,
       "size": 138,
-      "keywords": "detection \u00b7 image \u00b7 images \u00b7 models \u00b7 ai-generated"
+      "keywords": "detection \u00b7 image \u00b7 deepfake \u00b7 forgery \u00b7 ai-generated"
     },
     {
       "cluster_id": 31,
       "size": 128,
-      "keywords": "graph \u00b7 learning \u00b7 circuit \u00b7 models \u00b7 model"
+      "keywords": "graph \u00b7 icl \u00b7 in-context \u00b7 circuit \u00b7 learning"
     },
     {
       "cluster_id": 59,
       "size": 127,
-      "keywords": "gradient \u00b7 neural \u00b7 learning \u00b7 wasserstein \u00b7 langevin"
+      "keywords": "langevin \u00b7 wasserstein \u00b7 gradient \u00b7 riemannian \u00b7 manifold"
     },
     {
       "cluster_id": 48,
       "size": 126,
-      "keywords": "muon \u00b7 training \u00b7 spectral \u00b7 optimizer \u00b7 learning"
+      "keywords": "muon \u00b7 optimizer \u00b7 optimizers \u00b7 momentum \u00b7 adamw"
     },
     {
       "cluster_id": 13,
       "size": 125,
-      "keywords": "privacy \u00b7 data \u00b7 private \u00b7 differential \u00b7 noise"
+      "keywords": "privacy \u00b7 private \u00b7 differentially \u00b7 differential \u00b7 dp-sgd"
     },
     {
       "cluster_id": 96,
       "size": 125,
-      "keywords": "agents \u00b7 software \u00b7 agentic \u00b7 code \u00b7 agent"
+      "keywords": "software \u00b7 agentic \u00b7 agents \u00b7 engineering \u00b7 agent"
     },
     {
       "cluster_id": 21,
       "size": 123,
-      "keywords": "adaptation \u00b7 data \u00b7 test-time \u00b7 training \u00b7 model"
+      "keywords": "test-time \u00b7 adaptation \u00b7 tta \u00b7 sft \u00b7 data"
     },
     {
       "cluster_id": 44,
       "size": 122,
-      "keywords": "robustness \u00b7 adversarial \u00b7 verification \u00b7 neural \u00b7 training"
+      "keywords": "adversarial \u00b7 robustness \u00b7 neural \u00b7 verification \u00b7 label"
     },
     {
       "cluster_id": 15,
       "size": 120,
-      "keywords": "distillation \u00b7 knowledge \u00b7 teacher \u00b7 student \u00b7 model"
+      "keywords": "distillation \u00b7 teacher \u00b7 student \u00b7 knowledge \u00b7 model"
     },
     {
       "cluster_id": 42,
       "size": 120,
-      "keywords": "document \u00b7 summarization \u00b7 models \u00b7 ocr \u00b7 summaries"
+      "keywords": "document \u00b7 summarization \u00b7 ocr \u00b7 documents \u00b7 summaries"
     },
     {
       "cluster_id": 71,
       "size": 119,
-      "keywords": "routing \u00b7 problem \u00b7 learning \u00b7 neural \u00b7 optimization"
+      "keywords": "routing \u00b7 problem \u00b7 vehicle \u00b7 tsp \u00b7 optimization"
     },
     {
       "cluster_id": 88,
       "size": 117,
-      "keywords": "code \u00b7 security \u00b7 vulnerability \u00b7 detection \u00b7 models"
+      "keywords": "vulnerability \u00b7 security \u00b7 code \u00b7 vulnerabilities \u00b7 detection"
     },
     {
       "cluster_id": 53,
       "size": 116,
-      "keywords": "visual \u00b7 token \u00b7 pruning \u00b7 tokens \u00b7 models"
+      "keywords": "visual \u00b7 token \u00b7 pruning \u00b7 tokens \u00b7 compression"
     },
     {
       "cluster_id": 83,
       "size": 116,
-      "keywords": "rtl \u00b7 code \u00b7 verification \u00b7 generation \u00b7 llms"
+      "keywords": "rtl \u00b7 verification \u00b7 specifications \u00b7 code \u00b7 generation"
     },
     {
       "cluster_id": 93,
       "size": 112,
-      "keywords": "prompt \u00b7 optimization \u00b7 models \u00b7 prompts \u00b7 model"
+      "keywords": "prompt \u00b7 prompts \u00b7 optimization \u00b7 language \u00b7 models"
     },
     {
       "cluster_id": 3,
       "size": 111,
-      "keywords": "positional \u00b7 rope \u00b7 models \u00b7 ssms \u00b7 state"
+      "keywords": "ssms \u00b7 rope \u00b7 positional \u00b7 mamba \u00b7 state"
     },
     {
       "cluster_id": 41,
       "size": 109,
-      "keywords": "data \u00b7 models \u00b7 model \u00b7 training \u00b7 language"
+      "keywords": "language \u00b7 memorization \u00b7 data \u00b7 llms \u00b7 models"
     },
     {
       "cluster_id": 78,
       "size": 106,
-      "keywords": "learning \u00b7 uav \u00b7 reinforcement \u00b7 control \u00b7 policy"
+      "keywords": "uav \u00b7 aerial \u00b7 uavs \u00b7 reinforcement \u00b7 unmanned"
     },
     {
       "cluster_id": 82,
       "size": 106,
-      "keywords": "code \u00b7 test \u00b7 generation \u00b7 llms \u00b7 models"
+      "keywords": "code \u00b7 test \u00b7 llms \u00b7 generation \u00b7 software"
     },
     {
       "cluster_id": 5,
       "size": 105,
-      "keywords": "decoding \u00b7 speculative \u00b7 draft \u00b7 model \u00b7 verification"
+      "keywords": "speculative \u00b7 decoding \u00b7 draft \u00b7 acceptance \u00b7 verification"
     },
     {
       "cluster_id": 19,
       "size": 105,
-      "keywords": "latent \u00b7 learning \u00b7 world \u00b7 jepa \u00b7 predictive"
+      "keywords": "jepa \u00b7 latent \u00b7 predictive \u00b7 self-supervised \u00b7 world"
     },
     {
       "cluster_id": 2,
       "size": 104,
-      "keywords": "features \u00b7 sparse \u00b7 sae \u00b7 saes \u00b7 feature"
+      "keywords": "saes \u00b7 sae \u00b7 sparse \u00b7 features \u00b7 autoencoders"
     },
     {
       "cluster_id": 34,
       "size": 104,
-      "keywords": "models \u00b7 data \u00b7 model \u00b7 foundation \u00b7 imagery"
+      "keywords": "imagery \u00b7 foundation \u00b7 geospatial \u00b7 earth \u00b7 data"
     },
     {
       "cluster_id": 47,
       "size": 102,
-      "keywords": "regret \u00b7 online \u00b7 convex \u00b7 algorithm \u00b7 algorithms"
+      "keywords": "regret \u00b7 online \u00b7 convex \u00b7 algorithm \u00b7 bounds"
     },
     {
       "cluster_id": 70,
       "size": 101,
-      "keywords": "motion \u00b7 human \u00b7 pose \u00b7 interaction \u00b7 video"
+      "keywords": "motion \u00b7 human \u00b7 pose \u00b7 hoi \u00b7 video"
     },
     {
       "cluster_id": 74,
       "size": 100,
-      "keywords": "planning \u00b7 plan \u00b7 models \u00b7 search \u00b7 llm"
+      "keywords": "planning \u00b7 plan \u00b7 search \u00b7 plans \u00b7 agents"
     }
   ]
 }

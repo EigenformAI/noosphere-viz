@@ -26,6 +26,7 @@ and emits one compact JSON with:
 Run from the repo root:
   uv run build/build_noosphere_data.py
 """
+import collections
 import csv
 import json
 import re
@@ -42,9 +43,26 @@ MS_OUT = Path("/root/michael-folder/mindspaceai/data/output")
 # the same quarter run exported twice: one carrying the panel+Fable names,
 # one with none. Plate II reads the TF-IDF variant, plate III the Fable one —
 # same weeks, same clusters, same positions, two naming regimes.
-QUARTER_TFIDF = MS_OUT / "quarter_without_fable"
-QUARTER_FABLE = MS_OUT / "quarter_with_fable"
-QUARTER = QUARTER_FABLE          # canonical source for the shared corpus space
+def pick(*names):
+    """First of these export directories that exists.
+
+    The pipeline has renamed the Fable export several times (quarter_with_fable
+    -> quarter -> quarter_with_fable), so try the known aliases rather than
+    breaking. Whichever one is picked is then *proved* to be the same run as the
+    other export below, so a wrong guess fails loudly instead of quietly mixing
+    two clusterings.
+    """
+    for nm in names:
+        if (MS_OUT / nm).is_dir():
+            return MS_OUT / nm
+    raise SystemExit(f"none of {names} found under {MS_OUT}")
+
+
+QUARTER_TFIDF = pick("quarter_without_fable")
+QUARTER_FABLE = pick("quarter_with_fable", "quarter")
+# the shared corpus space comes from whichever export actually ships projector/
+# and projection3d.npz — the Fable one has not always written them
+QUARTER = QUARTER_TFIDF if (QUARTER_TFIDF / "projector").is_dir() else QUARTER_FABLE
 ARXIV = MS_OUT / "arxiv"
 
 X_SOURCES = {"Desearch X", "Twitter/Grok"}
@@ -124,10 +142,15 @@ n = len(ids)
 
 p3 = np.load(QUARTER / "projection3d.npz")
 assert (p3["article_ids"] == ids).all(), "projection3d row order mismatch"
-# plates II and III share this space, so the two exports must agree on it
-p3b = np.load(QUARTER_TFIDF / "projection3d.npz")
-assert (p3b["article_ids"] == ids).all() and np.array_equal(p3b["coords"], p3["coords"]), \
-    "the two quarter exports disagree on the shared projection"
+# Plates II and III share this space and this slider, so the two exports must be
+# the same clustering run written twice — prove it rather than trusting the
+# directory names: same rows, same coordinates, same weekly frames.
+pf = np.load(QUARTER_FABLE / "projection.npz")
+assert np.array_equal(pf["article_ids"], ids) and np.array_equal(pf["coords"], proj["coords"]), \
+    f"{QUARTER_FABLE.name} and {QUARTER_TFIDF.name} disagree on the corpus projection"
+assert (json.loads((QUARTER_FABLE / "frames.json").read_text())
+        == json.loads((QUARTER_TFIDF / "frames.json").read_text())), \
+    f"{QUARTER_FABLE.name} and {QUARTER_TFIDF.name} disagree on the weekly frames"
 
 vec = np.fromfile(QUARTER / "projector" / "vectors.bytes", dtype="<f4")
 assert vec.size == n * 1536, f"vectors.bytes size {vec.size} != {n}x1536"
@@ -320,6 +343,40 @@ def month_end(m):
 
 arx_stops = [month_end(m) for m in arx_months]
 
+# Activity is a RATE, not a monthly total. Both ends of the window are cut
+# short — February starts on the 4th, August stops on the 3rd — so a total
+# understates them badly (August ran at 6% of May's total but 71% of its rate).
+# Short spans also carry an unrepresentative mix of weekdays: arXiv's weekend
+# runs at ~0.58 of a weekday, and 2 of August's 3 days are a weekend. So each
+# month gets a denominator in "weekday-equivalent days": every observed day
+# counts as its weekday's share of an average day. A 3-day month is then
+# measured on the same footing as a 31-day one.
+arx_day_n = collections.Counter(r[5][:10] for r in arows)
+_by_wd = collections.defaultdict(list)
+for _d, _k in arx_day_n.items():
+    _by_wd[date.fromisoformat(_d).weekday()].append(_k)
+_mean = lambda xs: sum(xs) / len(xs)
+_day_avg = _mean(list(arx_day_n.values()))
+wd_factor = {w: _mean(v) / _day_avg for w, v in _by_wd.items()}
+arx_day_eq = [
+    round(sum(wd_factor[date.fromisoformat(d).weekday()]
+              for d in arx_day_n if d[:7] == m), 3)
+    for m in arx_months
+]
+assert all(e > 0 for e in arx_day_eq), arx_day_eq
+arx_days_seen = [sum(1 for d in arx_day_n if d[:7] == m) for m in arx_months]
+# the export reports its own per-month day counts; the denominator has to match
+# the numerator, which is counted off the shipped sample, so the sample's days
+# win — but never silently
+_meta_days = {m: v["days"] for m, v in ameta.get("months", {}).items()
+              if isinstance(v, dict) and "days" in v}
+for _m, _seen in zip(arx_months, arx_days_seen):
+    if _m in _meta_days and _meta_days[_m] != _seen:
+        print(f"  note: {_m}: export reports {_meta_days[_m]} days, the shipped sample "
+              f"has papers on {_seen} — using {_seen}, which is what the counts come from")
+print("  arxiv activity denominators (weekday-equivalent days per month): "
+      + " · ".join(f"{m[5:]} {e:.1f}" for m, e in zip(arx_months, arx_day_eq)))
+
 full_size = {str(c["cluster_id"]): c["size"] for c in ameta["clusters"]}
 kw_by_id = {str(c["cluster_id"]): c["keywords"] for c in ameta["clusters"]}
 rows_by_cid = {}
@@ -341,6 +398,9 @@ arx_members = sorted(i for i, r in enumerate(arows) if r[1] != "noise")
 arx_view = {
     "id": "arxiv", "space": 1,
     "stops": arx_stops, "stopUnit": "month",
+    # colour divides each cluster's monthly count by this to get papers/day
+    "dayEq": arx_day_eq,
+    "days": arx_days_seen,
     "partialLast": arx_months[-1] == date.today().isoformat()[:7],
     "members": arx_members,
     "clusters": arx_clusters,
