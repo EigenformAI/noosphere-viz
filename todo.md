@@ -1,0 +1,2 @@
+- For plate 3 emergent sky, add existing grok summary in between the label establish emergent stuff and attractor description
+- 

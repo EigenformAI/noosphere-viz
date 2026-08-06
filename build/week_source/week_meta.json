@@ -1,0 +1,120 @@
+{
+  "week": 1,
+  "window": "2026-07-28..2026-08-04",
+  "documents": 392,
+  "noise": 70,
+  "max_clusters": 50,
+  "clusters": [
+    {
+      "cluster_id": 5,
+      "size": 63,
+      "keywords": "claude \u00b7 model \u00b7 github \u00b7 openai \u00b7 open"
+    },
+    {
+      "cluster_id": 21,
+      "size": 21,
+      "keywords": "model \u00b7 think \u00b7 like \u00b7 models \u00b7 structural"
+    },
+    {
+      "cluster_id": 12,
+      "size": 19,
+      "keywords": "solver \u00b7 tasks \u00b7 model \u00b7 task \u00b7 evaluation"
+    },
+    {
+      "cluster_id": 0,
+      "size": 17,
+      "keywords": "llm \u00b7 llms \u00b7 don \u00b7 honeypot \u00b7 jump"
+    },
+    {
+      "cluster_id": 15,
+      "size": 17,
+      "keywords": "principle \u00b7 like \u00b7 awareness \u00b7 eval \u00b7 yes"
+    },
+    {
+      "cluster_id": 8,
+      "size": 16,
+      "keywords": "video \u00b7 visual \u00b7 models \u00b7 prompt \u00b7 rgb"
+    },
+    {
+      "cluster_id": 17,
+      "size": 15,
+      "keywords": "data \u00b7 good \u00b7 models \u00b7 human \u00b7 reasoning"
+    },
+    {
+      "cluster_id": 4,
+      "size": 15,
+      "keywords": "vla \u00b7 models \u00b7 visual \u00b7 inference \u00b7 geospatial"
+    },
+    {
+      "cluster_id": 9,
+      "size": 12,
+      "keywords": "world \u00b7 latent \u00b7 physical \u00b7 dynamics \u00b7 model"
+    },
+    {
+      "cluster_id": 14,
+      "size": 11,
+      "keywords": "gpt \u00b7 gpt-5 \u00b7 frontier \u00b7 openai \u00b7 sol"
+    },
+    {
+      "cluster_id": 3,
+      "size": 11,
+      "keywords": "llms \u00b7 benchmarking \u00b7 cves \u00b7 llm \u00b7 x2f"
+    },
+    {
+      "cluster_id": 7,
+      "size": 11,
+      "keywords": "memory \u00b7 agents \u00b7 agent \u00b7 models \u00b7 askchem"
+    },
+    {
+      "cluster_id": 16,
+      "size": 10,
+      "keywords": "identity \u00b7 people \u00b7 ontologies \u00b7 ideas \u00b7 feature"
+    },
+    {
+      "cluster_id": 20,
+      "size": 10,
+      "keywords": "model \u00b7 training \u00b7 grokking \u00b7 subspace \u00b7 weight"
+    },
+    {
+      "cluster_id": 2,
+      "size": 10,
+      "keywords": "risk \u00b7 problems \u00b7 generalisation \u00b7 research \u00b7 different"
+    },
+    {
+      "cluster_id": 6,
+      "size": 10,
+      "keywords": "llm \u00b7 new \u00b7 llm-mcp-client \u00b7 datasette \u00b7 agent"
+    },
+    {
+      "cluster_id": 13,
+      "size": 10,
+      "keywords": "model \u00b7 chatgpt \u00b7 reward \u00b7 copilot \u00b7 word"
+    },
+    {
+      "cluster_id": 18,
+      "size": 9,
+      "keywords": "aesthetic \u00b7 writing \u00b7 generate \u00b7 process \u00b7 non-use"
+    },
+    {
+      "cluster_id": 19,
+      "size": 9,
+      "keywords": "models \u00b7 like \u00b7 better \u00b7 different \u00b7 new"
+    },
+    {
+      "cluster_id": 10,
+      "size": 9,
+      "keywords": "agent \u00b7 research \u00b7 like \u00b7 people \u00b7 loop"
+    },
+    {
+      "cluster_id": 11,
+      "size": 9,
+      "keywords": "student \u00b7 teacher \u00b7 distillation \u00b7 opd \u00b7 policy"
+    },
+    {
+      "cluster_id": 1,
+      "size": 8,
+      "keywords": "compute \u00b7 x2f \u00b7 problems \u00b7 openai \u00b7 model"
+    }
+  ],
+  "cut_by_threshold": []
+}

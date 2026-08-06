@@ -2,7 +2,7 @@
 """Inject noosphere_data.json into noosphere_template.html.
 
   python3 build_noosphere.py [--data noosphere_data.json] [--out noosphere.html] \
-      [--title "Armillary Noosphere"] [--standalone]
+      [--title "Reports from the future"] [--standalone]
 
 Default output is an artifact fragment (the claude.ai wrapper adds the document
 shell). --standalone wraps it in a full <!doctype html> document for plain
@@ -16,7 +16,7 @@ HERE = Path(__file__).parent
 ap = argparse.ArgumentParser()
 ap.add_argument("--data", default="noosphere_data.json")
 ap.add_argument("--out", default="noosphere.html")
-ap.add_argument("--title", default="Armillary Noosphere")
+ap.add_argument("--title", default="Reports from the future")
 ap.add_argument("--standalone", action="store_true",
                 help="emit a complete HTML document (for Vercel/static hosting)")
 args = ap.parse_args()

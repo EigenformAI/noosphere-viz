@@ -27,6 +27,13 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .plateHead h2 { font-size:19px; letter-spacing:0.14em; font-weight:600; margin-top:4px; }
 .noo .plateHead .sub { font-size:11.5px; color:var(--ink2); margin-top:6px; line-height:1.45; }
 .noo .plateHead .method { font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:0.04em; }
+.noo .plateHead .note { font-size:10px; color:var(--ink2); line-height:1.55; margin-top:11px;
+  padding-left:9px; border-left:2px solid var(--gold-deep); max-width:390px; }
+.noo .plateHead .note b { color:var(--ink); font-weight:600; }
+.noo .plateHead .note i { color:var(--ink); font-style:normal; }
+.noo .plateHead .note .g { color:var(--gold); }
+.noo .plateHead .note .v { color:#8b7fe8; }
+.noo .plateHead .note .r { color:#e05252; }
 
 .noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 200px);
   background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px;
@@ -37,6 +44,7 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .key .row { display:grid; grid-template-columns:14px 1fr 46px; gap:8px; align-items:center;
   padding:6px 12px; cursor:pointer; border-left:2px solid transparent; }
 .noo .key .row:hover, .noo .key .row.hl { background:rgba(237,161,0,0.06); border-left-color:var(--gold-deep); }
+.noo .key .row.off { opacity:0.4; }
 .noo .key .row .dot { width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 6px rgba(237,161,0,0.8); }
 .noo .key .row .nm { font-size:11px; color:var(--ink2); line-height:1.3; overflow:hidden;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
@@ -50,6 +58,10 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .chip.established { color:#0e0d0a; background:var(--blue); }
 .noo .chip.buzzword { color:#0e0d0a; background:var(--muted); }
 .noo .key .legend { font-size:9.5px; color:var(--muted); padding:8px 12px; border-top:1px solid var(--hair); line-height:1.5; }
+.noo .key .legend .gradbar { height:8px; border-radius:4px; margin:2px 0 3px;
+  background:linear-gradient(90deg,#4338ca,#9333ea,#dc2626,#ff9628,#ffe082); }
+.noo .key .legend .gradlab { display:flex; justify-content:space-between; margin-bottom:5px;
+  font-size:8.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink2); }
 
 .noo .bar { position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:6;
   display:flex; align-items:center; gap:12px; padding:8px 14px;
@@ -73,8 +85,13 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .detail .dn { font-size:13px; color:var(--ink); letter-spacing:0.04em; margin-bottom:5px; }
 .noo .detail .dm { font-size:10px; color:var(--muted); margin-bottom:7px; }
 .noo .detail .dx { font-size:11px; color:var(--ink2); line-height:1.5; margin-bottom:8px; }
+.noo .detail .dh { font-size:8.5px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--muted); margin:0 0 5px; border-top:1px solid rgba(255,255,255,0.07); padding-top:7px; }
 .noo .detail .dt { font-size:10px; color:var(--muted); line-height:1.5; }
 .noo .detail .dt em { color:var(--ink2); font-style:normal; }
+.noo .detail .dt a { color:var(--ink2); text-decoration:none;
+  border-bottom:1px solid rgba(237,161,0,0.38); }
+.noo .detail .dt a:hover { color:var(--gold); border-bottom-color:var(--gold); }
 .noo .detail .close { position:absolute; top:6px; right:9px; background:none; border:none;
   color:var(--muted); cursor:pointer; font-size:13px; }
 
@@ -99,7 +116,7 @@ html, body { margin:0; padding:0; background:#05060c; }
 
 <div class="noo" id="noo">
   <header id="mast">
-    <div class="t">Armillary Noosphere</div>
+    <div class="t">__RUN_TITLE__</div>
     <div class="s" id="mastSub"></div>
   </header>
   <nav id="dots" aria-label="plates"></nav>
@@ -118,12 +135,28 @@ const SPHERE = (location.hash.match(/sphere=(\w+)/) || [])[1] === "pca" ? "pca" 
 const C = { page:"#0e0d0a", deep:"#05060c", ink:"#f2ede2", ink2:"#b5ad9c", muted:"#8a8478",
   gold:"#eda100", goldDeep:"#c98500", blue:"#3987e5", aqua:"#199e70" };
 const RGB = { gold:"237,161,0", blue:"57,135,229", muted:"138,132,120", pale:"205,196,178" };
-const BAND_RGB = { emerging:RGB.gold, established:RGB.blue, buzzword:RGB.muted };
-const BAND_HEX = { emerging:C.gold, established:C.blue, buzzword:C.muted };
+
+/* piecewise-linear color ramps: [[t, [r,g,b]], ...] -> "r,g,b" */
+function rampRGB(stops, t) {
+  t = Math.max(stops[0][0], Math.min(stops[stops.length - 1][0], t));
+  let i = 1;
+  while (i < stops.length - 1 && t > stops[i][0]) i++;
+  const [t0, a] = stops[i - 1], [t1, b] = stops[i], f = (t - t0) / (t1 - t0 || 1);
+  return a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(",");
+}
+/* activity / size heat: white (few, small) -> yellow -> orange -> red (loads, big) */
+const HEAT = [[0, [242,237,226]], [0.35, [255,215,94]], [0.7, [255,150,40]], [1, [255,69,48]]];
+/* name gap, the original mindspace anchors: indigo buzzword -> red established -> pale gold emerging */
+const GAP = [[-1, [67,56,202]], [-0.5, [147,51,234]], [0, [220,38,38]], [0.5, [255,150,40]], [1, [255,224,130]]];
 
 /* doc spaces: 0 = full corpus, 1 = the week-only projector export (own embedding map) */
 const SPACES = DATA.spaces.map(b => ({ N: b.title.length,
-  XYZ: Float32Array.from(b[SPHERE] || b.umap), PUB: b.pub, SRC: b.src, TITLES: b.title }));
+  XYZ: Float32Array.from(b[SPHERE] || b.umap), PUB: b.pub, SRC: b.src, TITLES: b.title,
+  /* urls are stored as host-prefix + path; rebuild on demand rather than
+     materialising 25,000 strings nothing may ever click */
+  URL: b.url ? (i => b.url.pre[b.url.i[i]] + b.url.s[i]) : (() => null) }));
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const SRC_NAME = ["arXiv", "X", "web"];
 const BASE_MS = Date.parse(DATA.meta.base_date + "T00:00:00Z");
 const fmtD = (iso, style) => new Intl.DateTimeFormat("en-GB",
@@ -133,8 +166,9 @@ const fmtD = (iso, style) => new Intl.DateTimeFormat("en-GB",
   : { day:"numeric", month:"short", timeZone:"UTC" }).format(new Date(iso + "T00:00:00Z"));
 const pubDayISO = d => new Date(BASE_MS + d * 864e5).toISOString().slice(0, 10);
 const nf = n => n.toLocaleString("en-US");
+const SRC_SHORT = { "Twitter/Grok": "X", "Desearch X": "X", "HuggingFace Papers": "HF papers" };
 const mixLine = m => Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 3)
-  .map(([k, v]) => `${v} ${k === "Twitter/Grok" ? "X" : k}`).join(" · ") + " + blogs";
+  .map(([k, v]) => `${v} ${SRC_SHORT[k] || k}`).join(" · ") + " + blogs";
 
 document.getElementById("mastSub").textContent =
   `the idea-sky of AI research & discourse · every star is a real document — drag to turn the sphere`;
@@ -144,26 +178,30 @@ const VC = {
   arxiv: {
     plate:"PLATE I", title:"THE RESEARCH SKY",
     sub:"What researchers are working on — six months of arXiv, one star per paper, revealed month by month.",
-    method:"trend-detection run · clusters: TF-IDF → SVD → UMAP → HDBSCAN · constellation names: TF-IDF top terms",
-    real:v => `<b>real</b> — every star is one arXiv paper (${nf(v.docs_total)} papers, Feb – Aug 2026); clusters, names and monthly counts come from the trend-detection TF-IDF run; the reveal follows true submission months.`,
-    simp:v => `<b>simplified</b> — the ${v.total_clusters} clusters are trimmed to the ${v.clusters.length} largest, shown complete (${nf(v.named_docs)} papers); the remaining clusters are sampled 1-in-3 as pale stars, the ${nf(v.dust_total)} unclustered papers 1-in-5 as dust; positions from this run's own projection; August is days old.`,
-    legend:"brightness = recency · lines sketch each constellation · pale stars = sampled papers from unnamed clusters · dust = sampled unclustered papers",
+    method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords",
+    real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; the reveal follows true submission dates.`,
+    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}; August is days old.`,
+    legend:"colour = that month's activity (white few → yellow → red many) · brightness = recency · lines sketch each constellation · dust = unclustered papers · key rows are sorted by size — click one to fly to it",
   },
   social: {
     plate:"PLATE II", title:"THE ATTENTION SKY",
-    sub:"What the discourse is looking at right now — one week across X, Hacker News, LessWrong and the blogs, revealed day by day.",
-    method:"charted on its own week-only embedding map · clusters: HDBSCAN · constellation names: raw TF-IDF keywords",
-    real:v => `<b>real</b> — every star is one document from ${fmtD(v.stops[0])} – ${fmtD(v.stops[v.stops.length - 1])} 2026 (${v.n_docs} docs: ${mixLine(v.srcmix)}); all ${v.clusters.length} clusters shown; the day-by-day reveal follows true publish dates.`,
-    simp:v => `<b>simplified</b> — this plate is charted on its own week-only projection, so star positions are not comparable with Plates I & III; ${v.noise} unclustered documents shown as dust; TF-IDF names are raw, glitches and all.`,
-    legend:"brightness = recency · lines join each constellation (spanning tree) · dust = this week's unclustered documents",
+    sub:"What the discourse is calling things — the same weeks as Plate III, every cluster named by the words its documents actually use.",
+    method:"each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week",
+    real:v => `<b>real</b> — every star is one document (${nf(v.n_docs)} across the ${v.stops.length} weeks: ${mixLine(v.srcmix)}); each week is clustered independently and <b>every</b> cluster it found is drawn, named by its top TF-IDF terms; positions come from the shared window projection.`,
+    simp:v => `<b>simplified</b> — TF-IDF names are raw, glitches and all: they say what a cluster's documents repeat, not what they mean — Plate III names these same weeks by meaning instead. Colour is normalised inside each week, so it ranks a week against itself and not against the others. Grey dust = the trailing window's earlier documents, pale stars = the week's unclustered documents.`,
+    legend:"colour = size within this week (white = its smallest constellation → red = its largest), rescaled every week · lines join each constellation · pale = this week's unclustered documents · dust = the trailing window",
   },
   meta: {
     plate:"PLATE III", title:"THE EMERGENT SKY",
     sub:"Metaconcepts as they assemble — clusters whose meaning is running ahead of shared vocabulary, named before the crowd names them.",
-    method:"names: 4-model panel → Claude Fable synthesis · band = name gap (semantic − lexical coherence)",
-    real:v => `<b>real</b> — the ${v.clusters.length} final-week clusters with the highest name gap; sizes, dates and memberships are the pipeline's; each name synthesizes 4 independent model readings.`,
-    simp:() => "<b>simplified</b> — the names are interpretive syntheses, not corpus text; <span style='color:#eda100'>gold = emerging</span> · <span style='color:#3987e5'>blue = established</span> · <span style='color:#8a8478'>grey = buzzword</span>.",
-    legend:"band colors: gold emerging · blue established · grey buzzword · click a constellation for its Fable reading",
+    method:"each week clustered on its own · position = shared window map · colour = that week's name gap (semantic − lexical coherence)",
+    note:`<b>Reading the shade.</b> Every cluster of the week is scored twice — <i>semantic coherence</i>, how tightly its documents sit together in embedding space, and <i>lexical coherence</i>, how much wording they actually share. Both are percentile ranks among that week's clusters, so each runs 0–1 and the two are directly comparable; <b>name gap = semantic − lexical</b>.
+      <br><span class="g">Gold — emerging</span> (gap &gt; 0): the documents cohere in meaning faster than in words, an idea arriving ahead of the vocabulary for it.
+      <span class="r">Red — established</span> (gap ≈ 0): name and meaning in step.
+      <span class="v">Indigo — buzzword</span> (gap &lt; 0): shared wording outruns shared meaning, a phrase doing more work than the concept behind it.`,
+    real:v => `<b>real</b> — each of the ${v.stops.length} weeks is clustered independently; star positions come from the shared window projection, colours ONLY from that week's clustering and its name-gap scores; the ${v.clusters.length} constellations are the clusters whose name gap earned a reading, each named by a 4-model panel synthesized by Claude Fable.`,
+    simp:v => `<b>simplified</b> — the names are interpretive syntheses, not corpus text, and restart every week, so a theme may return under a new name; only panel-named clusters are drawn — the week's other documents, whether in a lower-gap cluster or unclustered, render as the pale field; grey dust = the trailing window's earlier documents.`,
+    legend:`<div class="gradbar"></div><div class="gradlab"><span>buzzword</span><span>established</span><span>emerging</span></div>colour = this week's name gap (see the note, top left) · pale = this week's documents outside the named clusters · click a constellation for its reading`,
   },
 };
 
@@ -179,6 +217,40 @@ function sprite(rgb) {
   return s;
 }
 const SPR = Object.fromEntries(Object.entries(RGB).map(([k, v]) => [k, sprite(v)]));
+const sprCache = new Map();
+function spriteFor(rgb) {
+  let s = sprCache.get(rgb);
+  if (!s) sprCache.set(rgb, s = sprite(rgb));
+  return s;
+}
+/* hotter, wider bloom for the focused constellation */
+const sprFCache = new Map();
+function spriteFocusFor(rgb) {
+  let s = sprFCache.get(rgb);
+  if (s) return s;
+  s = document.createElement("canvas"); s.width = s.height = 96;
+  const g = s.getContext("2d").createRadialGradient(48, 48, 0, 48, 48, 48);
+  g.addColorStop(0, "rgba(255,252,244,1)");
+  g.addColorStop(0.14, `rgba(${rgb},0.9)`);
+  g.addColorStop(0.4, `rgba(${rgb},0.28)`);
+  g.addColorStop(1, `rgba(${rgb},0)`);
+  const cx = s.getContext("2d"); cx.fillStyle = g; cx.fillRect(0, 0, 96, 96);
+  sprFCache.set(rgb, s);
+  return s;
+}
+
+/* the panel readings arrive as light markdown; render the little of it they use */
+function mdHTML(s) {
+  return (s || "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/^#+\s*/gm, "")
+    /* non-greedy so a bold span can hold an italic; leftovers are unclosed
+       markers in the source text, dropped rather than shown raw */
+    .replace(/\*\*([\s\S]+?)\*\*/g, "<b>$1</b>")
+    .replace(/\*([^*\n]+?)\*/g, "<i>$1</i>")
+    .replace(/\*+/g, "")
+    .split(/\n{2,}/).map(p => `<div class="dx">${p.trim().replace(/\n/g, " ")}</div>`).join("");
+}
 
 /* ---------- geometry helpers ---------- */
 function mstEdges(rows, XYZ) {
@@ -218,7 +290,7 @@ const tip = document.getElementById("tip");
 function makeSky(view, idx) {
   const cfg = VC[view.id];
   const sp = SPACES[view.space || 0];
-  const N = sp.N, XYZ = sp.XYZ, PUB = sp.PUB, SRC = sp.SRC, TITLES = sp.TITLES;
+  const N = sp.N, XYZ = sp.XYZ, PUB = sp.PUB, SRC = sp.SRC, TITLES = sp.TITLES, urlOf = sp.URL;
   const sec = document.createElement("section");
   sec.className = "plate"; sec.id = "s-" + view.id;
   sec.innerHTML = `
@@ -226,6 +298,7 @@ function makeSky(view, idx) {
     <div class="plateHead">
       <div class="pl">${cfg.plate}</div><h2>${cfg.title}</h2>
       <div class="sub">${cfg.sub}</div><div class="method">${cfg.method}</div>
+      ${cfg.note ? `<div class="note">${cfg.note}</div>` : ""}
     </div>
     <button class="keyToggle">KEY</button>
     <aside class="key">
@@ -246,19 +319,31 @@ function makeSky(view, idx) {
   const slider = sec.querySelector("input"), stopLab = sec.querySelector(".stopLab"),
         countEl = sec.querySelector(".count"), playBtn = sec.querySelector(".play"),
         keyEl = sec.querySelector(".key"), rowsEl = sec.querySelector(".rows"),
+        khEl = sec.querySelector(".kh"),
         detailEl = sec.querySelector(".detail"), detailBody = detailEl.querySelector(".body");
 
+  /* framed views: each stop is an independently clustered week — only that
+     week's clusters are highlighted, everything else falls back to dust */
+  const FRAMED = view.clusters.length > 0 && view.clusters[0].fr !== undefined;
   /* precompute membership + reveal stops */
   const memberOf = new Int16Array(N).fill(-1);
   view.members.forEach(i => { memberOf[i] = -2; });
   const stopDays = view.stops.map(s => Math.round((Date.parse(s + "T00:00:00Z") - BASE_MS) / 864e5));
   const pubStop = new Int16Array(N);
-  view.members.forEach(i => {
+  if (!FRAMED) for (let i = 0; i < N; i++) {
     let s = 0;
     while (s < stopDays.length - 1 && PUB[i] > stopDays[s]) s++;
     pubStop[i] = s;
-  });
+  }
+  /* framed views assign each member its cluster's week below, not its pub date */
+  /* one stop at a time: only the current stop's documents are lit — earlier ones
+     fall back to dust rather than accumulating (framed views are always so) */
+  const STOP_ONLY = FRAMED || view.id === "social";
   const HEAVY = view.members.length > 4000;
+  /* dust visibility: sparse skies get a stronger presence — on framed views the
+     dust IS the shared window map every week is positioned on */
+  const DUST_A = view.id === "arxiv" ? [0.05, 0.11] : [0.08, 0.18];
+  const DUST_S = view.id === "arxiv" ? 1.3 : 1.6;
   const dShow = i => view.stopUnit === "month" ? fmtD(pubDayISO(PUB[i]), "moShort") : fmtD(pubDayISO(PUB[i]));
   /* heavy skies: at most SPRITE_CAP bloom sprites per stop (deterministic pick) */
   const spriteOK = new Uint8Array(N);
@@ -268,38 +353,96 @@ function makeSky(view, idx) {
       if (memberOf[i] >= 0 && perStop[pubStop[i]]++ < SPRITE_CAP) spriteOK[i] = 1;
     });
   }
+  /* per-view color scale: meta = name-gap ramp, social = size heat, arxiv = that month's activity heat */
+  const wkMax = Math.max(1, ...view.clusters.map(c => Math.max(...c.wk)));
+  const actT = v => Math.round(Math.sqrt(Math.min(1, v / wkMax)) * 12) / 12; // 12-bucket, keeps sprite cache small
+  /* size heat is normalised inside each week and log-scaled: cluster sizes are
+     long-tailed, so one absolute ramp across all weeks paints a single red
+     constellation and leaves the rest white. Each frame now runs the full ramp
+     — its smallest cluster white, its largest red — at the cost of cross-week
+     comparability, which the legend states. */
+  const szRange = view.stops.map(() => [Infinity, 0]);
+  view.clusters.forEach(c => {
+    const b = szRange[FRAMED ? c.fr : 0];
+    b[0] = Math.min(b[0], c.size); b[1] = Math.max(b[1], c.size);
+  });
+  const szT = c => {
+    const [lo, hi] = szRange[FRAMED ? c.fr : 0];
+    return hi > lo ? (Math.log(c.size) - Math.log(lo)) / (Math.log(hi) - Math.log(lo)) : 0.5;
+  };
+  const clusterRGB = (c, stop) =>
+    view.id === "meta" ? rampRGB(GAP, c.gap)
+    : view.id === "arxiv" ? rampRGB(HEAT, actT(c.wk[stop]))
+    : rampRGB(HEAT, szT(c));
   const clusters = view.clusters.map((c, k) => {
-    c.rows.forEach(i => { memberOf[i] = k; });
+    c.rows.forEach(i => { memberOf[i] = k; if (FRAMED) pubStop[i] = c.fr; });
     const cen = centroidOf(c.rows, XYZ);
     let alpha = c.rows[0], bd = -2;
     c.rows.forEach(i => {
       const d = XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
       if (d > bd) { bd = d; alpha = i; }
     });
-    const rgb = view.id === "meta" ? BAND_RGB[c.band] : RGB.gold;
+    const rgb = clusterRGB(c, 0);
     const dotc = i => XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
     const eRows = HEAVY ? [...c.rows].sort((a, b) => dotc(b) - dotc(a)).slice(0, 60) : c.rows;
     return { ...c, k, cen, alpha, rgb,
-      hex: view.id === "meta" ? BAND_HEX[c.band] : C.gold,
-      spr: view.id === "meta" ? (c.band === "established" ? "blue" : c.band === "buzzword" ? "muted" : "gold") : "gold",
+      hex: `rgb(${rgb})`,
+      spr: spriteFor(rgb),
+      sprF: spriteFocusFor(rgb),
+      stopRgb: view.id === "arxiv" ? view.stops.map((_, s) => rampRGB(HEAT, actT(c.wk[s]))) : null,
       edges: mstEdges(eRows, XYZ),
-      short: view.id === "meta"
-        ? (c.name.length > 30 ? c.name.slice(0, 28).replace(/\s+\S*$/, "") + "…" : c.name)
+      short: view.id === "meta" && c.panel
+        /* these are the only labels the emergent sky paints — room to spell them out */
+        ? (c.name.length > 46 ? c.name.slice(0, 44).replace(/\s+\S*$/, "") + "…" : c.name)
         : c.name.split(" · ").slice(0, 2).join(" · ") };
   });
+  /* label placement order — biggest constellation wins a contested slot */
+  const bySize = [...clusters].sort((a, b) => b.size - a.size);
+  bySize.forEach(c => { c.txt = c.short.toUpperCase(); });
+  const LABEL_CAP = 44;
+  /* constellation lines at rest — brighter where the sky is sparse */
+  const LINE_A = view.id === "arxiv" ? 0.13 : 0.22;
+  /* the emergent sky paints only the synthesized names; TF-IDF keyword names
+     live in the key and the tooltip, not on the sphere */
+  const NAMED_LABELS_ONLY = view.id === "meta";
   /* per-stop member counts */
   const stopTotals = view.stops.map((_, s) => {
     let on = 0, fresh = 0;
     view.members.forEach(i => { if (pubStop[i] <= s) on++; if (pubStop[i] === s) fresh++; });
     return [on, fresh];
   });
+  const frCounts = FRAMED
+    ? view.stops.map((_, s) => clusters.reduce((n, c) => n + (c.fr === s), 0)) : null;
+  /* the stop's own unclustered documents, drawn neutral-pale above the dust */
+  const stopNoise = FRAMED ? view.noiseRows
+    : STOP_ONLY ? view.stops.map((_, s) => {
+        const a = [];
+        for (let i = 0; i < N; i++) if (memberOf[i] === -1 && pubStop[i] === s) a.push(i);
+        return a;
+      }) : null;
+  /* framed views — per-doc render state for the current stop: position always
+     from the shared window projection, colour ONLY from this week's clustering.
+     0 outside this week's trailing window (hidden) · 1 window dust ·
+     2 this week's unclustered (neutral) · 3 this week's clustered */
+  const frState = FRAMED ? new Uint8Array(N) : null;
+  function applyFrameState() {
+    frState.fill(0);
+    const [lo, hi] = view.wins[st.stop];
+    frState.fill(1, lo, hi + 1);
+    view.noiseRows[st.stop].forEach(i => { frState[i] = 2; });
+    clusters.forEach(c => {
+      if (c.fr === st.stop) c.rows.forEach(i => { frState[i] = 3; });
+    });
+  }
 
   /* home pose: open facing this view's member centroid */
   const mc = centroidOf(view.members, XYZ);
   const homeTheta = Math.atan2(-mc[0], mc[2]);
   const homePhi = Math.max(-0.9, Math.min(0.9, Math.atan2(mc[1], Math.hypot(mc[0], mc[2]))));
   const st = { theta: homeTheta, phi: homePhi, spin: 0, t: 0,
-    stop: RM ? view.stops.length - 1 : 0, playing: !RM, playAcc: 0,
+    /* the reveal never starts on its own — the play button and the slider are
+       the only things that move it */
+    stop: RM ? view.stops.length - 1 : 0, playing: false, playAcc: 0,
     hover: -1, focus: -1, drag: null, idleAt: 0,
     fTheta: null, fPhi: null, ease: 0 };
   let W = 0, H = 0, R = 0, cx0 = 0, cy0 = 0, bg = null;
@@ -414,14 +557,20 @@ function makeSky(view, idx) {
     project();
     drawRings(false);
 
-    /* corpus dust (non-members) — one path per bucket, not one fill per star */
-    ctx.fillStyle = "rgba(168,178,212,0.05)";
+    /* corpus dust — one path per bucket, not one fill per star; on framed
+       views the dust is the trailing window minus this week's clusters */
+    /* earlier stops fall back to dust; the current stop is drawn by the passes
+       below, later stops are not on the sky yet */
+    const dusty = FRAMED ? (i => frState[i] === 1)
+      : STOP_ONLY ? (i => pubStop[i] < st.stop)
+      : (i => memberOf[i] === -1);
+    ctx.fillStyle = `rgba(168,178,212,${DUST_A[0]})`;
     ctx.beginPath();
-    for (let i = 0; i < N; i++) if (memberOf[i] === -1 && SZ[i] < 0) ctx.rect(SX[i], SY[i], 1.3, 1.3);
+    for (let i = 0; i < N; i++) if (dusty(i) && SZ[i] < 0) ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
     ctx.fill();
-    ctx.fillStyle = "rgba(168,178,212,0.11)";
+    ctx.fillStyle = `rgba(168,178,212,${DUST_A[1]})`;
     ctx.beginPath();
-    for (let i = 0; i < N; i++) if (memberOf[i] === -1 && SZ[i] >= 0) ctx.rect(SX[i], SY[i], 1.3, 1.3);
+    for (let i = 0; i < N; i++) if (dusty(i) && SZ[i] >= 0) ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
     ctx.fill();
 
     const hl = st.focus >= 0 ? st.focus : st.hover;
@@ -429,54 +578,87 @@ function makeSky(view, idx) {
     /* member stars */
     ctx.globalCompositeOperation = "lighter";
     const s0 = st.stop;
+    if (STOP_ONLY) {
+      /* this stop's unclustered documents: neutral, brighter than the dust */
+      const dimN = hl >= 0 ? 0.3 : 1;
+      for (const i of stopNoise[s0]) {
+        const sc = SZ[i] >= 0 ? 1 : 0.5;
+        ctx.globalAlpha = (SZ[i] >= 0 ? 0.55 : 0.16) * dimN;
+        ctx.drawImage(SPR.pale, SX[i] - 2.4 * sc, SY[i] - 2.4 * sc, 4.8 * sc, 4.8 * sc);
+      }
+      ctx.globalAlpha = 1;
+    }
     if (!HEAVY) {
+      /* constellations carry a strong bloom at rest; selection then reads from
+         the extra size, the hotter sprite, the halo — and everything else dimming */
+      const GLOWF = view.id === "arxiv" ? 1 : 1.5;
       for (let m = 0; m < view.members.length; m++) {
         const i = view.members[m], ps = pubStop[i];
-        if (ps > s0) continue;
+        if (STOP_ONLY ? ps !== s0 : ps > s0) continue;
         const k = memberOf[i];
         const z = SZ[i];
         const fresh = ps === s0;
         const ageF = fresh ? 1 : Math.max(0.34, 1 - 0.055 * (s0 - ps));
-        const depthF = z >= 0 ? 0.75 + 0.25 * z : 0.22;
-        const dimF = hl >= 0 && k !== hl ? 0.25 : 1;
-        const tw = fresh && !RM ? 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7) : 1;
-        const sz = (fresh ? 5.2 : 3.4) * (z >= 0 ? 1 : 0.65) * tw;
-        ctx.globalAlpha = Math.min(1, 0.9 * ageF * depthF * dimF);
-        const sp = k >= 0 ? clusters[k].spr : "pale";
-        ctx.drawImage(SPR[sp], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+        const depthF = z >= 0 ? 0.82 + 0.18 * z : 0.3;
+        const focused = hl >= 0 && k === hl;
+        const dimF = hl >= 0 && !focused ? 0.22 : 1;
+        const tw = fresh && !RM ? 0.88 + 0.22 * Math.sin(st.t * 2.6 + i * 1.7) : 1;
+        const sz = (fresh ? 5.2 : 3.4) * (z >= 0 ? 1 : 0.65) * tw * GLOWF * (focused ? 1.7 : 1);
+        ctx.globalAlpha = Math.min(1, (focused ? 1.35 : 1.05) * ageF * depthF * dimF);
+        ctx.drawImage(focused ? clusters[k].sprF : k >= 0 ? clusters[k].spr : SPR.pale,
+          SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
       }
       ctx.globalAlpha = 1;
+      /* focused constellation: one soft halo behind its stars */
+      if (hl >= 0) {
+        const hc = clusters[hl], hp = projectVec(hc.cen);
+        if (hp[2] > 0) {
+          const hr = R * 0.34;
+          ctx.globalAlpha = 0.38 * hp[2];
+          ctx.drawImage(hc.sprF, hp[0] - hr, hp[1] - hr, hr * 2, hr * 2);
+          ctx.globalAlpha = 1;
+        }
+      }
     } else {
       /* tens of thousands of stars: flat pixels for the mass, blooms only
-         where they matter (this stop's named-cluster papers, highlight) */
+         where they matter (this stop's named-cluster papers, highlight).
+         Every pass is batched by constellation colour — otherwise the mass is
+         drawn in one flat gold and a red month reads white. The composite is
+         "lighter", so drawing colour-major instead of back-to-front is
+         equivalent; the alphas below carry the depth and recency order. */
       const dimAll = hl >= 0;
-      ctx.fillStyle = `rgba(233,186,94,${dimAll ? 0.06 : 0.15})`;
-      ctx.beginPath();
-      for (let m = 0; m < view.members.length; m++) {
-        const i = view.members[m];
-        if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
-        ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+      for (const b of flatBatch) {
+        const idx = b.idx;
+        /* already published, behind the sphere */
+        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.06 : 0.16})`;
+        ctx.beginPath();
+        for (let m = 0; m < idx.length; m++) {
+          const i = idx[m];
+          if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
+          ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+        }
+        ctx.fill();
+        /* already published, facing us */
+        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.11 : 0.44})`;
+        ctx.beginPath();
+        for (let m = 0; m < idx.length; m++) {
+          const i = idx[m];
+          if (pubStop[i] >= s0 || SZ[i] < 0) continue;
+          ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
+        }
+        ctx.fill();
+        /* this stop's papers: capped sprite budget, bright pixels for the rest */
+        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.16 : 0.78})`;
+        ctx.beginPath();
+        for (let m = 0; m < idx.length; m++) {
+          const i = idx[m];
+          if (pubStop[i] !== s0) continue;
+          if (memberOf[i] >= 0 && spriteOK[i] && !dimAll) continue;
+          const sc = SZ[i] >= 0 ? 1 : 0.3;
+          ctx.rect(SX[i] - 1.2 * sc, SY[i] - 1.2 * sc, 2.4 * sc, 2.4 * sc);
+        }
+        ctx.fill();
       }
-      ctx.fill();
-      ctx.fillStyle = `rgba(240,200,118,${dimAll ? 0.10 : 0.42})`;
-      ctx.beginPath();
-      for (let m = 0; m < view.members.length; m++) {
-        const i = view.members[m];
-        if (pubStop[i] >= s0 || SZ[i] < 0) continue;
-        ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
-      }
-      ctx.fill();
-      /* this stop's papers: capped sprite budget, bright pixels for the rest */
-      ctx.fillStyle = `rgba(250,225,160,${dimAll ? 0.15 : 0.72})`;
-      ctx.beginPath();
-      for (let m = 0; m < view.members.length; m++) {
-        const i = view.members[m];
-        if (pubStop[i] !== s0) continue;
-        if (memberOf[i] >= 0 && spriteOK[i] && !dimAll) continue;
-        const sc = SZ[i] >= 0 ? 1 : 0.3;
-        ctx.rect(SX[i] - 1.2 * sc, SY[i] - 1.2 * sc, 2.4 * sc, 2.4 * sc);
-      }
-      ctx.fill();
       if (!dimAll) for (let m = 0; m < view.members.length; m++) {
         const i = view.members[m];
         if (pubStop[i] !== s0 || memberOf[i] < 0 || !spriteOK[i]) continue;
@@ -484,7 +666,7 @@ function makeSky(view, idx) {
         const tw = RM ? 1 : 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7);
         const sz = 3.6 * (z >= 0 ? 1 : 0.6) * tw;
         ctx.globalAlpha = Math.min(1, 0.92 * (z >= 0 ? 0.8 + 0.2 * z : 0.22));
-        ctx.drawImage(SPR[clusters[memberOf[i]].spr], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+        ctx.drawImage(clusters[memberOf[i]].spr, SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
       }
       ctx.globalAlpha = 1;
       if (hl >= 0) {
@@ -494,34 +676,57 @@ function makeSky(view, idx) {
           const z = SZ[i], fresh = pubStop[i] === s0;
           const sz = (fresh ? 4.6 : 3.0) * (z >= 0 ? 1 : 0.65);
           ctx.globalAlpha = Math.min(1, (fresh ? 0.95 : 0.6) * (z >= 0 ? 1 : 0.3));
-          ctx.drawImage(SPR[c.spr], SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+          ctx.drawImage(c.spr, SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
         }
         ctx.globalAlpha = 1;
       }
     }
 
-    /* constellation lines */
+    /* constellation lines — batched by colour so a 680-constellation sky
+       costs a handful of strokes per frame, not one per cluster */
+    const lineBuckets = new Map();
     clusters.forEach(c => {
-      const boost = hl === c.k ? 0.42 : 0.13;
-      ctx.strokeStyle = `rgba(${c.rgb},${boost})`;
-      ctx.lineWidth = hl === c.k ? 1.2 : 0.8;
+      if (FRAMED && c.fr !== s0) return;
+      if (c.k === hl) return;                    // highlighted one drawn on top
+      let arr = lineBuckets.get(c.rgb);
+      if (!arr) lineBuckets.set(c.rgb, arr = []);
+      arr.push(c);
+    });
+    ctx.lineWidth = 0.8;
+    lineBuckets.forEach((cs, rgb) => {
+      ctx.strokeStyle = `rgba(${rgb},${LINE_A})`;
       ctx.beginPath();
-      c.edges.forEach(([a, b]) => {
-        if (pubStop[a] > s0 || pubStop[b] > s0) return;
-        if (SZ[a] < 0.02 || SZ[b] < 0.02) return;
+      for (const c of cs) for (const [a, b] of c.edges) {
+        if (STOP_ONLY ? (pubStop[a] !== s0 || pubStop[b] !== s0)
+                      : (pubStop[a] > s0 || pubStop[b] > s0)) continue;
+        if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
         ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[b], SY[b]);
-      });
+      }
       ctx.stroke();
     });
+    if (hl >= 0 && !(FRAMED && clusters[hl].fr !== s0)) {
+      const c = clusters[hl];
+      ctx.strokeStyle = `rgba(${c.rgb},0.42)`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      for (const [a, b] of c.edges) {
+        if (STOP_ONLY ? (pubStop[a] !== s0 || pubStop[b] !== s0)
+                      : (pubStop[a] > s0 || pubStop[b] > s0)) continue;
+        if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
+        ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[b], SY[b]);
+      }
+      ctx.stroke();
+    }
 
     /* diffraction spikes on each constellation's alpha star */
     ctx.strokeStyle = "rgba(255,244,214,0.5)"; ctx.lineWidth = 0.8;
     ctx.beginPath();
     clusters.forEach(c => {
+      if (FRAMED && c.fr !== s0) return;
       const i = c.alpha;
-      if (pubStop[i] > s0 || SZ[i] < 0.05) return;
+      if ((STOP_ONLY ? pubStop[i] !== s0 : pubStop[i] > s0) || SZ[i] < 0.05) return;
       if (hl >= 0 && c.k !== hl) return;
-      const L = 8;
+      const L = !HEAVY && hl === c.k ? 13 : 8;
       ctx.moveTo(SX[i] - L, SY[i]); ctx.lineTo(SX[i] + L, SY[i]);
       ctx.moveTo(SX[i], SY[i] - L); ctx.lineTo(SX[i], SY[i] + L);
     });
@@ -533,29 +738,67 @@ function makeSky(view, idx) {
     ctx.letterSpacing = "0.12em";
     ctx.textAlign = "center";
     const placed = [];
-    [...clusters].sort((a, b) => b.size - a.size).forEach(c => {
+    for (const c of bySize) {
+      if (FRAMED && c.fr !== s0) continue;
+      if (NAMED_LABELS_ONLY && !c.panel) continue;  // raw keyword names stay in the key
+      if (placed.length >= LABEL_CAP) break;      // the sky can only hold so many
       const p = projectVec(c.cen);
-      if (p[2] < 0.18) return;
+      if (p[2] < 0.18) continue;
       let vis = 0;
-      for (const i of c.rows) if (pubStop[i] <= s0) { if (++vis > 1) break; }
-      if (vis < 2) return;
-      const txt = c.short.toUpperCase();
-      const w = ctx.measureText(txt).width;
+      for (const i of c.rows) if (STOP_ONLY ? pubStop[i] === s0 : pubStop[i] <= s0) { if (++vis > 1) break; }
+      if (vis < 2) continue;
+      const txt = c.txt;
+      if (c.txtW === undefined) c.txtW = ctx.measureText(txt).width;  // font is fixed
+      const w = c.txtW;
       const bx = { x0: p[0] - w/2 - 4, x1: p[0] + w/2 + 4, y0: p[1] - 18, y1: p[1] - 2 };
-      if (placed.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0)) return;
+      if (placed.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0)) continue;
       placed.push(bx);
       const on = hl === c.k;
       ctx.fillStyle = "rgba(5,6,12,0.55)";
       ctx.fillRect(bx.x0, bx.y0 + 2, bx.x1 - bx.x0, 13);
       ctx.fillStyle = on ? C.ink : `rgba(${c.rgb},0.82)`;
       ctx.fillText(txt, p[0], p[1] - 7);
-    });
+    }
     ctx.letterSpacing = "0em";
 
     drawRings(true);
   }
 
   /* ---------- state advance ---------- */
+  /* month-activity recolor (arxiv): sprites, lines, labels, key dots and sparks
+     all read the mutated cluster fields */
+  function applyStopColors() {
+    if (!clusters.length || !clusters[0].stopRgb) return;
+    let moved = false;
+    clusters.forEach(c => {
+      const rgb = c.stopRgb[st.stop];
+      if (rgb === c.rgb) return;
+      moved = true;
+      c.rgb = rgb; c.hex = `rgb(${rgb})`;
+      c.spr = spriteFor(rgb); c.sprF = spriteFocusFor(rgb);
+      if (c.dotEl) {
+        c.dotEl.style.background = c.hex;
+        c.dotEl.style.boxShadow = `0 0 6px rgba(${rgb},0.8)`;
+      }
+    });
+    if (moved && HEAVY) buildFlatBatch();
+  }
+  /* the flat-pixel mass, grouped by the colour its constellation carries at this
+     stop — the activity ramp quantizes to a dozen shades, so this is a dozen
+     fills per pass rather than one per star */
+  let flatBatch = [];
+  function buildFlatBatch() {
+    const by = new Map();
+    for (let m = 0; m < view.members.length; m++) {
+      const i = view.members[m], k = memberOf[i];
+      const rgb = k >= 0 ? clusters[k].rgb : RGB.pale;
+      let a = by.get(rgb);
+      if (!a) by.set(rgb, a = []);
+      a.push(i);
+    }
+    flatBatch = [...by].map(([rgb, a]) => ({ rgb, idx: Int32Array.from(a) }));
+  }
+  if (HEAVY) buildFlatBatch();
   function setStop(s, fromSlider) {
     st.stop = Math.max(0, Math.min(view.stops.length - 1, s));
     if (!fromSlider) slider.value = st.stop;
@@ -567,7 +810,31 @@ function makeSky(view, idx) {
       : `${fmtD(iso, "wd")} · day ${st.stop + 1}/${nStops}`)
       + (view.partialLast && st.stop === nStops - 1 ? " · partial" : "");
     const [on, fresh] = stopTotals[st.stop];
-    countEl.textContent = `${nf(on)} on sky · +${nf(fresh)} new`;
+    if (FRAMED) {
+      applyFrameState();
+      if (st.focus >= 0 && clusters[st.focus].fr !== st.stop) unfocus();
+      rowsEl.querySelectorAll(".row").forEach(r => {
+        r.style.display = clusters[+r.dataset.k].fr === st.stop ? "" : "none";
+      });
+      khEl.textContent = `constellations · ${frCounts[st.stop]}`;
+    } else if (STOP_ONLY) {
+      /* every cluster belongs to the week; fade the ones with nothing today */
+      rowsEl.querySelectorAll(".row").forEach(r => {
+        r.classList.toggle("off", !view.clusters[+r.dataset.k].wk[st.stop]);
+      });
+    }
+    if (STOP_ONLY) {
+      const unit = view.stopUnit === "day" && !FRAMED ? "today" : `this ${view.stopUnit}`;
+      /* on the framed sky the pale field is "not named by the panel", which is
+         not the same claim as "not clustered" */
+      const [lit, rest] = view.id === "meta" ? ["in named clusters", "unnamed"]
+                                             : ["clustered", "unclustered"];
+      countEl.textContent =
+        `${nf(fresh)} ${lit} · ${nf(stopNoise[st.stop].length)} ${rest} ${unit}`;
+    } else {
+      countEl.textContent = `${nf(on)} on sky · +${nf(fresh)} new`;
+    }
+    applyStopColors();
     drawSparks();
   }
   function setPlaying(p) {
@@ -606,6 +873,7 @@ function makeSky(view, idx) {
       <div class="nm">${chip}${c.name}</div>
       <div class="rt"><span class="n">${c.size}</span><canvas class="spark" width="92" height="28"></canvas></div>`;
     rowsEl.appendChild(row);
+    cl.dotEl = row.querySelector(".dot");
     sparks.push([row.querySelector(".spark"), c.wk, cl]);
     row.addEventListener("mouseenter", () => { st.hover = k; markRows(); });
     row.addEventListener("mouseleave", () => { st.hover = -1; markRows(); });
@@ -628,7 +896,7 @@ function makeSky(view, idx) {
     });
   }
 
-  function focusCluster(k) {
+  function focusCluster(k, pick = -1) {
     st.focus = k;
     const c = clusters[k];
     st.eTheta0 = st.theta + st.spin; st.spin = 0; st.ePhi0 = st.phi; st.ease = 0;
@@ -642,20 +910,24 @@ function makeSky(view, idx) {
     st.fTheta = cur + dlt;
     st.fPhi = Math.atan2(y, h);
     markRows();
-    const fullDesc = (c.attractor || c.excerpt || "")
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/^#+\s*/gm, "")
-      .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
-      .replace(/\*([^*]+)\*/g, "<i>$1</i>")
-      .split(/\n{2,}/).map(p => `<div class="dx">${p.trim().replace(/\n/g, " ")}</div>`).join("");
     const src = view.id === "meta"
-      ? `<div class="dm"><span class="chip ${c.band}">${c.band}</span> name gap ${c.gap} · ${c.size} documents · keywords: ${c.kw}</div>
-         ${fullDesc}
-         <div class="dm">panel: ${c.panel.join(" · ")} → Fable synthesis</div>`
+      ? `<div class="dm"><span class="chip ${c.band}">${c.band}</span> name gap ${c.gap} = semantic ${c.sem} − lexical ${c.lex} · ${c.size} documents</div>
+         ${c.grok ? `<div class="dh">what these documents are</div>${mdHTML(c.grok)}` : ""}
+         <div class="dh">the metaconcept — Fable synthesis</div>
+         ${mdHTML(c.attractor || c.excerpt)}
+         <div class="dm">read by ${c.panel.join(" · ")} → synthesized by Claude Fable</div>`
       : `<div class="dm">${c.size} documents · raw TF-IDF name</div>`;
-    const latest = [...c.rows].sort((a, b) => PUB[b] - PUB[a]).slice(0, 3)
-      .map(i => `<em>${TITLES[i]}</em> — ${SRC_NAME[SRC[i]]}, ${dShow(i)}`).join("<br>");
-    detailBody.innerHTML = `<div class="dn">${c.name}</div>${src}<div class="dt">${latest}</div>`;
+    /* the document you clicked leads the list, then the cluster's most recent */
+    const rest = [...c.rows].sort((a, b) => PUB[b] - PUB[a]).filter(i => i !== pick);
+    const listed = (pick >= 0 ? [pick] : []).concat(rest).slice(0, pick >= 0 ? 4 : 3);
+    const docLine = i => {
+      const u = urlOf(i), meta = `${SRC_NAME[SRC[i]]}, ${dShow(i)}`;
+      const t = `<em>${esc(TITLES[i])}</em>`;
+      return (u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${t}</a>` : t)
+        + ` — ${meta}` + (i === pick ? " · the star you clicked" : "");
+    };
+    detailBody.innerHTML = `<div class="dn">${c.name}</div>${src}` +
+      `<div class="dt">${listed.map(docLine).join("<br>")}</div>`;
     detailEl.classList.add("on");
   }
   function unfocus() {
@@ -686,7 +958,7 @@ function makeSky(view, idx) {
     const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
     let bi = -1, bd = 100;
     for (const i of view.members) {
-      if (pubStop[i] > st.stop || SZ[i] < 0) continue;
+      if ((STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) || SZ[i] < 0) continue;
       const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
       if (d < bd) { bd = d; bi = i; }
     }
@@ -694,7 +966,7 @@ function makeSky(view, idx) {
       tip.style.display = "block";
       tip.style.left = Math.min(innerWidth - 310, e.clientX + 14) + "px";
       tip.style.top = (e.clientY + 12) + "px";
-      tip.innerHTML = `${TITLES[bi]}<div class="ts">${SRC_NAME[SRC[bi]]} · ${dShow(bi)}${memberOf[bi] >= 0 ? " · " + clusters[memberOf[bi]].short : ""}</div>`;
+      tip.innerHTML = `${esc(TITLES[bi])}<div class="ts">${SRC_NAME[SRC[bi]]} · ${dShow(bi)}${memberOf[bi] >= 0 ? " · " + clusters[memberOf[bi]].short : ""}</div>`;
     } else tip.style.display = "none";
   });
   cv.addEventListener("pointerup", e => {
@@ -704,11 +976,11 @@ function makeSky(view, idx) {
     const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
     let bi = -1, bd = 120;
     for (const i of view.members) {
-      if (pubStop[i] > st.stop || SZ[i] < 0) continue;
+      if ((STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) || SZ[i] < 0) continue;
       const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
       if (d < bd) { bd = d; bi = i; }
     }
-    if (bi >= 0 && memberOf[bi] >= 0) focusCluster(memberOf[bi]);
+    if (bi >= 0 && memberOf[bi] >= 0) focusCluster(memberOf[bi], bi);
     else unfocus();
   });
   cv.addEventListener("pointerleave", () => { tip.style.display = "none"; });
@@ -743,7 +1015,6 @@ const io = new IntersectionObserver(es => {
     if (e.isIntersecting && e.intersectionRatio > 0.5) {
       active = skies.find(s => s.sec === e.target) || active;
       dots.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", skies[i] === active));
-      if (!RM && !REC && active.st.stop === 0 && !active.st.playing) active.setPlaying(true);
     }
   });
 }, { root: snap, threshold: [0.55] });

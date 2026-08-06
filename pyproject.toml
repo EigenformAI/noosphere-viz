@@ -1,0 +1,8 @@
+[project]
+name = "noosphere-viz"
+version = "0.1.0"
+description = "Reports from the future — data build + page build scripts"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=1.26",
+]

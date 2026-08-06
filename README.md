@@ -1,20 +1,44 @@
-# Armillary Noosphere
+# Reports from the future
 
 The idea-sky of AI research & discourse: three spherical star-map projections, drawn
 as constellations turning inside an armillary sphere. Every star is a real document.
 
-One self-contained page, no dependencies, no build step: **`index.html`** (~3 MB).
+One self-contained page, no dependencies, no build step: **`index.html`** (~3.8 MB).
 
 ## The three plates
 
-| Plate | Sky | Data | Slider |
-|---|---|---|---|
-| I | **The Research Sky** — six months of arXiv (50,295 papers, Feb–Aug 2026), clustered by TF-IDF → SVD → UMAP → HDBSCAN, constellations named by TF-IDF top terms | trend-detection pipeline | month by month |
-| II | **The Attention Sky** — one week of discourse (X, Hacker News, LessWrong, blogs; 299 docs), 15 clusters on the week's own embedding map | mindspace `week_projector` export | day by day |
-| III | **The Emergent Sky** — metaconcepts whose meaning runs ahead of shared vocabulary: the final week's highest *name-gap* clusters, named by a 4-model panel synthesized by Claude Fable | mindspace pipeline run | day by day |
+| Plate | Sky | Data | Colour | Slider |
+|---|---|---|---|---|
+| I | **The Research Sky** — six months of arXiv (49,135 papers, Feb–Aug 2026), clustered by embedding UMAP → HDBSCAN (`min_cluster_size` 100 → 105 clusters), constellations named by TF-IDF keywords; **every cluster** is a constellation, drawn from the export's deterministic 20,000-paper sample (unclustered papers as dust). Only the labels that fit are painted; the key lists every one | mindspace `arxiv` export | that month's activity, on one absolute scale across all months: white few → yellow → red loads | month by month |
+| II | **The Attention Sky** — the same 11 weeks and the same sphere as Plate III, but **every** cluster the run found (209), named by its raw TF-IDF keywords: what the discourse *calls* things | mindspace `quarter_without_fable` run | cluster size **normalised inside each week** and log-scaled: that week's smallest constellation white → its largest red | week by week |
+| III | **The Emergent Sky** — metaconcepts whose meaning runs ahead of shared vocabulary. Each of the 11 weeks is clustered **independently**: positions come from the shared 3-month window projection, highlight colours only from that week's own clustering run. Only the clusters a 4-model panel named via Claude Fable are drawn (116 of the same 209), each carrying its full reading — no TF-IDF anywhere. Flip between Plates II and III to see the name gap itself | mindspace `quarter_with_fable` run | continuous name gap: indigo buzzword → red established → pale-gold emerging | week by week |
+
+Plate II's colour scale is rescaled per week on purpose: cluster sizes are
+long-tailed, so a single absolute ramp painted one red constellation across the
+whole quarter and left everything else white. The cost is that colour ranks a
+week against itself, not against the other weeks — the legend says so. Plate I
+keeps an absolute scale, so the sky visibly heats up through spring and goes
+cold in the days-old August frame.
+
+Clicking a Plate III constellation opens its reading in two parts: the panel's
+plain description of what the documents are (grok-4.5's compression), then the
+Fable synthesis naming the metaconcept.
 
 Interactions: drag to turn a sphere · hover a star for its document · click a
 constellation (or its key row) to focus it — Plate III opens the full Fable reading.
+Clicking a star focuses its constellation *and* puts that document at the top of
+the detail panel; every document listed there links out to its source (arXiv,
+X, LessWrong, Hacker News, the blogs) in a new tab.
+
+Nothing plays on its own: the reveal only advances via the play button, the
+slider, or the arrow keys.
+
+On Plate III the slider steps between **visual frames**, not a cumulative reveal:
+each week highlights only its own clusters and un-highlights the previous week's,
+its unclustered documents render neutral-pale, and the trailing window's earlier
+documents fall back to grey dust. Cluster identities and names are per-week and
+independent, so the same theme reappearing under a different name week to week is
+expected — that is the signal, not a bug.
 Each plate carries an honesty caption: **real** (what you could check against the
 source data) vs **simplified** (windows, sampling, and labeling choices made here).
 
@@ -23,14 +47,28 @@ source data) vs **simplified** (windows, sampling, and labeling choices made her
 - `index.html` — the built page (what Vercel serves)
 - `noosphere_template.html` — the page source: canvas engine, armillary chrome, keys,
   sliders, deterministic `#record` hooks; data is injected at the `/*__DATA_JSON__*/` token
-- `noosphere_data.json` — the packed data (3 document-spaces + 3 view definitions)
+- `noosphere_data.json` — the packed data (2 document-spaces + 3 view definitions).
+  Source URLs are stored host-prefix + path (`{pre, i, s}`) and rebuilt in the
+  page; stored whole, the 25,005 links would cost ~470 KB more
 - `build_noosphere.py` — injects the JSON into the template:
-  `python3 build_noosphere.py --standalone --out index.html`
+  `uv run build_noosphere.py --standalone --out index.html`
   (`--standalone` wraps the page in a full `<!doctype html>` document; without it
-  you get the bare fragment used for claude.ai artifact publishing)
-- `build/build_noosphere_data.py` — provenance copy of the data-prep script; it reads
-  the private scraping/clustering pipelines (trend-detection + mindspace) and is **not
-  runnable from this repo** — it documents exactly how `noosphere_data.json` was made
+  you get the bare fragment used for claude.ai artifact publishing. The default
+  title is "Reports from the future"; override with `--title`.)
+- `build/build_noosphere_data.py` — the data-prep script, **runnable from this repo**
+  (takes seconds; all projections are precomputed by the pipelines):
+  `uv run build/build_noosphere_data.py`
+  It reads the pipeline exports directly:
+  - `…/data/output/quarter_with_fable` — Plate III + the shared corpus space
+    (projections, `frames.json` weekly clusters, `*_by_week.json` panel/Fable
+    labels, per-model compressions & attractor readings)
+  - `…/data/output/quarter_without_fable` — Plate II: the *same* run exported
+    without the Fable labels, so its clusters keep raw TF-IDF names. The build
+    asserts the two exports agree on the shared projection before letting the
+    plates share a space.
+  - `…/data/output/arxiv` — Plate I arXiv space
+    (the small files snapshotted into `build/arxiv_source/`)
+- `pyproject.toml` — uv project (numpy; Python 3.12)
 
 ## Deploying on Vercel
 
@@ -44,8 +82,11 @@ Pure static site — no framework, no build.
 Change the template, then rebuild the page:
 
 ```
-python3 build_noosphere.py --standalone --out index.html
+uv run build_noosphere.py --standalone --out index.html
 ```
 
-Refreshing the *data* (new pipeline runs) happens in the source repos; regenerate
-`noosphere_data.json` there with `build/build_noosphere_data.py` and copy it over.
+Refreshing the data (new pipeline runs):
+
+```
+uv run build/build_noosphere_data.py
+```

@@ -1,0 +1,22 @@
+{
+  "embeddings": [
+    {
+      "tensorName": "Week 1 (2026-07-28..2026-08-04) \u2014 embeddings",
+      "tensorShape": [
+        392,
+        1536
+      ],
+      "tensorPath": "data/vectors.bytes",
+      "metadataPath": "data/metadata.tsv"
+    },
+    {
+      "tensorName": "UMAP 3-D cluster map",
+      "tensorShape": [
+        392,
+        3
+      ],
+      "tensorPath": "data/umap3d.bytes",
+      "metadataPath": "data/metadata.tsv"
+    }
+  ]
+}
