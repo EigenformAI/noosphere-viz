@@ -177,11 +177,11 @@ document.getElementById("mastSub").textContent =
 const VC = {
   arxiv: {
     plate:"PLATE I", title:"THE RESEARCH SKY",
-    sub:"What researchers are working on — six months of arXiv, one star per paper, revealed month by month.",
+    sub:"What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.",
     method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month",
-    real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; the reveal follows true submission dates.`,
-    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August), and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August's rate rests on only ${v.days[v.days.length - 1]} days of papers; read its ranking loosely.`,
-    legend:"colour = that month's publishing rate, papers per day (white quiet → yellow → red busy) · brightness = recency · lines sketch each constellation · dust = unclustered papers · key rows are sorted by size — click one to fly to it",
+    real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; which month a paper lights in follows its true submission date.`,
+    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. The slider does not reveal the sky, it moves a light across it: every month is present as grey dust at every stop, and only the selected month's papers are lit, so the shape of the corpus stays fixed and each month is read against it. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August), and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August's rate rests on only ${v.days[v.days.length - 1]} days of papers; read its ranking loosely.`,
+    legend:"grey dust = all six months, always on the sphere · colour = the lit month's publishing rate, papers per day (white quiet → yellow → red busy) · pale = that month's unclustered papers · lines sketch each constellation · click a key row to fly to it and see its whole six-month extent",
   },
   social: {
     plate:"PLATE II", title:"THE ATTENTION SKY",
@@ -338,17 +338,26 @@ function makeSky(view, idx) {
   /* framed views assign each member its cluster's week below, not its pub date */
   /* one stop at a time: only the current stop's documents are lit — earlier ones
      fall back to dust rather than accumulating (framed views are always so) */
-  const STOP_ONLY = FRAMED || view.id === "social";
+  const STOP_ONLY = FRAMED || view.id === "social" || view.id === "arxiv";
+  /* the research sky keeps the whole six months on the sphere as grey dust and
+     lights one month inside it, so the shape of the corpus never changes and
+     the month is read against it. The weekly plates instead reveal forward
+     through a trailing window, where later documents are not yet on the sky. */
+  const BACKDROP = view.id === "arxiv";
   const HEAVY = view.members.length > 4000;
   /* dust visibility: sparse skies get a stronger presence — on framed views the
      dust IS the shared window map every week is positioned on */
-  const DUST_A = view.id === "arxiv" ? [0.05, 0.11] : [0.08, 0.18];
+  /* on the backdrop sky the dust is no longer leftovers — it is the corpus, and
+     the only thing giving the lit month something to be read against */
+  const DUST_A = BACKDROP ? [0.07, 0.155] : [0.08, 0.18];
   const DUST_S = view.id === "arxiv" ? 1.3 : 1.6;
   const dShow = i => view.stopUnit === "month" ? fmtD(pubDayISO(PUB[i]), "moShort") : fmtD(pubDayISO(PUB[i]));
   /* heavy skies: at most SPRITE_CAP bloom sprites per stop (deterministic pick) */
   const spriteOK = new Uint8Array(N);
   if (HEAVY) {
-    const SPRITE_CAP = 1400, perStop = new Int32Array(view.stops.length);
+    /* only one stop is ever lit now, so the budget buys blooms for one month
+       rather than a whole accumulated sky */
+    const SPRITE_CAP = 2200, perStop = new Int32Array(view.stops.length);
     view.members.forEach(i => {
       if (memberOf[i] >= 0 && perStop[pubStop[i]]++ < SPRITE_CAP) spriteOK[i] = 1;
     });
@@ -567,8 +576,10 @@ function makeSky(view, idx) {
     /* corpus dust — one path per bucket, not one fill per star; on framed
        views the dust is the trailing window minus this week's clusters */
     /* earlier stops fall back to dust; the current stop is drawn by the passes
-       below, later stops are not on the sky yet */
+       below, later stops are not on the sky yet — except on the backdrop view,
+       where every other month, past and future, is part of the grey field */
     const dusty = FRAMED ? (i => frState[i] === 1)
+      : BACKDROP ? (i => pubStop[i] !== st.stop)
       : STOP_ONLY ? (i => pubStop[i] < st.stop)
       : (i => memberOf[i] === -1);
     ctx.fillStyle = `rgba(168,178,212,${DUST_A[0]})`;
@@ -636,24 +647,28 @@ function makeSky(view, idx) {
       const dimAll = hl >= 0;
       for (const b of flatBatch) {
         const idx = b.idx;
-        /* already published, behind the sphere */
-        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.06 : 0.16})`;
-        ctx.beginPath();
-        for (let m = 0; m < idx.length; m++) {
-          const i = idx[m];
-          if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
-          ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+        /* on a one-month-at-a-time sky the other months are already drawn, in
+           grey, by the dust pass — only a cumulative reveal paints them here */
+        if (!STOP_ONLY) {
+          /* already published, behind the sphere */
+          ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.06 : 0.16})`;
+          ctx.beginPath();
+          for (let m = 0; m < idx.length; m++) {
+            const i = idx[m];
+            if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
+            ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+          }
+          ctx.fill();
+          /* already published, facing us */
+          ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.11 : 0.44})`;
+          ctx.beginPath();
+          for (let m = 0; m < idx.length; m++) {
+            const i = idx[m];
+            if (pubStop[i] >= s0 || SZ[i] < 0) continue;
+            ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
+          }
+          ctx.fill();
         }
-        ctx.fill();
-        /* already published, facing us */
-        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.11 : 0.44})`;
-        ctx.beginPath();
-        for (let m = 0; m < idx.length; m++) {
-          const i = idx[m];
-          if (pubStop[i] >= s0 || SZ[i] < 0) continue;
-          ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
-        }
-        ctx.fill();
         /* this stop's papers: capped sprite budget, bright pixels for the rest */
         ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.16 : 0.78})`;
         ctx.beginPath();
@@ -679,7 +694,10 @@ function makeSky(view, idx) {
       if (hl >= 0) {
         const c = clusters[hl];
         for (const i of c.rows) {
-          if (pubStop[i] > s0) continue;
+          /* the backdrop sky already holds every month, so a focused
+             constellation shows its whole extent — this month bright, the
+             others dim — instead of stopping at the current stop */
+          if (!BACKDROP && pubStop[i] > s0) continue;
           const z = SZ[i], fresh = pubStop[i] === s0;
           const sz = (fresh ? 4.6 : 3.0) * (z >= 0 ? 1 : 0.65);
           ctx.globalAlpha = Math.min(1, (fresh ? 0.95 : 0.6) * (z >= 0 ? 1 : 0.3));

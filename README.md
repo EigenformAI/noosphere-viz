@@ -45,6 +45,12 @@ X, LessWrong, Hacker News, the blogs) in a new tab.
 Nothing plays on its own: the reveal only advances via the play button, the
 slider, or the arrow keys.
 
+On Plate I the slider does not reveal the sky, it moves a light across it: all
+six months are present as grey dust at every stop and only the selected month's
+papers are lit, so the shape of the corpus never changes and each month is read
+against the same backdrop. Focusing a constellation shows its *whole* six-month
+extent, with the selected month brightest.
+
 On Plate III the slider steps between **visual frames**, not a cumulative reveal:
 each week highlights only its own clusters and un-highlights the previous week's,
 its unclustered documents render neutral-pale, and the trailing window's earlier
