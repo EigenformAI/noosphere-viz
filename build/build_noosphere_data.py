@@ -318,7 +318,13 @@ with open(ARXIV_DIR / "metadata.tsv") as f:
     rd3 = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
     ahdr = next(rd3)
     arows = list(rd3)
-assert ahdr == ["label", "cluster", "source", "title", "url", "published"], ahdr
+# resolve by name, not position: the export grows columns from time to time (an
+# `author` column appeared on 2026-08-07), and pinning the exact header meant a
+# purely additive upstream change broke the build
+acol = {name: i for i, name in enumerate(ahdr)}
+for req in ("cluster", "title", "url", "published"):
+    assert req in acol, f"arxiv metadata.tsv missing column {req!r}: {ahdr}"
+A_CID, A_TITLE, A_URL, A_PUB = (acol["cluster"], acol["title"], acol["url"], acol["published"])
 na = len(arows)
 assert na == ameta["shipped"], (na, ameta["shipped"])
 
@@ -327,14 +333,14 @@ assert aum.size == na * 3, f"arxiv umap3d size {aum.size} != {na}x3"
 aum = aum.reshape(na, 3)
 
 docs_arx6 = {
-    "title": [r[3][:90] for r in arows],
+    "title": [r[A_TITLE][:90] for r in arows],
     "src": [0] * na,
-    "pub": [(date.fromisoformat(r[5]) - BASE).days for r in arows],
-    "url": pack_urls([r[4] for r in arows], "arxiv"),
+    "pub": [(date.fromisoformat(r[A_PUB]) - BASE).days for r in arows],
+    "url": pack_urls([r[A_URL] for r in arows], "arxiv"),
     "umap": flat(unit_rows(aum - aum.mean(axis=0))),
 }
 
-arx_months = sorted({r[5][:7] for r in arows})
+arx_months = sorted({r[A_PUB][:7] for r in arows})
 
 def month_end(m):
     y, mo = int(m[:4]), int(m[5:7])
@@ -351,7 +357,7 @@ arx_stops = [month_end(m) for m in arx_months]
 # month gets a denominator in "weekday-equivalent days": every observed day
 # counts as its weekday's share of an average day. A 3-day month is then
 # measured on the same footing as a 31-day one.
-arx_day_n = collections.Counter(r[5][:10] for r in arows)
+arx_day_n = collections.Counter(r[A_PUB][:10] for r in arows)
 _by_wd = collections.defaultdict(list)
 for _d, _k in arx_day_n.items():
     _by_wd[date.fromisoformat(_d).weekday()].append(_k)
@@ -381,7 +387,7 @@ full_size = {str(c["cluster_id"]): c["size"] for c in ameta["clusters"]}
 kw_by_id = {str(c["cluster_id"]): c["keywords"] for c in ameta["clusters"]}
 rows_by_cid = {}
 for i, r in enumerate(arows):
-    rows_by_cid.setdefault(r[1], []).append(i)
+    rows_by_cid.setdefault(r[A_CID], []).append(i)
 
 arx_clusters = []
 for cid in sorted(full_size, key=lambda k: -full_size[k]):
@@ -392,9 +398,9 @@ for cid in sorted(full_size, key=lambda k: -full_size[k]):
         "name": clean_kw(kw_by_id[cid]),
         "size": full_size[cid],   # true corpus size; the sky shows the shipped sample
         "rows": rows_k,
-        "wk": [sum(1 for k in rows_k if arows[k][5][:7] == m) for m in arx_months],
+        "wk": [sum(1 for k in rows_k if arows[k][A_PUB][:7] == m) for m in arx_months],
     })
-arx_members = sorted(i for i, r in enumerate(arows) if r[1] != "noise")
+arx_members = sorted(i for i, r in enumerate(arows) if r[A_CID] != "noise")
 arx_view = {
     "id": "arxiv", "space": 1,
     "stops": arx_stops, "stopUnit": "month",

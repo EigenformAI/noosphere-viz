@@ -9,23 +9,49 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo * { box-sizing:border-box; margin:0; }
 .noo #snap { height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; scroll-behavior:smooth; }
 .noo section.plate { position:relative; height:100vh; scroll-snap-align:start; overflow:hidden; }
-.noo canvas.sky { position:absolute; inset:0; display:block; cursor:grab; }
+/* an absolutely positioned canvas is a replaced element, so width:auto resolves
+   to its intrinsic (attribute) size, NOT the containing block — inset:0 alone
+   leaves it at whatever the last resize() set, and any layout change that does
+   not fire a window resize shows the page through the gap as a hard-edged band.
+   Force it to fill; resize() then only has to keep the backing store crisp. */
+.noo canvas.sky { position:absolute; inset:0; width:100%; height:100%;
+  display:block; cursor:grab; }
 .noo canvas.sky.drag { cursor:grabbing; }
 
 .noo #mast { position:fixed; top:14px; left:20px; z-index:30; pointer-events:none; }
 .noo #mast .t { font-size:13px; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
 .noo #mast .s { font-size:10.5px; color:var(--muted); letter-spacing:0.06em; margin-top:3px; }
 
-.noo #dots { position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:30;
-  display:flex; flex-direction:column; gap:12px; }
-.noo #dots button { width:10px; height:10px; border-radius:50%; border:1px solid var(--muted);
-  background:transparent; cursor:pointer; padding:0; }
-.noo #dots button.on { background:var(--gold); border-color:var(--gold); }
+/* the plates are full-height snap sections, so nothing on screen would otherwise
+   say there are two more below: the rail names them and the chevron both hints
+   at the scroll and performs it */
+.noo #dots { position:fixed; right:18px; bottom:20px; z-index:30;
+  display:flex; flex-direction:column; align-items:flex-end; gap:9px; }
+.noo #dots button { width:30px; height:30px; border-radius:50%; border:1px solid var(--muted);
+  background:rgba(23,20,14,0.72); cursor:pointer; padding:0; color:var(--muted);
+  /* not the `font:` shorthand — `inherit` is not a legal component value there,
+     so the whole declaration is dropped and the numerals fall back to the UA size */
+  font-family:inherit; font-size:15px; font-weight:600; line-height:1;
+  /* no tracking: "III" is the widest label and has to sit inside the circle */
+  display:flex; align-items:center;
+  justify-content:center; transition:color .2s, background .2s, border-color .2s; }
+.noo #dots button:hover { color:var(--ink); border-color:var(--ink2); }
+.noo #dots button.on { background:var(--gold); border-color:var(--gold); color:var(--page); }
+.noo #dots .cue { border-color:transparent; background:transparent; color:var(--gold);
+  font-size:15px; margin-top:1px; }
+.noo #dots .cue:hover { color:var(--gold); border-color:var(--gold); }
+.noo #dots .cue.up { transform:rotate(180deg); }
+.noo #dots .cue.hint { animation:nooBob 2s ease-in-out infinite; }
+.noo #dots .hintLab { font-size:8px; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--muted); pointer-events:none; transition:opacity .5s; margin-top:-2px; }
+@keyframes nooBob { 0%,100% { transform:translateY(-2px); opacity:0.5; } 50% { transform:translateY(3px); opacity:1; } }
+@media (prefers-reduced-motion: reduce) { .noo #dots .cue.hint { animation:none; } }
 
 .noo .plateHead { position:absolute; top:64px; left:20px; z-index:5; max-width:430px; pointer-events:none; }
 .noo .plateHead .pl { font-size:10px; letter-spacing:0.3em; color:var(--gold-deep); }
 .noo .plateHead h2 { font-size:19px; letter-spacing:0.14em; font-weight:600; margin-top:4px; }
 .noo .plateHead .sub { font-size:11.5px; color:var(--ink2); margin-top:6px; line-height:1.45; }
+.noo .plateHead .sub .p2 { display:block; margin-top:6px; }
 .noo .plateHead .method { font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:0.04em; }
 .noo .plateHead .note { font-size:10px; color:var(--ink2); line-height:1.55; margin-top:11px;
   padding-left:9px; border-left:2px solid var(--gold-deep); max-width:390px; }
@@ -35,7 +61,8 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .plateHead .note .v { color:#8b7fe8; }
 .noo .plateHead .note .r { color:#e05252; }
 
-.noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 200px);
+/* the bottom bound leaves room for the plate rail parked in the corner below */
+.noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 258px);
   background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px;
   display:flex; flex-direction:column; }
 .noo .key .kh { font-size:10px; letter-spacing:0.2em; color:var(--muted); padding:10px 12px 8px;
@@ -74,7 +101,9 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .bar .count { font:10px ui-monospace,Menlo,monospace; color:var(--muted); min-width:170px; text-align:right; }
 
 .noo .capt { position:absolute; left:20px; bottom:16px; z-index:5;
-  max-width:clamp(210px, calc(50vw - 350px), 400px);
+  /* stay clear of the transport bar, which is centred and grew with the
+     per-stop counts — at laptop widths the two used to overlap */
+  max-width:clamp(200px, calc(50vw - 395px), 400px);
   font-size:9.5px; color:var(--muted); line-height:1.5; pointer-events:none; }
 .noo .capt b { color:var(--ink2); font-weight:600; }
 
@@ -177,15 +206,15 @@ document.getElementById("mastSub").textContent =
 const VC = {
   arxiv: {
     plate:"PLATE I", title:"THE RESEARCH SKY",
-    sub:"What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.",
+    sub:`What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.<span class="p2">Darker colouring shows more intense activity around a particular cluster.</span>`,
     method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month",
     real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; which month a paper lights in follows its true submission date.`,
-    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. The slider does not reveal the sky, it moves a light across it: every month is present as grey dust at every stop, and only the selected month's papers are lit, so the shape of the corpus stays fixed and each month is read against it. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August), and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August's rate rests on only ${v.days[v.days.length - 1]} days of papers; read its ranking loosely.`,
+    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August) and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August rests on ${v.days[v.days.length - 1]} days; read its ranking loosely.`,
     legend:"grey dust = all six months, always on the sphere · colour = the lit month's publishing rate, papers per day (white quiet → yellow → red busy) · pale = that month's unclustered papers · lines sketch each constellation · click a key row to fly to it and see its whole six-month extent",
   },
   social: {
     plate:"PLATE II", title:"THE ATTENTION SKY",
-    sub:"What the discourse is calling things — the same weeks as Plate III, every cluster named by the words its documents actually use.",
+    sub:`The technologies that caught the attention of AI commenters this week, clustered and anchored on a background of the past three months' trends.<span class="p2">Cluster names come from a TF-IDF analysis aimed at creating clusters based on lexical similarity (use of similar vocabulary). Darker colouring shows more intense activity around a particular cluster.</span>`,
     method:"each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week",
     real:v => `<b>real</b> — every star is one document (${nf(v.n_docs)} across the ${v.stops.length} weeks: ${mixLine(v.srcmix)}); each week is clustered independently and <b>every</b> cluster it found is drawn, named by its top TF-IDF terms; positions come from the shared window projection.`,
     simp:v => `<b>simplified</b> — TF-IDF names are raw, glitches and all: they say what a cluster's documents repeat, not what they mean — Plate III names these same weeks by meaning instead. Colour is normalised inside each week, so it ranks a week against itself and not against the others. Grey dust = the trailing window's earlier documents, pale stars = the week's unclustered documents.`,
@@ -193,7 +222,7 @@ const VC = {
   },
   meta: {
     plate:"PLATE III", title:"THE EMERGENT SKY",
-    sub:"Metaconcepts as they assemble — clusters whose meaning is running ahead of shared vocabulary, named before the crowd names them.",
+    sub:`The evolving world of AI metaconcepts and buzzwords, clustered and anchored on a background of the past three months' trends.<span class="p2">Clusters are based on shared embedding space, with colours indicating whether a concept is emerging (gold), established (red) or has become a buzzword (indigo).</span>`,
     method:"each week clustered on its own · position = shared window map · colour = that week's name gap (semantic − lexical coherence)",
     note:`<b>Reading the shade.</b> Every cluster of the week is scored twice — <i>semantic coherence</i>, how tightly its documents sit together in embedding space, and <i>lexical coherence</i>, how much wording they actually share. Both are percentile ranks among that week's clusters, so each runs 0–1 and the two are directly comparable; <b>name gap = semantic − lexical</b>.
       <br><span class="g">Gold — emerging</span> (gap &gt; 0): the documents cohere in meaning faster than in words, an idea arriving ahead of the vocabulary for it.
@@ -472,7 +501,13 @@ function makeSky(view, idx) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const keyW = W > 980 ? 330 : 0;
     R = Math.min((W - keyW) * 0.42, H * 0.365);
-    cx0 = (W - keyW) / 2; cy0 = H * 0.52;
+    /* the sphere is usually height-limited, so it is far narrower than the band
+       left of the key. Centre it on the page and only slide it left when the
+       key would actually be in the way — reserving a flat 330px at every width
+       shifted it off-centre by the same pixels on a laptop as on a wide screen,
+       which is a much larger share of a laptop's width and read as lopsided. */
+    /* the armillary rings and their tick marks reach past R, so clear on that */
+    cx0 = Math.min(W / 2, W - keyW - R * 1.18 - 16); cy0 = H * 0.52;
     bg = ctx.createRadialGradient(cx0, cy0, R * 0.2, cx0, cy0, Math.max(W, H) * 0.85);
     bg.addColorStop(0, "#0d0f17"); bg.addColorStop(0.55, "#080a10"); bg.addColorStop(1, C.deep);
   }
@@ -1031,21 +1066,51 @@ DATA.views.forEach((v, i) => makeSky(v, i));
 const dots = document.getElementById("dots");
 skies.forEach((s, i) => {
   const b = document.createElement("button");
+  /* the numeral turns three anonymous dots into a pager: three plates, you are here */
+  b.textContent = VC[s.id].plate.replace(/^PLATE\s*/, "");
   b.title = VC[s.id].plate + " — " + VC[s.id].title;
   b.addEventListener("click", () => s.sec.scrollIntoView({ behavior: "smooth" }));
   dots.appendChild(b);
 });
+/* the scroll cue: animates until the reader has actually moved between plates,
+   and doubles as the control for doing so */
+const cue = document.createElement("button");
+cue.className = "cue hint";
+cue.innerHTML = "&#9662;";
+const hintLab = document.createElement("span");
+hintLab.className = "hintLab";
+hintLab.textContent = "scroll";
+dots.append(cue, hintLab);
+/* which plate is on screen, read off the scroll position: the plates are equal
+   full-height snap sections, so this is exact, and it keeps the cue correct
+   even when the observer below coalesces several crossings into one callback */
+const curPlate = () => Math.max(0, Math.min(skies.length - 1,
+  Math.round(snap.scrollTop / Math.max(1, snap.clientHeight))));
+function aimCue() {
+  const i = curPlate(), last = i === skies.length - 1;
+  cue.classList.toggle("up", last);
+  const lab = last ? "Back to the first plate" : "Next plate — " + VC[skies[i + 1].id].title;
+  cue.title = lab; cue.setAttribute("aria-label", lab);
+  if (i > 0) { cue.classList.remove("hint"); hintLab.style.opacity = 0; }
+}
+cue.addEventListener("click", () => {
+  const i = curPlate();
+  skies[i >= skies.length - 1 ? 0 : i + 1].sec.scrollIntoView({ behavior: "smooth" });
+});
+snap.addEventListener("scroll", aimCue, { passive: true });
 let active = skies[0];
 const io = new IntersectionObserver(es => {
   es.forEach(e => {
     if (e.isIntersecting && e.intersectionRatio > 0.5) {
       active = skies.find(s => s.sec === e.target) || active;
-      dots.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", skies[i] === active));
+      dots.querySelectorAll("button:not(.cue)").forEach((b, i) => b.classList.toggle("on", skies[i] === active));
+      aimCue();
     }
   });
 }, { root: snap, threshold: [0.55] });
 skies.forEach(s => io.observe(s.sec));
 dots.querySelector("button").classList.add("on");
+aimCue();
 
 addEventListener("keydown", e => {
   if (e.key === "Escape") active.unfocus();
@@ -1053,6 +1118,16 @@ addEventListener("keydown", e => {
   if (e.key === "ArrowLeft") { active.setPlaying(false); active.setStop(active.st.stop - 1); }
 });
 addEventListener("resize", () => skies.forEach(s => { s.resize(); s.render(); }));
+/* the window resize event misses layout changes that do not come from the
+   window: a scrollbar appearing, a monitor swap that re-lays-out before firing.
+   Observing the sections themselves catches every one. */
+if (self.ResizeObserver) {
+  const ro = new ResizeObserver(es => es.forEach(e => {
+    const s = skies.find(k => k.sec === e.target);
+    if (s) { s.resize(); s.render(); }
+  }));
+  skies.forEach(s => ro.observe(s.sec));
+}
 
 /* ---------- loop ---------- */
 let last = performance.now();
