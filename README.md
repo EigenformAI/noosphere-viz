@@ -1,4 +1,4 @@
-# Reports from the future
+# Reports from the future 
 
 The idea-sky of AI research & discourse: three spherical star-map projections, drawn
 as constellations turning inside an armillary sphere. Every star is a real document.
