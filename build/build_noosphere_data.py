@@ -213,8 +213,10 @@ def framed_view(vid, qdir, space, use_fable):
             for wk, entries in json.loads(
                 (qdir / "name_gap_compressions_by_week.json").read_text()).items()
         }
-        assert sorted(labels_by_week) == sorted(f["week_end"] for f in frames), \
-            f"{vid}: label weeks do not match the frames"
+        missing = sorted({f["week_end"] for f in frames} - set(labels_by_week))
+        assert not missing, (
+            f"{vid}: {len(missing)} framed week(s) have no names: "
+            f"{', '.join(missing)} — run `mindspace fable --all-weeks`")
 
     clusters, pale, wins = [], [], []
     n_skipped = 0
