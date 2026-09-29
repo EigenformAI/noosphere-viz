@@ -41,12 +41,13 @@ out = tpl.replace("__RUN_TITLE__", args.title)
 if args.standalone:
     title_tag = f"<title>{args.title}</title>"
     meta_desc = '<meta name="description" content="An interactive 3D visualisation of the AI research landscape: papers, threads and posts mapped as constellations on a rotating globe, updated weekly.">'
+    canonical = '<link rel="canonical" href="https://www.eigenform.ai/reports-from-the-future">'
     noscript = '<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><h1>Reports from the future</h1><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p></div></noscript>'
     body = out.replace(title_tag, "", 1)
     out = (f"<!doctype html>\n<html lang=\"en\">\n<head>\n{GTM_HEAD}\n"
            f"<meta charset=\"utf-8\">\n"
            f"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
-           f"{title_tag}\n{meta_desc}\n</head>\n<body>\n{GTM_BODY}\n{noscript}\n{body}\n</body>\n</html>\n")
+           f"{title_tag}\n{meta_desc}\n{canonical}\n</head>\n<body>\n{GTM_BODY}\n{noscript}\n{body}\n</body>\n</html>\n")
 
 (HERE / args.out).write_text(out)
 print(f"wrote {HERE / args.out} ({len(out)/1024:.0f} KB){' [standalone]' if args.standalone else ''}")
