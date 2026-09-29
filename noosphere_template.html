@@ -154,9 +154,9 @@ html, body { margin:0; padding:0; background:#05060c; }
 </div>
 
 <script>
-(() => {
+(async () => {
 "use strict";
-const DATA = /*__DATA_JSON__*/;
+const DATA = await fetch("noosphere_data.json").then(r => { if (!r.ok) throw new Error(`fetch failed: ${r.status}`); return r.json(); });
 const REC = location.hash.includes("record");
 const RM = matchMedia("(prefers-reduced-motion: reduce)").matches && !REC;
 const SPHERE = (location.hash.match(/sphere=(\w+)/) || [])[1] === "pca" ? "pca" : "umap";
