@@ -42,7 +42,18 @@ if args.standalone:
     title_tag = f"<title>{args.title}</title>"
     meta_desc = '<meta name="description" content="An interactive 3D visualisation of the AI research landscape: papers, threads and posts mapped as constellations on a rotating globe, updated weekly.">'
     canonical = '<link rel="canonical" href="https://www.eigenform.ai/reports-from-the-future">'
-    noscript = '<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><h1>Reports from the future</h1><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p></div></noscript>'
+    noscript = (
+        '<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif">'
+        '<h1>Reports from the future</h1>'
+        '<p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p>'
+        '<nav aria-label="Navigation" style="margin-top:1rem">'
+        '<ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem">'
+        '<li><a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/" style="color:#eda100">How it\'s built</a></li>'
+        '<li><a href="https://www.eigenform.ai/about" style="color:#eda100">About</a></li>'
+        '<li><a href="https://www.eigenform.ai/contact-us" style="color:#eda100">Contact Us</a></li>'
+        '</ul></nav>'
+        '</div></noscript>'
+    )
     body = out.replace(title_tag, "", 1)
     out = (f"<!doctype html>\n<html lang=\"en\">\n<head>\n{GTM_HEAD}\n"
            f"<meta charset=\"utf-8\">\n"

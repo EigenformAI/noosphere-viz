@@ -20,7 +20,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><h1>Reports from the future</h1><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p></div></noscript>
+<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><h1>Reports from the future</h1><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p><nav aria-label="Navigation" style="margin-top:1rem"><ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem"><li><a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/" style="color:#eda100">How it's built</a></li><li><a href="https://www.eigenform.ai/about" style="color:#eda100">About</a></li><li><a href="https://www.eigenform.ai/contact-us" style="color:#eda100">Contact Us</a></li></ul></nav></div></noscript>
 
 <style>
 html, body { margin:0; padding:0; background:#05060c; }
@@ -41,9 +41,17 @@ html, body { margin:0; padding:0; background:#05060c; }
   display:block; cursor:grab; }
 .noo canvas.sky.drag { cursor:grabbing; }
 
-.noo #mast { position:fixed; top:14px; left:20px; z-index:30; pointer-events:none; }
+.noo #mast { position:fixed; top:14px; left:20px; right:20px; z-index:30; pointer-events:none;
+  display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.noo #mast .mastLeft { pointer-events:none; }
 .noo #mast .t { font-size:13px; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
 .noo #mast .s { font-size:10.5px; color:var(--muted); letter-spacing:0.06em; margin-top:3px; }
+.noo #mast .mastNav { pointer-events:auto; display:flex; align-items:center; gap:16px;
+  background:rgba(23,20,14,0.85); border:1px solid var(--hair); border-radius:20px;
+  padding:6px 14px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+.noo #mast .mastNav a { font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--ink2); text-decoration:none; transition:color .2s; white-space:nowrap; }
+.noo #mast .mastNav a:hover { color:var(--gold); }
 
 /* the plates are full-height snap sections, so nothing on screen would otherwise
    say there are two more below: the rail names them and the chevron both hints
@@ -83,6 +91,8 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo .plateHead .note .g { color:var(--gold); }
 .noo .plateHead .note .v { color:#8b7fe8; }
 .noo .plateHead .note .r { color:#e05252; }
+.noo .plateHead a { pointer-events:auto; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(237,161,0,0.38); transition:border-color .2s; }
+.noo .plateHead a:hover { border-bottom-color:var(--gold); }
 
 /* the bottom bound leaves room for the plate rail parked in the corner below */
 .noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 258px);
@@ -163,13 +173,27 @@ html, body { margin:0; padding:0; background:#05060c; }
   .noo .bar .count { display:none; }
   .noo .capt { bottom:84px; max-width:320px; }
 }
-.noo.rec #dots, .noo.rec #tip, .noo.rec .keyToggle { display:none !important; }
+@media (max-width:640px) {
+  .noo #mast { flex-direction:column; gap:6px; right:20px; }
+  .noo #mast .s { display:none; }
+  .noo #mast .mastNav { gap:10px; padding:4px 10px; }
+  .noo #mast .mastNav a { font-size:9.5px; }
+  .noo .plateHead { top:84px; }
+}
+.noo.rec #dots, .noo.rec #tip, .noo.rec .keyToggle, .noo.rec .mastNav { display:none !important; }
 </style>
 
 <div class="noo" id="noo">
   <header id="mast">
-    <div class="t">Reports from the future</div>
-    <div class="s" id="mastSub"></div>
+    <div class="mastLeft">
+      <div class="t">Reports from the future</div>
+      <div class="s" id="mastSub">the idea-sky of AI research &amp; discourse · every star is a real document — drag to turn the sphere</div>
+    </div>
+    <nav class="mastNav" aria-label="Main Navigation">
+      <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">How it's built</a>
+      <a href="https://www.eigenform.ai/about">About</a>
+      <a href="https://www.eigenform.ai/contact-us">Contact Us</a>
+    </nav>
   </header>
   <nav id="dots" aria-label="plates"></nav>
   <main id="snap"></main>
@@ -230,7 +254,7 @@ const VC = {
   arxiv: {
     plate:"PLATE I", title:"THE RESEARCH SKY",
     sub:`What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.<span class="p2">Darker colouring shows more intense activity around a particular cluster.</span>`,
-    method:"mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month",
+    method:`mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month · <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">how star maps are drawn ↗</a>`,
     real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; which month a paper lights in follows its true submission date.`,
     simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August) and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August rests on ${v.days[v.days.length - 1]} days; read its ranking loosely.`,
     legend:"grey dust = all six months, always on the sphere · colour = the lit month's publishing rate, papers per day (white quiet → yellow → red busy) · pale = that month's unclustered papers · lines sketch each constellation · click a key row to fly to it and see its whole six-month extent",
