@@ -20,7 +20,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><h1>Reports from the future</h1><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p><nav aria-label="Navigation" style="margin-top:1rem"><ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem"><li><a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/" style="color:#eda100">How it's built</a></li><li><a href="https://www.eigenform.ai/about" style="color:#eda100">About</a></li><li><a href="https://www.eigenform.ai/contact-us" style="color:#eda100">Contact Us</a></li></ul></nav></div></noscript>
+<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><p><strong>Reports from the future</strong></p><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p><nav aria-label="Navigation" style="margin-top:1rem"><ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem"><li><a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/" style="color:#eda100">How it's built</a></li><li><a href="https://www.eigenform.ai/about" style="color:#eda100">About</a></li><li><a href="https://www.eigenform.ai/contact-us" style="color:#eda100">Contact Us</a></li></ul></nav></div></noscript>
 
 <style>
 html, body { margin:0; padding:0; background:#05060c; }
@@ -44,7 +44,7 @@ html, body { margin:0; padding:0; background:#05060c; }
 .noo #mast { position:fixed; top:14px; left:20px; right:20px; z-index:30; pointer-events:none;
   display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
 .noo #mast .mastLeft { pointer-events:none; }
-.noo #mast .t { font-size:13px; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
+.noo #mast .t { font-size:13px; font-weight:400; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
 .noo #mast .s { font-size:10.5px; color:var(--muted); letter-spacing:0.06em; margin-top:3px; }
 .noo #mast .mastNav { pointer-events:auto; display:flex; align-items:center; gap:16px;
   background:rgba(23,20,14,0.85); border:1px solid var(--hair); border-radius:20px;
@@ -186,7 +186,7 @@ html, body { margin:0; padding:0; background:#05060c; }
 <div class="noo" id="noo">
   <header id="mast">
     <div class="mastLeft">
-      <div class="t">Reports from the future</div>
+      <h1 class="t">Reports from the future</h1>
       <div class="s" id="mastSub">the idea-sky of AI research &amp; discourse · every star is a real document — drag to turn the sphere</div>
     </div>
     <nav class="mastNav" aria-label="Main Navigation">
@@ -196,7 +196,32 @@ html, body { margin:0; padding:0; background:#05060c; }
     </nav>
   </header>
   <nav id="dots" aria-label="plates"></nav>
-  <main id="snap"></main>
+  <main id="snap">
+    <section class="plate">
+      <div class="plateHead">
+        <div class="pl">PLATE I</div>
+        <h2>THE RESEARCH SKY</h2>
+        <div class="sub">What researchers are working on: six months of arXiv artificial intelligence and machine learning publications, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it. Darker colouring shows more intense activity around a particular cluster.</div>
+        <div class="method">mindspace arXiv export · clusters: embedding UMAP to HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month · <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">how star maps are drawn</a></div>
+      </div>
+    </section>
+    <section class="plate">
+      <div class="plateHead">
+        <div class="pl">PLATE II</div>
+        <h2>THE ATTENTION SKY</h2>
+        <div class="sub">The technologies that caught the attention of AI commenters this week, clustered and anchored on a background of the past three months' trends. Cluster names come from a TF-IDF analysis aimed at creating clusters based on lexical similarity (use of similar vocabulary).</div>
+        <div class="method">each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week</div>
+      </div>
+    </section>
+    <section class="plate">
+      <div class="plateHead">
+        <div class="pl">PLATE III</div>
+        <h2>THE EMERGENT SKY</h2>
+        <div class="sub">The evolving world of AI metaconcepts and buzzwords, clustered and anchored on a background of the past three months' trends. Clusters are based on shared embedding space, with colours indicating whether a concept is emerging (gold), established (red), or has become a buzzword (indigo) based on the semantic-lexical name gap.</div>
+        <div class="method">each week clustered on its own · position = shared window map · colour = that week's name gap (semantic minus lexical coherence)</div>
+      </div>
+    </section>
+  </main>
   <div id="tip"></div>
 </div>
 
@@ -1107,6 +1132,7 @@ function makeSky(view, idx) {
   return sky;
 }
 
+snap.innerHTML = "";
 DATA.views.forEach((v, i) => makeSky(v, i));
 
 /* ---------- dots nav + activation ---------- */

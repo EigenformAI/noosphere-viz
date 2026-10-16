@@ -44,7 +44,7 @@ if args.standalone:
     canonical = '<link rel="canonical" href="https://www.eigenform.ai/reports-from-the-future">'
     noscript = (
         '<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif">'
-        '<h1>Reports from the future</h1>'
+        '<p><strong>Reports from the future</strong></p>'
         '<p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p>'
         '<nav aria-label="Navigation" style="margin-top:1rem">'
         '<ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem">'
