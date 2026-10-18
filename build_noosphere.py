@@ -2,7 +2,8 @@
 """Inject noosphere_data.json into noosphere_template.html.
 
   python3 build_noosphere.py [--data noosphere_data.json] [--out noosphere.html] \
-      [--title "Reports from the future"] [--standalone]
+      [--title "Reports from the future"] \
+      [--meta-title "Reports From the Future: Interactive 3D Map of AI Research"] [--standalone]
 
 Default output is an artifact fragment (the claude.ai wrapper adds the document
 shell). --standalone wraps it in a full <!doctype html> document for plain
@@ -31,6 +32,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--data", default="noosphere_data.json")
 ap.add_argument("--out", default="noosphere.html")
 ap.add_argument("--title", default="Reports from the future")
+ap.add_argument("--meta-title", default="Reports From the Future: Interactive 3D Map of AI Research",
+                help="document title for standalone HTML; leaves the visible heading unchanged")
 ap.add_argument("--standalone", action="store_true",
                 help="emit a complete HTML document (for Vercel/static hosting)")
 args = ap.parse_args()
@@ -39,7 +42,8 @@ tpl = (HERE / "noosphere_template.html").read_text()
 out = tpl.replace("__RUN_TITLE__", args.title)
 
 if args.standalone:
-    title_tag = f"<title>{args.title}</title>"
+    title_tag = f"<title>{args.meta_title}</title>"
+    template_title_tag = f"<title>{args.title}</title>"
     meta_desc = '<meta name="description" content="An interactive 3D visualisation of the AI research landscape: papers, threads and posts mapped as constellations on a rotating globe, updated weekly.">'
     canonical = '<link rel="canonical" href="https://www.eigenform.ai/reports-from-the-future">'
     noscript = (
@@ -54,7 +58,7 @@ if args.standalone:
         '</ul></nav>'
         '</div></noscript>'
     )
-    body = out.replace(title_tag, "", 1)
+    body = out.replace(template_title_tag, "", 1)
     out = (f"<!doctype html>\n<html lang=\"en\">\n<head>\n{GTM_HEAD}\n"
            f"<meta charset=\"utf-8\">\n"
            f"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
