@@ -1,407 +1,1244 @@
 <!doctype html>
 <html lang="en">
-<head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TV5WCH3Z');</script>
-<!-- End Google Tag Manager -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reports From the Future: Interactive 3D Map of AI Research</title>
-<meta name="description" content="An interactive 3D visualisation of the AI research landscape: papers, threads and posts mapped as constellations on a rotating globe, updated weekly.">
-<link rel="canonical" href="https://www.eigenform.ai/reports-from-the-future">
-</head>
-<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TV5WCH3Z"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TV5WCH3Z");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reports From the Future: Interactive 3D Map of AI Research</title>
+    <meta
+      name="description"
+      content="An interactive 3D visualisation of the AI research landscape: papers, threads and posts mapped as constellations on a rotating globe, updated weekly."
+    />
+    <link
+      rel="canonical"
+      href="https://www.eigenform.ai/reports-from-the-future"
+    />
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TV5WCH3Z"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
-<noscript><div style="padding:2rem;color:#f2ede2;font-family:sans-serif"><p><strong>Reports from the future</strong></p><p>An interactive 3D visualisation of the AI research landscape. This page requires JavaScript to render the globe.</p><nav aria-label="Navigation" style="margin-top:1rem"><ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:1.5rem"><li><a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/" style="color:#eda100">How it's built</a></li><li><a href="https://www.eigenform.ai/about" style="color:#eda100">About</a></li><li><a href="https://www.eigenform.ai/contact-us" style="color:#eda100">Contact Us</a></li></ul></nav></div></noscript>
+    <noscript
+      ><div style="padding: 2rem; color: #f2ede2; font-family: sans-serif">
+        <p><strong>Reports from the future</strong></p>
+        <p>
+          An interactive 3D visualisation of the AI research landscape. This
+          page requires JavaScript to render the globe.
+        </p>
+        <nav aria-label="Navigation" style="margin-top: 1rem">
+          <ul
+            style="
+              list-style: none;
+              padding: 0;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1.5rem;
+            "
+          >
+            <li>
+              <a
+                href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/"
+                style="color: #eda100"
+                >How it's built</a
+              >
+            </li>
+            <li>
+              <a href="https://www.eigenform.ai/about" style="color: #eda100"
+                >About</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.eigenform.ai/contact-us"
+                style="color: #eda100"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div></noscript
+    >
 
-<style>
-html, body { margin:0; padding:0; background:#05060c; }
-.noo { --page:#0e0d0a; --deep:#05060c; --tile:#17140e; --hair:#2a2721;
-  --ink:#f2ede2; --ink2:#b5ad9c; --muted:#8a8478;
-  --gold:#eda100; --gold-deep:#c98500; --blue:#3987e5; --aqua:#199e70;
-  background:var(--deep); color:var(--ink);
-  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
-.noo * { box-sizing:border-box; margin:0; }
-.noo #snap { height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; scroll-behavior:smooth; }
-.noo section.plate { position:relative; height:100vh; scroll-snap-align:start; overflow:hidden; }
-/* an absolutely positioned canvas is a replaced element, so width:auto resolves
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #05060c;
+      }
+      .noo {
+        --page: #0e0d0a;
+        --deep: #05060c;
+        --tile: #17140e;
+        --hair: #2a2721;
+        --ink: #f2ede2;
+        --ink2: #b5ad9c;
+        --muted: #8a8478;
+        --gold: #eda100;
+        --gold-deep: #c98500;
+        --blue: #3987e5;
+        --aqua: #199e70;
+        background: var(--deep);
+        color: var(--ink);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      .noo * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .noo #snap {
+        height: 100vh;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+      }
+      .noo section.plate {
+        position: relative;
+        height: 100vh;
+        scroll-snap-align: start;
+        overflow: hidden;
+      }
+      /* an absolutely positioned canvas is a replaced element, so width:auto resolves
    to its intrinsic (attribute) size, NOT the containing block — inset:0 alone
    leaves it at whatever the last resize() set, and any layout change that does
    not fire a window resize shows the page through the gap as a hard-edged band.
    Force it to fill; resize() then only has to keep the backing store crisp. */
-.noo canvas.sky { position:absolute; inset:0; width:100%; height:100%;
-  display:block; cursor:grab; }
-.noo canvas.sky.drag { cursor:grabbing; }
+      .noo canvas.sky {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: grab;
+      }
+      .noo canvas.sky.drag {
+        cursor: grabbing;
+      }
 
-.noo #mast { position:fixed; top:14px; left:20px; right:20px; z-index:30; pointer-events:none;
-  display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
-.noo #mast .mastLeft { pointer-events:none; }
-.noo #mast .t { font-size:13px; font-weight:400; letter-spacing:0.28em; color:var(--gold); text-transform:uppercase; }
-.noo #mast .s { font-size:10.5px; color:var(--muted); letter-spacing:0.06em; margin-top:3px; }
-.noo #mast .mastNav { pointer-events:auto; display:flex; align-items:center; gap:16px;
-  background:rgba(23,20,14,0.85); border:1px solid var(--hair); border-radius:20px;
-  padding:6px 14px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
-.noo #mast .mastNav a { font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--ink2); text-decoration:none; transition:color .2s; white-space:nowrap; }
-.noo #mast .mastNav a:hover { color:var(--gold); }
+      .noo #mast {
+        position: fixed;
+        top: 14px;
+        left: 20px;
+        right: 20px;
+        z-index: 30;
+        pointer-events: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .noo #mast .mastLeft {
+        pointer-events: none;
+      }
+      .noo #mast .t {
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.28em;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+      .noo #mast .s {
+        font-size: 10.5px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        margin-top: 3px;
+      }
+      .noo #mast .mastNav {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: rgba(23, 20, 14, 0.85);
+        border: 1px solid var(--hair);
+        border-radius: 20px;
+        padding: 6px 14px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      .noo #mast .mastNav a {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink2);
+        text-decoration: none;
+        transition: color 0.2s;
+        white-space: nowrap;
+      }
+      .noo #mast .mastNav a:hover {
+        color: var(--gold);
+      }
 
-/* the plates are full-height snap sections, so nothing on screen would otherwise
+      /* the plates are full-height snap sections, so nothing on screen would otherwise
    say there are two more below: the rail names them and the chevron both hints
    at the scroll and performs it */
-.noo #dots { position:fixed; right:18px; bottom:20px; z-index:30;
-  display:flex; flex-direction:column; align-items:flex-end; gap:9px; }
-.noo #dots button { width:30px; height:30px; border-radius:50%; border:1px solid var(--muted);
-  background:rgba(23,20,14,0.72); cursor:pointer; padding:0; color:var(--muted);
-  /* not the `font:` shorthand — `inherit` is not a legal component value there,
+      .noo #dots {
+        position: fixed;
+        right: 18px;
+        bottom: 20px;
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 9px;
+      }
+      .noo #dots button {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid var(--muted);
+        background: rgba(23, 20, 14, 0.72);
+        cursor: pointer;
+        padding: 0;
+        color: var(--muted);
+        /* not the `font:` shorthand — `inherit` is not a legal component value there,
      so the whole declaration is dropped and the numerals fall back to the UA size */
-  font-family:inherit; font-size:15px; font-weight:600; line-height:1;
-  /* no tracking: "III" is the widest label and has to sit inside the circle */
-  display:flex; align-items:center;
-  justify-content:center; transition:color .2s, background .2s, border-color .2s; }
-.noo #dots button:hover { color:var(--ink); border-color:var(--ink2); }
-.noo #dots button.on { background:var(--gold); border-color:var(--gold); color:var(--page); }
-.noo #dots .cue { border-color:transparent; background:transparent; color:var(--gold);
-  font-size:15px; margin-top:1px; }
-.noo #dots .cue:hover { color:var(--gold); border-color:var(--gold); }
-.noo #dots .cue.up { transform:rotate(180deg); }
-.noo #dots .cue.hint { animation:nooBob 2s ease-in-out infinite; }
-.noo #dots .hintLab { font-size:8px; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--muted); pointer-events:none; transition:opacity .5s; margin-top:-2px; }
-@keyframes nooBob { 0%,100% { transform:translateY(-2px); opacity:0.5; } 50% { transform:translateY(3px); opacity:1; } }
-@media (prefers-reduced-motion: reduce) { .noo #dots .cue.hint { animation:none; } }
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+        /* no tracking: "III" is the widest label and has to sit inside the circle */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          color 0.2s,
+          background 0.2s,
+          border-color 0.2s;
+      }
+      .noo #dots button:hover {
+        color: var(--ink);
+        border-color: var(--ink2);
+      }
+      .noo #dots button.on {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--page);
+      }
+      .noo #dots .cue {
+        border-color: transparent;
+        background: transparent;
+        color: var(--gold);
+        font-size: 15px;
+        margin-top: 1px;
+      }
+      .noo #dots .cue:hover {
+        color: var(--gold);
+        border-color: var(--gold);
+      }
+      .noo #dots .cue.up {
+        transform: rotate(180deg);
+      }
+      .noo #dots .cue.hint {
+        animation: nooBob 2s ease-in-out infinite;
+      }
+      .noo #dots .hintLab {
+        font-size: 8px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        pointer-events: none;
+        transition: opacity 0.5s;
+        margin-top: -2px;
+      }
+      @keyframes nooBob {
+        0%,
+        100% {
+          transform: translateY(-2px);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translateY(3px);
+          opacity: 1;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .noo #dots .cue.hint {
+          animation: none;
+        }
+      }
 
-.noo .plateHead { position:absolute; top:64px; left:20px; z-index:5; max-width:430px; pointer-events:none; }
-.noo .plateHead .pl { font-size:10px; letter-spacing:0.3em; color:var(--gold-deep); }
-.noo .plateHead h2 { font-size:19px; letter-spacing:0.14em; font-weight:600; margin-top:4px; }
-.noo .plateHead .sub { font-size:11.5px; color:var(--ink2); margin-top:6px; line-height:1.45; }
-.noo .plateHead .sub .p2 { display:block; margin-top:6px; }
-.noo .plateHead .method { font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:0.04em; }
-.noo .plateHead .note { font-size:10px; color:var(--ink2); line-height:1.55; margin-top:11px;
-  padding-left:9px; border-left:2px solid var(--gold-deep); max-width:390px; }
-.noo .plateHead .note b { color:var(--ink); font-weight:600; }
-.noo .plateHead .note i { color:var(--ink); font-style:normal; }
-.noo .plateHead .note .g { color:var(--gold); }
-.noo .plateHead .note .v { color:#8b7fe8; }
-.noo .plateHead .note .r { color:#e05252; }
-.noo .plateHead a { pointer-events:auto; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(237,161,0,0.38); transition:border-color .2s; }
-.noo .plateHead a:hover { border-bottom-color:var(--gold); }
+      .noo .plateHead {
+        position: absolute;
+        top: 64px;
+        left: 20px;
+        z-index: 5;
+        max-width: 430px;
+        pointer-events: none;
+      }
+      .noo .plateHead .pl {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        color: var(--gold-deep);
+      }
+      .noo .plateHead h2 {
+        font-size: 19px;
+        letter-spacing: 0.14em;
+        font-weight: 600;
+        margin-top: 4px;
+      }
+      .noo :is(.plateHead, .info) .sub {
+        font-size: 11.5px;
+        color: var(--ink2);
+        margin-top: 6px;
+        line-height: 1.45;
+      }
+      .noo :is(.plateHead, .info) .sub .p2 {
+        display: block;
+        margin-top: 6px;
+      }
+      .noo :is(.plateHead, .info) .method {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 5px;
+        letter-spacing: 0.04em;
+      }
+      .noo :is(.plateHead, .info) .note {
+        font-size: 10px;
+        color: var(--ink2);
+        line-height: 1.55;
+        margin-top: 11px;
+        padding-left: 9px;
+        border-left: 2px solid var(--gold-deep);
+        max-width: 390px;
+      }
+      .noo :is(.plateHead, .info) .note b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .noo :is(.plateHead, .info) .note i {
+        color: var(--ink);
+        font-style: normal;
+      }
+      .noo :is(.plateHead, .info) .note .g {
+        color: var(--gold);
+      }
+      .noo :is(.plateHead, .info) .note .v {
+        color: #8b7fe8;
+      }
+      .noo :is(.plateHead, .info) .note .r {
+        color: #e05252;
+      }
+      .noo :is(.plateHead, .info) a {
+        pointer-events: auto;
+        color: var(--gold);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(237, 161, 0, 0.38);
+        transition: border-color 0.2s;
+      }
+      .noo :is(.plateHead, .info) a:hover {
+        border-bottom-color: var(--gold);
+      }
 
-/* the bottom bound leaves room for the plate rail parked in the corner below */
-.noo .key { position:absolute; top:64px; right:16px; z-index:6; width:302px; max-height:calc(100vh - 258px);
-  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px;
-  display:flex; flex-direction:column; }
-.noo .key .kh { font-size:10px; letter-spacing:0.2em; color:var(--muted); padding:10px 12px 8px;
-  border-bottom:1px solid var(--hair); text-transform:uppercase; }
-.noo .key .rows { overflow-y:auto; padding:4px 0; scrollbar-width:thin; }
-.noo .key .row { display:grid; grid-template-columns:14px 1fr 46px; gap:8px; align-items:center;
-  padding:6px 12px; cursor:pointer; border-left:2px solid transparent; }
-.noo .key .row:hover, .noo .key .row.hl { background:rgba(237,161,0,0.06); border-left-color:var(--gold-deep); }
-.noo .key .row.off { opacity:0.4; }
-.noo .key .row .dot { width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 6px rgba(237,161,0,0.8); }
-.noo .key .row .nm { font-size:11px; color:var(--ink2); line-height:1.3; overflow:hidden;
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-.noo .key .row.hl .nm { color:var(--ink); }
-.noo .key .row .rt { text-align:right; }
-.noo .key .row .n { font:10px ui-monospace,Menlo,monospace; color:var(--muted); display:block; }
-.noo .key .row canvas.spark { width:46px; height:14px; display:block; margin-top:2px; }
-.noo .key .chip { display:inline-block; font-size:8.5px; letter-spacing:0.1em; text-transform:uppercase;
-  padding:1px 5px; border-radius:3px; margin-right:5px; vertical-align:1px; }
-.noo .chip.emerging { color:#0e0d0a; background:var(--gold); }
-.noo .chip.established { color:#0e0d0a; background:var(--blue); }
-.noo .chip.buzzword { color:#0e0d0a; background:var(--muted); }
-.noo .key .legend { font-size:9.5px; color:var(--muted); padding:8px 12px; border-top:1px solid var(--hair); line-height:1.5; }
-.noo .key .legend .gradbar { height:8px; border-radius:4px; margin:2px 0 3px;
-  background:linear-gradient(90deg,#4338ca,#9333ea,#dc2626,#ff9628,#ffe082); }
-.noo .key .legend .gradlab { display:flex; justify-content:space-between; margin-bottom:5px;
-  font-size:8.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink2); }
+      /* the bottom bound leaves room for the plate rail parked in the corner below */
+      .noo .key {
+        position: absolute;
+        top: 64px;
+        right: 16px;
+        z-index: 6;
+        width: 302px;
+        max-height: calc(100vh - 258px);
+        background: rgba(23, 20, 14, 0.92);
+        border: 1px solid var(--hair);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+      }
+      .noo .key .kh {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        padding: 10px 12px 8px;
+        border-bottom: 1px solid var(--hair);
+        text-transform: uppercase;
+      }
+      .noo .key .rows {
+        overflow-y: auto;
+        padding: 4px 0;
+        scrollbar-width: thin;
+      }
+      .noo .key .row {
+        display: grid;
+        grid-template-columns: 14px 1fr 46px;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-left: 2px solid transparent;
+      }
+      .noo .key .row:hover,
+      .noo .key .row.hl {
+        background: rgba(237, 161, 0, 0.06);
+        border-left-color: var(--gold-deep);
+      }
+      .noo .key .row.off {
+        opacity: 0.4;
+      }
+      .noo .key .row .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 0 6px rgba(237, 161, 0, 0.8);
+      }
+      .noo .key .row .nm {
+        font-size: 11px;
+        color: var(--ink2);
+        line-height: 1.3;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      .noo .key .row.hl .nm {
+        color: var(--ink);
+      }
+      .noo .key .row .rt {
+        text-align: right;
+      }
+      .noo .key .row .n {
+        font:
+          10px ui-monospace,
+          Menlo,
+          monospace;
+        color: var(--muted);
+        display: block;
+      }
+      .noo .key .row canvas.spark {
+        width: 46px;
+        height: 14px;
+        display: block;
+        margin-top: 2px;
+      }
+      .noo .key .chip {
+        display: inline-block;
+        font-size: 8.5px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 1px 5px;
+        border-radius: 3px;
+        margin-right: 5px;
+        vertical-align: 1px;
+      }
+      .noo .chip.emerging {
+        color: #0e0d0a;
+        background: var(--gold);
+      }
+      .noo .chip.established {
+        color: #0e0d0a;
+        background: var(--blue);
+      }
+      .noo .chip.buzzword {
+        color: #0e0d0a;
+        background: var(--muted);
+      }
+      .noo .key .legend {
+        font-size: 9.5px;
+        color: var(--muted);
+        padding: 8px 12px;
+        border-top: 1px solid var(--hair);
+        line-height: 1.5;
+      }
+      .noo .key .legend .gradbar {
+        height: 8px;
+        border-radius: 4px;
+        margin: 2px 0 3px;
+        background: linear-gradient(
+          90deg,
+          #4338ca,
+          #9333ea,
+          #dc2626,
+          #ff9628,
+          #ffe082
+        );
+      }
+      .noo .key .legend .gradlab {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 8.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink2);
+      }
 
-.noo .bar { position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:6;
-  display:flex; align-items:center; gap:12px; padding:8px 14px;
-  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:8px; }
-.noo .bar button.play { width:26px; height:26px; border-radius:6px; border:1px solid var(--hair);
-  background:transparent; color:var(--gold); cursor:pointer; font-size:12px; line-height:1; }
-.noo .bar button.play:hover { border-color:var(--gold-deep); }
-.noo .bar input[type=range] { width:210px; accent-color:var(--gold); cursor:pointer; }
-.noo .bar .stopLab { font:11px ui-monospace,Menlo,monospace; color:var(--ink); min-width:150px; }
-.noo .bar .count { font:10px ui-monospace,Menlo,monospace; color:var(--muted); min-width:170px; text-align:right; }
+      .noo .bar {
+        position: absolute;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 14px;
+        background: rgba(23, 20, 14, 0.92);
+        border: 1px solid var(--hair);
+        border-radius: 8px;
+        /* the readouts have fixed widths (set per sky from its longest text), so the
+     bar is exactly as wide as its content and never resizes between stops */
+        width: max-content;
+        max-width: calc(100vw - 24px);
+        box-sizing: border-box;
+      }
+      .noo .bar > * {
+        flex: none;
+      }
+      .noo .bar button.play {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        border: 1px solid var(--hair);
+        background: transparent;
+        color: var(--gold);
+        cursor: pointer;
+        padding: 0;
+        display: grid;
+        place-items: center;
+      }
+      .noo .bar button.play svg {
+        width: 19px;
+        height: 19px;
+        display: block;
+        fill: currentColor;
+      }
+      .noo .bar button.play:hover {
+        border-color: var(--gold-deep);
+      }
+      .noo .bar input[type="range"] {
+        width: 210px;
+        accent-color: var(--gold);
+        cursor: pointer;
+      }
+      .noo .bar .stopLab {
+        font:
+          11px ui-monospace,
+          Menlo,
+          monospace;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .noo .bar .count {
+        font:
+          10px ui-monospace,
+          Menlo,
+          monospace;
+        color: var(--muted);
+        white-space: nowrap;
+        text-align: right;
+      }
 
-.noo .capt { position:absolute; left:20px; bottom:16px; z-index:5;
-  /* stay clear of the transport bar, which is centred and grew with the
-     per-stop counts — at laptop widths the two used to overlap */
-  max-width:clamp(200px, calc(50vw - 395px), 400px);
-  font-size:9.5px; color:var(--muted); line-height:1.5; pointer-events:none; }
-.noo .capt b { color:var(--ink2); font-weight:600; }
+      .noo .capt {
+        position: absolute;
+        left: 20px;
+        bottom: 16px;
+        z-index: 5;
+        /* stay clear of the transport bar, which is centred and up to ~765px wide
+     (fixed per sky); below 1240px the caption moves up above it instead */
+        max-width: clamp(200px, calc(50vw - 415px), 400px);
+        font-size: 9.5px;
+        color: var(--muted);
+        line-height: 1.5;
+        pointer-events: none;
+      }
+      .noo .capt b {
+        color: var(--ink2);
+        font-weight: 600;
+      }
 
-.noo .detail { position:absolute; left:20px; bottom:88px; z-index:8; width:360px; max-height:44vh; overflow-y:auto;
-  background:rgba(23,20,14,0.96); border:1px solid var(--gold-deep); border-radius:8px;
-  padding:12px 14px; display:none; scrollbar-width:thin; }
-.noo .detail.on { display:block; }
-.noo .detail .dn { font-size:13px; color:var(--ink); letter-spacing:0.04em; margin-bottom:5px; }
-.noo .detail .dm { font-size:10px; color:var(--muted); margin-bottom:7px; }
-.noo .detail .dx { font-size:11px; color:var(--ink2); line-height:1.5; margin-bottom:8px; }
-.noo .detail .dh { font-size:8.5px; letter-spacing:0.16em; text-transform:uppercase;
-  color:var(--muted); margin:0 0 5px; border-top:1px solid rgba(255,255,255,0.07); padding-top:7px; }
-.noo .detail .dt { font-size:10px; color:var(--muted); line-height:1.5; }
-.noo .detail .dt em { color:var(--ink2); font-style:normal; }
-.noo .detail .dt a { color:var(--ink2); text-decoration:none;
-  border-bottom:1px solid rgba(237,161,0,0.38); }
-.noo .detail .dt a:hover { color:var(--gold); border-bottom-color:var(--gold); }
-.noo .detail .close { position:absolute; top:6px; right:9px; background:none; border:none;
-  color:var(--muted); cursor:pointer; font-size:13px; }
+      .noo .detail {
+        position: absolute;
+        left: 20px;
+        bottom: 88px;
+        z-index: 8;
+        width: 360px;
+        max-height: 44vh;
+        overflow-y: auto;
+        background: rgba(23, 20, 14, 0.96);
+        border: 1px solid var(--gold-deep);
+        border-radius: 8px;
+        padding: 12px 14px;
+        display: none;
+        scrollbar-width: thin;
+      }
+      .noo .detail.on {
+        display: block;
+      }
+      .noo .detail .dn {
+        font-size: 13px;
+        color: var(--ink);
+        letter-spacing: 0.04em;
+        margin-bottom: 5px;
+      }
+      .noo .detail .dm {
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 7px;
+      }
+      .noo .detail .dx {
+        font-size: 11px;
+        color: var(--ink2);
+        line-height: 1.5;
+        margin-bottom: 8px;
+      }
+      .noo .detail .dh {
+        font-size: 8.5px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 5px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding-top: 7px;
+      }
+      .noo .detail .dt {
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .noo .detail .dt em {
+        color: var(--ink2);
+        font-style: normal;
+      }
+      .noo .detail .dt a {
+        color: var(--ink2);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(237, 161, 0, 0.38);
+      }
+      .noo .detail .dt a:hover {
+        color: var(--gold);
+        border-bottom-color: var(--gold);
+      }
+      .noo .detail .close {
+        position: absolute;
+        top: 6px;
+        right: 9px;
+        background: none;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 13px;
+      }
 
-.noo #tip { position:fixed; z-index:40; pointer-events:none; display:none; max-width:300px;
-  background:rgba(23,20,14,0.97); border:1px solid var(--hair); border-radius:6px;
-  padding:7px 10px; font-size:10.5px; color:var(--ink); line-height:1.4; }
-.noo #tip .ts { color:var(--muted); font:9.5px ui-monospace,Menlo,monospace; margin-top:3px; }
+      .noo #tip {
+        position: fixed;
+        z-index: 40;
+        pointer-events: none;
+        display: none;
+        max-width: 300px;
+        background: rgba(23, 20, 14, 0.97);
+        border: 1px solid var(--hair);
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 10.5px;
+        color: var(--ink);
+        line-height: 1.4;
+      }
+      .noo #tip .ts {
+        color: var(--muted);
+        font:
+          9.5px ui-monospace,
+          Menlo,
+          monospace;
+        margin-top: 3px;
+      }
 
-.noo .keyToggle { display:none; position:absolute; top:64px; right:16px; z-index:7;
-  background:rgba(23,20,14,0.92); border:1px solid var(--hair); border-radius:6px;
-  color:var(--ink2); font-size:10px; letter-spacing:0.15em; padding:6px 10px; cursor:pointer; }
-@media (max-width:980px) {
-  .noo .key { display:none; }
-  .noo .key.open { display:flex; top:100px; }
-  .noo .keyToggle { display:block; }
-  .noo .plateHead { max-width:300px; }
-  .noo .bar .count { display:none; }
-  .noo .capt { bottom:84px; max-width:320px; }
-}
-@media (max-width:640px) {
-  .noo #mast { flex-direction:column; gap:6px; right:20px; }
-  .noo #mast .s { display:none; }
-  .noo #mast .mastNav { gap:10px; padding:4px 10px; }
-  .noo #mast .mastNav a { font-size:9.5px; }
-  .noo .plateHead { top:84px; }
-}
-.noo.rec #dots, .noo.rec #tip, .noo.rec .keyToggle, .noo.rec .mastNav { display:none !important; }
-</style>
+      .noo .keyToggle {
+        display: none;
+        position: absolute;
+        top: 64px;
+        right: 16px;
+        z-index: 7;
+        background: rgba(23, 20, 14, 0.92);
+        border: 1px solid var(--hair);
+        border-radius: 6px;
+        color: var(--ink2);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      /* phone only: the plate's first sentence stays up front; the rest of the text
+   lives in the INFO panel (desktop shows it all in place, so these stay hidden) */
+      .noo .plateHead .lead,
+      .noo .infoToggle,
+      .noo .info {
+        display: none;
+      }
+      .noo .plateHead .lead {
+        font-size: 11.5px;
+        color: var(--ink2);
+        margin-top: 6px;
+        line-height: 1.45;
+      }
+      .noo .infoToggle {
+        position: absolute;
+        top: 64px;
+        right: 72px;
+        z-index: 7;
+        background: rgba(23, 20, 14, 0.92);
+        border: 1px solid var(--hair);
+        border-radius: 6px;
+        color: var(--ink2);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      .noo .info {
+        position: absolute;
+        top: 100px;
+        left: 12px;
+        right: 12px;
+        z-index: 8;
+        max-height: calc(100% - 190px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        background: rgba(23, 20, 14, 0.97);
+        border: 1px solid var(--hair);
+        border-radius: 8px;
+        padding: 14px 16px;
+      }
+      .noo .info .close {
+        position: sticky;
+        top: 0;
+        float: right;
+        margin: -6px -8px 0 8px;
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-size: 14px;
+        cursor: pointer;
+        padding: 4px 6px;
+      }
+      .noo .info .sub {
+        margin-top: 0;
+      }
+      .noo .info .note {
+        max-width: none;
+      }
+      .noo .info .capt {
+        position: static;
+        max-width: none;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        pointer-events: auto;
+      }
+      @media (max-width: 1240px) {
+        .noo .capt {
+          bottom: 84px;
+          max-width: 320px;
+        }
+      }
+      @media (max-width: 980px) {
+        .noo .key {
+          display: none;
+        }
+        .noo .key.open {
+          display: flex;
+          top: 100px;
+        }
+        .noo .keyToggle {
+          display: block;
+        }
+        .noo .plateHead {
+          max-width: 300px;
+        }
+        .noo .bar .count {
+          display: none;
+        }
+        .noo .capt {
+          bottom: 84px;
+          max-width: 320px;
+        }
+      }
+      @media (max-width: 640px) {
+        .noo #mast {
+          flex-direction: column;
+          gap: 6px;
+          right: 20px;
+        }
+        .noo #mast .s {
+          display: none;
+        }
+        .noo #mast .mastNav {
+          gap: 10px;
+          padding: 4px 10px;
+        }
+        .noo #mast .mastNav a {
+          font-size: 9.5px;
+        }
+        /* on a phone the bar sits left, clear of the plate dots on the right, and is
+     capped to the space between; the slider gives way so the play button and
+     the label stay whole */
+        .noo .bar {
+          left: 12px;
+          transform: none;
+          max-width: calc(100vw - 84px);
+          gap: 10px;
+          padding: 8px 12px;
+        }
+        .noo .bar input[type="range"] {
+          flex: 0 1 210px;
+          width: auto;
+          min-width: 60px;
+        }
+        .noo .plateHead {
+          top: 84px;
+        }
+        .noo .plateHead .lead {
+          display: block;
+        }
+        .noo .plateHead :is(.sub, .method, .note),
+        .noo .plate > .capt {
+          display: none;
+        }
+        .noo .infoToggle {
+          display: block;
+        }
+        .noo .info.open {
+          display: block;
+        }
+      }
+      .noo.rec #dots,
+      .noo.rec #tip,
+      .noo.rec .keyToggle,
+      .noo.rec .infoToggle,
+      .noo.rec .info,
+      .noo.rec .mastNav {
+        display: none !important;
+      }
+    </style>
 
-<div class="noo" id="noo">
-  <header id="mast">
-    <div class="mastLeft">
-      <h1 class="t">Reports from the future</h1>
-      <div class="s" id="mastSub">the idea-sky of AI research &amp; discourse · every star is a real document — drag to turn the sphere</div>
+    <div class="noo" id="noo">
+      <header id="mast">
+        <div class="mastLeft">
+          <h1 class="t">Reports from the future</h1>
+          <div class="s" id="mastSub">
+            the idea-sky of AI research &amp; discourse · every star is a real
+            document — drag to turn the sphere
+          </div>
+        </div>
+        <nav class="mastNav" aria-label="Main Navigation">
+          <a
+            href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/"
+            >How it's built</a
+          >
+          <a href="https://www.eigenform.ai/about">About</a>
+          <a href="https://www.eigenform.ai/contact-us">Contact Us</a>
+        </nav>
+      </header>
+      <nav id="dots" aria-label="plates"></nav>
+      <main id="snap">
+        <section class="plate">
+          <div class="plateHead">
+            <div class="pl">PLATE I</div>
+            <h2>THE RESEARCH SKY</h2>
+            <div class="sub">
+              What researchers are working on: six months of arXiv artificial
+              intelligence and machine learning publications, one star per
+              paper. The whole corpus stays on the sphere in grey; one month
+              lights up inside it. Darker colouring shows more intense activity
+              around a particular cluster.
+            </div>
+            <div class="method">
+              mindspace arXiv export · clusters: embedding UMAP to HDBSCAN ·
+              constellation names: TF-IDF keywords · colour = papers per day
+              that month ·
+              <a
+                href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/"
+                >how star maps are drawn</a
+              >
+            </div>
+          </div>
+        </section>
+        <section class="plate">
+          <div class="plateHead">
+            <div class="pl">PLATE II</div>
+            <h2>THE ATTENTION SKY</h2>
+            <div class="sub">
+              The technologies that caught the attention of AI commenters this
+              week, clustered and anchored on a background of the past three
+              months' trends. Cluster names come from a TF-IDF analysis aimed at
+              creating clusters based on lexical similarity (use of similar
+              vocabulary).
+            </div>
+            <div class="method">
+              each week clustered on its own · position = shared window map ·
+              names: raw TF-IDF keywords · colour = size within the week
+            </div>
+          </div>
+        </section>
+        <section class="plate">
+          <div class="plateHead">
+            <div class="pl">PLATE III</div>
+            <h2>THE EMERGENT SKY</h2>
+            <div class="sub">
+              The evolving world of AI metaconcepts and buzzwords, clustered and
+              anchored on a background of the past three months' trends.
+              Clusters are based on shared embedding space, with colours
+              indicating whether a concept is emerging (gold), established
+              (red), or has become a buzzword (indigo) based on the
+              semantic-lexical name gap.
+            </div>
+            <div class="method">
+              each week clustered on its own · position = shared window map ·
+              colour = that week's name gap (semantic minus lexical coherence)
+            </div>
+          </div>
+        </section>
+      </main>
+      <div id="tip"></div>
     </div>
-    <nav class="mastNav" aria-label="Main Navigation">
-      <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">How it's built</a>
-      <a href="https://www.eigenform.ai/about">About</a>
-      <a href="https://www.eigenform.ai/contact-us">Contact Us</a>
-    </nav>
-  </header>
-  <nav id="dots" aria-label="plates"></nav>
-  <main id="snap">
-    <section class="plate">
-      <div class="plateHead">
-        <div class="pl">PLATE I</div>
-        <h2>THE RESEARCH SKY</h2>
-        <div class="sub">What researchers are working on: six months of arXiv artificial intelligence and machine learning publications, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it. Darker colouring shows more intense activity around a particular cluster.</div>
-        <div class="method">mindspace arXiv export · clusters: embedding UMAP to HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month · <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">how star maps are drawn</a></div>
-      </div>
-    </section>
-    <section class="plate">
-      <div class="plateHead">
-        <div class="pl">PLATE II</div>
-        <h2>THE ATTENTION SKY</h2>
-        <div class="sub">The technologies that caught the attention of AI commenters this week, clustered and anchored on a background of the past three months' trends. Cluster names come from a TF-IDF analysis aimed at creating clusters based on lexical similarity (use of similar vocabulary).</div>
-        <div class="method">each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week</div>
-      </div>
-    </section>
-    <section class="plate">
-      <div class="plateHead">
-        <div class="pl">PLATE III</div>
-        <h2>THE EMERGENT SKY</h2>
-        <div class="sub">The evolving world of AI metaconcepts and buzzwords, clustered and anchored on a background of the past three months' trends. Clusters are based on shared embedding space, with colours indicating whether a concept is emerging (gold), established (red), or has become a buzzword (indigo) based on the semantic-lexical name gap.</div>
-        <div class="method">each week clustered on its own · position = shared window map · colour = that week's name gap (semantic minus lexical coherence)</div>
-      </div>
-    </section>
-  </main>
-  <div id="tip"></div>
-</div>
 
-<script>
-(async () => {
-"use strict";
-const DATA = await fetch("noosphere_data.json").then(r => { if (!r.ok) throw new Error(`fetch failed: ${r.status}`); return r.json(); });
-const REC = location.hash.includes("record");
-const RM = matchMedia("(prefers-reduced-motion: reduce)").matches && !REC;
-const SPHERE = (location.hash.match(/sphere=(\w+)/) || [])[1] === "pca" ? "pca" : "umap";
+    <script>
+      (async () => {
+        "use strict";
+        const DATA = await fetch("noosphere_data.json").then((r) => {
+          if (!r.ok) throw new Error(`fetch failed: ${r.status}`);
+          return r.json();
+        });
+        const REC = location.hash.includes("record");
+        const RM =
+          matchMedia("(prefers-reduced-motion: reduce)").matches && !REC;
+        /* each plate plays through once on first view — not under reduced motion, and
+   not in the record hook, which drives the stops itself */
+        const AUTOPLAY = !RM && !REC;
+        /* play/pause icons as SVG so the glyph fills the 26px button the same way in every font */
+        const ICON_PLAY = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.2v11.6L14 8z"/></svg>`;
+        const ICON_PAUSE = `<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2.5" width="3.6" height="11" rx="0.6"/><rect x="9.4" y="2.5" width="3.6" height="11" rx="0.6"/></svg>`;
+        const SPHERE =
+          (location.hash.match(/sphere=(\w+)/) || [])[1] === "pca"
+            ? "pca"
+            : "umap";
 
-const C = { page:"#0e0d0a", deep:"#05060c", ink:"#f2ede2", ink2:"#b5ad9c", muted:"#8a8478",
-  gold:"#eda100", goldDeep:"#c98500", blue:"#3987e5", aqua:"#199e70" };
-const RGB = { gold:"237,161,0", blue:"57,135,229", muted:"138,132,120", pale:"205,196,178" };
+        const C = {
+          page: "#0e0d0a",
+          deep: "#05060c",
+          ink: "#f2ede2",
+          ink2: "#b5ad9c",
+          muted: "#8a8478",
+          gold: "#eda100",
+          goldDeep: "#c98500",
+          blue: "#3987e5",
+          aqua: "#199e70",
+        };
+        const RGB = {
+          gold: "237,161,0",
+          blue: "57,135,229",
+          muted: "138,132,120",
+          pale: "205,196,178",
+        };
 
-/* piecewise-linear color ramps: [[t, [r,g,b]], ...] -> "r,g,b" */
-function rampRGB(stops, t) {
-  t = Math.max(stops[0][0], Math.min(stops[stops.length - 1][0], t));
-  let i = 1;
-  while (i < stops.length - 1 && t > stops[i][0]) i++;
-  const [t0, a] = stops[i - 1], [t1, b] = stops[i], f = (t - t0) / (t1 - t0 || 1);
-  return a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(",");
-}
-/* activity / size heat: white (few, small) -> yellow -> orange -> red (loads, big) */
-const HEAT = [[0, [242,237,226]], [0.35, [255,215,94]], [0.7, [255,150,40]], [1, [255,69,48]]];
-/* name gap, the original mindspace anchors: indigo buzzword -> red established -> pale gold emerging */
-const GAP = [[-1, [67,56,202]], [-0.5, [147,51,234]], [0, [220,38,38]], [0.5, [255,150,40]], [1, [255,224,130]]];
+        /* piecewise-linear color ramps: [[t, [r,g,b]], ...] -> "r,g,b" */
+        function rampRGB(stops, t) {
+          t = Math.max(stops[0][0], Math.min(stops[stops.length - 1][0], t));
+          let i = 1;
+          while (i < stops.length - 1 && t > stops[i][0]) i++;
+          const [t0, a] = stops[i - 1],
+            [t1, b] = stops[i],
+            f = (t - t0) / (t1 - t0 || 1);
+          return a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(",");
+        }
+        /* activity / size heat: white (few, small) -> yellow -> orange -> red (loads, big) */
+        const HEAT = [
+          [0, [242, 237, 226]],
+          [0.35, [255, 215, 94]],
+          [0.7, [255, 150, 40]],
+          [1, [255, 69, 48]],
+        ];
+        /* name gap, the original mindspace anchors: indigo buzzword -> red established -> pale gold emerging */
+        const GAP = [
+          [-1, [67, 56, 202]],
+          [-0.5, [147, 51, 234]],
+          [0, [220, 38, 38]],
+          [0.5, [255, 150, 40]],
+          [1, [255, 224, 130]],
+        ];
 
-/* doc spaces: 0 = full corpus, 1 = the week-only projector export (own embedding map) */
-const SPACES = DATA.spaces.map(b => ({ N: b.title.length,
-  XYZ: Float32Array.from(b[SPHERE] || b.umap), PUB: b.pub, SRC: b.src, TITLES: b.title,
-  /* urls are stored as host-prefix + path; rebuild on demand rather than
+        /* doc spaces: 0 = full corpus, 1 = the week-only projector export (own embedding map) */
+        const SPACES = DATA.spaces.map((b) => ({
+          N: b.title.length,
+          XYZ: Float32Array.from(b[SPHERE] || b.umap),
+          PUB: b.pub,
+          SRC: b.src,
+          TITLES: b.title,
+          /* urls are stored as host-prefix + path; rebuild on demand rather than
      materialising 25,000 strings nothing may ever click */
-  URL: b.url ? (i => b.url.pre[b.url.i[i]] + b.url.s[i]) : (() => null) }));
-const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-  .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const SRC_NAME = ["arXiv", "X", "web"];
-const BASE_MS = Date.parse(DATA.meta.base_date + "T00:00:00Z");
-const fmtD = (iso, style) => new Intl.DateTimeFormat("en-GB",
-  style === "wd" ? { weekday:"short", day:"numeric", month:"short", timeZone:"UTC" }
-  : style === "mo" ? { month:"long", year:"numeric", timeZone:"UTC" }
-  : style === "moShort" ? { month:"short", year:"numeric", timeZone:"UTC" }
-  : { day:"numeric", month:"short", timeZone:"UTC" }).format(new Date(iso + "T00:00:00Z"));
-const pubDayISO = d => new Date(BASE_MS + d * 864e5).toISOString().slice(0, 10);
-const nf = n => n.toLocaleString("en-US");
-const SRC_SHORT = { "Twitter/Grok": "X", "Desearch X": "X", "HuggingFace Papers": "HF papers" };
-const mixLine = m => Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 3)
-  .map(([k, v]) => `${v} ${SRC_SHORT[k] || k}`).join(" · ") + " + blogs";
+          URL: b.url ? (i) => b.url.pre[b.url.i[i]] + b.url.s[i] : () => null,
+        }));
+        const esc = (s) =>
+          String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        const SRC_NAME = ["arXiv", "X", "web"];
+        const BASE_MS = Date.parse(DATA.meta.base_date + "T00:00:00Z");
+        const fmtD = (iso, style) =>
+          new Intl.DateTimeFormat(
+            "en-GB",
+            style === "wd"
+              ? {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                  timeZone: "UTC",
+                }
+              : style === "mo"
+                ? { month: "long", year: "numeric", timeZone: "UTC" }
+                : style === "moShort"
+                  ? { month: "short", year: "numeric", timeZone: "UTC" }
+                  : { day: "numeric", month: "short", timeZone: "UTC" },
+          ).format(new Date(iso + "T00:00:00Z"));
+        const pubDayISO = (d) =>
+          new Date(BASE_MS + d * 864e5).toISOString().slice(0, 10);
+        const nf = (n) => n.toLocaleString("en-US");
+        /* a plate's first sentence — all of its description a phone shows up front;
+   the rest moves into the INFO panel */
+        const leadOf = (html) => {
+          const first = html.split("<span")[0],
+            i = first.search(/\.\s/);
+          return i < 0 ? first : first.slice(0, i + 1);
+        };
+        const SRC_SHORT = {
+          "Twitter/Grok": "X",
+          "Desearch X": "X",
+          "HuggingFace Papers": "HF papers",
+        };
+        const mixLine = (m) =>
+          Object.entries(m)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3)
+            .map(([k, v]) => `${v} ${SRC_SHORT[k] || k}`)
+            .join(" · ") + " + blogs";
 
-document.getElementById("mastSub").textContent =
-  `the idea-sky of AI research & discourse · every star is a real document — drag to turn the sphere`;
+        document.getElementById("mastSub").textContent =
+          `the idea-sky of AI research & discourse · every star is a real document — drag to turn the sphere`;
 
-/* ---------- per-view copy ---------- */
-const VC = {
-  arxiv: {
-    plate:"PLATE I", title:"THE RESEARCH SKY",
-    sub:`What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.<span class="p2">Darker colouring shows more intense activity around a particular cluster.</span>`,
-    method:`mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month · <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">how star maps are drawn ↗</a>`,
-    real:v => `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; which month a paper lights in follows its true submission date.`,
-    simp:v => `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August) and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August rests on ${v.days[v.days.length - 1]} days; read its ranking loosely.`,
-    legend:"grey dust = all six months, always on the sphere · colour = the lit month's publishing rate, papers per day (white quiet → yellow → red busy) · pale = that month's unclustered papers · lines sketch each constellation · click a key row to fly to it and see its whole six-month extent",
-  },
-  social: {
-    plate:"PLATE II", title:"THE ATTENTION SKY",
-    sub:`The technologies that caught the attention of AI commenters this week, clustered and anchored on a background of the past three months' trends.<span class="p2">Cluster names come from a TF-IDF analysis aimed at creating clusters based on lexical similarity (use of similar vocabulary). Darker colouring shows more intense activity around a particular cluster.</span>`,
-    method:"each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week",
-    real:v => `<b>real</b> — every star is one document (${nf(v.n_docs)} across the ${v.stops.length} weeks: ${mixLine(v.srcmix)}); each week is clustered independently and <b>every</b> cluster it found is drawn, named by its top TF-IDF terms; positions come from the shared window projection.`,
-    simp:v => `<b>simplified</b> — TF-IDF names are raw, glitches and all: they say what a cluster's documents repeat, not what they mean — Plate III names these same weeks by meaning instead. Colour is normalised inside each week, so it ranks a week against itself and not against the others. Grey dust = the trailing window's earlier documents, pale stars = the week's unclustered documents.`,
-    legend:"colour = size within this week (white = its smallest constellation → red = its largest), rescaled every week · lines join each constellation · pale = this week's unclustered documents · dust = the trailing window",
-  },
-  meta: {
-    plate:"PLATE III", title:"THE EMERGENT SKY",
-    sub:`The evolving world of AI metaconcepts and buzzwords, clustered and anchored on a background of the past three months' trends.<span class="p2">Clusters are based on shared embedding space, with colours indicating whether a concept is emerging (gold), established (red) or has become a buzzword (indigo).</span>`,
-    method:"each week clustered on its own · position = shared window map · colour = that week's name gap (semantic − lexical coherence)",
-    note:`<b>Reading the shade.</b> Every cluster of the week is scored twice — <i>semantic coherence</i>, how tightly its documents sit together in embedding space, and <i>lexical coherence</i>, how much wording they actually share. Both are percentile ranks among that week's clusters, so each runs 0–1 and the two are directly comparable; <b>name gap = semantic − lexical</b>.
+        /* ---------- per-view copy ---------- */
+        const VC = {
+          arxiv: {
+            plate: "PLATE I",
+            title: "THE RESEARCH SKY",
+            sub: `What researchers are working on — six months of arXiv, one star per paper. The whole corpus stays on the sphere in grey; one month lights up inside it.<span class="p2">Darker colouring shows more intense activity around a particular cluster.</span>`,
+            method: `mindspace arXiv export · clusters: embedding UMAP → HDBSCAN · constellation names: TF-IDF keywords · colour = papers per day that month · <a href="https://www.eigenform.ai/insights/how-reports-from-the-future-draws-its-star-maps/">how star maps are drawn ↗</a>`,
+            real: (v) =>
+              `<b>real</b> — every star is one arXiv paper; the ${nf(v.docs_total)} papers (Feb – Aug 2026) and all ${nf(v.total_clusters)} clusters, names and sizes come from the pipeline's HDBSCAN run; which month a paper lights in follows its true submission date.`,
+            simp: (v) =>
+              `<b>simplified</b> — the sky carries the export's deterministic ${nf(v.shipped)}-paper sample, so each constellation shows ≈2-in-5 of its papers (key sizes are full-corpus counts) and ${nf(v.dust_kept)} of the ${nf(v.dust_total)} unclustered papers appear as dust; only the labels that fit are drawn — the key lists all ${nf(v.clusters.length)}. Colour is a <b>rate</b>, not a total: both end months are clipped by the export window (${v.days[0]} days of February, ${v.days[v.days.length - 1]} of August) and short spans carry an odd mix of weekdays — arXiv's weekend runs at ≈0.58 of a weekday — so each month is divided by its weekday-equivalent days. August rests on ${v.days[v.days.length - 1]} days; read its ranking loosely.`,
+            legend:
+              "grey dust = all six months, always on the sphere · colour = the lit month's publishing rate, papers per day (white quiet → yellow → red busy) · pale = that month's unclustered papers · lines sketch each constellation · click a key row to fly to it and see its whole six-month extent",
+          },
+          social: {
+            plate: "PLATE II",
+            title: "THE ATTENTION SKY",
+            sub: `The technologies that caught the attention of AI commenters this week, clustered and anchored on a background of the past three months' trends.<span class="p2">Cluster names come from a TF-IDF analysis aimed at creating clusters based on lexical similarity (use of similar vocabulary). Darker colouring shows more intense activity around a particular cluster.</span>`,
+            method:
+              "each week clustered on its own · position = shared window map · names: raw TF-IDF keywords · colour = size within the week",
+            real: (v) =>
+              `<b>real</b> — every star is one document (${nf(v.n_docs)} across the ${v.stops.length} weeks: ${mixLine(v.srcmix)}); each week is clustered independently and <b>every</b> cluster it found is drawn, named by its top TF-IDF terms; positions come from the shared window projection.`,
+            simp: (v) =>
+              `<b>simplified</b> — TF-IDF names are raw, glitches and all: they say what a cluster's documents repeat, not what they mean — Plate III names these same weeks by meaning instead. Colour is normalised inside each week, so it ranks a week against itself and not against the others. Grey dust = the trailing window's earlier documents, pale stars = the week's unclustered documents.`,
+            legend:
+              "colour = size within this week (white = its smallest constellation → red = its largest), rescaled every week · lines join each constellation · pale = this week's unclustered documents · dust = the trailing window",
+          },
+          meta: {
+            plate: "PLATE III",
+            title: "THE EMERGENT SKY",
+            sub: `The evolving world of AI metaconcepts and buzzwords, clustered and anchored on a background of the past three months' trends.<span class="p2">Clusters are based on shared embedding space, with colours indicating whether a concept is emerging (gold), established (red) or has become a buzzword (indigo).</span>`,
+            method:
+              "each week clustered on its own · position = shared window map · colour = that week's name gap (semantic − lexical coherence)",
+            note: `<b>Reading the shade.</b> Every cluster of the week is scored twice — <i>semantic coherence</i>, how tightly its documents sit together in embedding space, and <i>lexical coherence</i>, how much wording they actually share. Both are percentile ranks among that week's clusters, so each runs 0–1 and the two are directly comparable; <b>name gap = semantic − lexical</b>.
       <br><span class="g">Gold — emerging</span> (gap &gt; 0): the documents cohere in meaning faster than in words, an idea arriving ahead of the vocabulary for it.
       <span class="r">Red — established</span> (gap ≈ 0): name and meaning in step.
       <span class="v">Indigo — buzzword</span> (gap &lt; 0): shared wording outruns shared meaning, a phrase doing more work than the concept behind it.`,
-    real:v => `<b>real</b> — each of the ${v.stops.length} weeks is clustered independently; star positions come from the shared window projection, colours ONLY from that week's clustering and its name-gap scores; the ${v.clusters.length} constellations are the clusters whose name gap earned a reading, each named by a 4-model panel synthesized by Claude Fable.`,
-    simp:v => `<b>simplified</b> — the names are interpretive syntheses, not corpus text, and restart every week, so a theme may return under a new name; only panel-named clusters are drawn — the week's other documents, whether in a lower-gap cluster or unclustered, render as the pale field; grey dust = the trailing window's earlier documents.`,
-    legend:`<div class="gradbar"></div><div class="gradlab"><span>buzzword</span><span>established</span><span>emerging</span></div>colour = this week's name gap (see the note, top left) · pale = this week's documents outside the named clusters · click a constellation for its reading`,
-  },
-};
+            real: (v) =>
+              `<b>real</b> — each of the ${v.stops.length} weeks is clustered independently; star positions come from the shared window projection, colours ONLY from that week's clustering and its name-gap scores; the ${v.clusters.length} constellations are the clusters whose name gap earned a reading, each named by a 4-model panel synthesized by Claude Fable.`,
+            simp: (v) =>
+              `<b>simplified</b> — the names are interpretive syntheses, not corpus text, and restart every week, so a theme may return under a new name; only panel-named clusters are drawn — the week's other documents, whether in a lower-gap cluster or unclustered, render as the pale field; grey dust = the trailing window's earlier documents.`,
+            legend: `<div class="gradbar"></div><div class="gradlab"><span>buzzword</span><span>established</span><span>emerging</span></div>colour = this week's name gap (see the note, top left) · pale = this week's documents outside the named clusters · click a constellation for its reading`,
+          },
+        };
 
-/* ---------- bloom sprites ---------- */
-function sprite(rgb) {
-  const s = document.createElement("canvas"); s.width = s.height = 64;
-  const g = s.getContext("2d").createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, "rgba(255,250,236,0.95)");
-  g.addColorStop(0.18, `rgba(${rgb},0.75)`);
-  g.addColorStop(0.45, `rgba(${rgb},0.16)`);
-  g.addColorStop(1, `rgba(${rgb},0)`);
-  const cx = s.getContext("2d"); cx.fillStyle = g; cx.fillRect(0, 0, 64, 64);
-  return s;
-}
-const SPR = Object.fromEntries(Object.entries(RGB).map(([k, v]) => [k, sprite(v)]));
-const sprCache = new Map();
-function spriteFor(rgb) {
-  let s = sprCache.get(rgb);
-  if (!s) sprCache.set(rgb, s = sprite(rgb));
-  return s;
-}
-/* hotter, wider bloom for the focused constellation */
-const sprFCache = new Map();
-function spriteFocusFor(rgb) {
-  let s = sprFCache.get(rgb);
-  if (s) return s;
-  s = document.createElement("canvas"); s.width = s.height = 96;
-  const g = s.getContext("2d").createRadialGradient(48, 48, 0, 48, 48, 48);
-  g.addColorStop(0, "rgba(255,252,244,1)");
-  g.addColorStop(0.14, `rgba(${rgb},0.9)`);
-  g.addColorStop(0.4, `rgba(${rgb},0.28)`);
-  g.addColorStop(1, `rgba(${rgb},0)`);
-  const cx = s.getContext("2d"); cx.fillStyle = g; cx.fillRect(0, 0, 96, 96);
-  sprFCache.set(rgb, s);
-  return s;
-}
+        /* ---------- bloom sprites ---------- */
+        function sprite(rgb) {
+          const s = document.createElement("canvas");
+          s.width = s.height = 64;
+          const g = s
+            .getContext("2d")
+            .createRadialGradient(32, 32, 0, 32, 32, 32);
+          g.addColorStop(0, "rgba(255,250,236,0.95)");
+          g.addColorStop(0.18, `rgba(${rgb},0.75)`);
+          g.addColorStop(0.45, `rgba(${rgb},0.16)`);
+          g.addColorStop(1, `rgba(${rgb},0)`);
+          const cx = s.getContext("2d");
+          cx.fillStyle = g;
+          cx.fillRect(0, 0, 64, 64);
+          return s;
+        }
+        const SPR = Object.fromEntries(
+          Object.entries(RGB).map(([k, v]) => [k, sprite(v)]),
+        );
+        const sprCache = new Map();
+        function spriteFor(rgb) {
+          let s = sprCache.get(rgb);
+          if (!s) sprCache.set(rgb, (s = sprite(rgb)));
+          return s;
+        }
+        /* hotter, wider bloom for the focused constellation */
+        const sprFCache = new Map();
+        function spriteFocusFor(rgb) {
+          let s = sprFCache.get(rgb);
+          if (s) return s;
+          s = document.createElement("canvas");
+          s.width = s.height = 96;
+          const g = s
+            .getContext("2d")
+            .createRadialGradient(48, 48, 0, 48, 48, 48);
+          g.addColorStop(0, "rgba(255,252,244,1)");
+          g.addColorStop(0.14, `rgba(${rgb},0.9)`);
+          g.addColorStop(0.4, `rgba(${rgb},0.28)`);
+          g.addColorStop(1, `rgba(${rgb},0)`);
+          const cx = s.getContext("2d");
+          cx.fillStyle = g;
+          cx.fillRect(0, 0, 96, 96);
+          sprFCache.set(rgb, s);
+          return s;
+        }
 
-/* the panel readings arrive as light markdown; render the little of it they use */
-function mdHTML(s) {
-  return (s || "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/^#+\s*/gm, "")
-    /* non-greedy so a bold span can hold an italic; leftovers are unclosed
+        /* the panel readings arrive as light markdown; render the little of it they use */
+        function mdHTML(s) {
+          return (
+            (s || "")
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/^#+\s*/gm, "")
+              /* non-greedy so a bold span can hold an italic; leftovers are unclosed
        markers in the source text, dropped rather than shown raw */
-    .replace(/\*\*([\s\S]+?)\*\*/g, "<b>$1</b>")
-    .replace(/\*([^*\n]+?)\*/g, "<i>$1</i>")
-    .replace(/\*+/g, "")
-    .split(/\n{2,}/).map(p => `<div class="dx">${p.trim().replace(/\n/g, " ")}</div>`).join("");
-}
+              .replace(/\*\*([\s\S]+?)\*\*/g, "<b>$1</b>")
+              .replace(/\*([^*\n]+?)\*/g, "<i>$1</i>")
+              .replace(/\*+/g, "")
+              .split(/\n{2,}/)
+              .map(
+                (p) => `<div class="dx">${p.trim().replace(/\n/g, " ")}</div>`,
+              )
+              .join("")
+          );
+        }
 
-/* ---------- geometry helpers ---------- */
-function mstEdges(rows, XYZ) {
-  const m = rows.length; if (m < 2) return [];
-  const px = i => [XYZ[3 * i], XYZ[3 * i + 1], XYZ[3 * i + 2]];
-  const P = rows.map(px);
-  const inT = new Uint8Array(m), dist = new Float64Array(m).fill(1e9), par = new Int32Array(m).fill(0);
-  const d2 = (a, b) => { const dx = a[0]-b[0], dy = a[1]-b[1], dz = a[2]-b[2]; return dx*dx + dy*dy + dz*dz; };
-  inT[0] = 1;
-  for (let j = 1; j < m; j++) dist[j] = d2(P[0], P[j]);
-  const out = [];
-  for (let k = 1; k < m; k++) {
-    let bi = -1, bd = 1e9;
-    for (let j = 0; j < m; j++) if (!inT[j] && dist[j] < bd) { bd = dist[j]; bi = j; }
-    if (bi < 0) break;
-    inT[bi] = 1;
-    if (bd < 0.30) out.push([rows[par[bi]], rows[bi]]);   // skip edges > ~32° arc
-    for (let j = 0; j < m; j++) if (!inT[j]) {
-      const nd = d2(P[bi], P[j]);
-      if (nd < dist[j]) { dist[j] = nd; par[j] = bi; }
-    }
-  }
-  return out;
-}
-function centroidOf(rows, XYZ) {
-  let x = 0, y = 0, z = 0;
-  rows.forEach(i => { x += XYZ[3*i]; y += XYZ[3*i+1]; z += XYZ[3*i+2]; });
-  const l = Math.hypot(x, y, z) || 1;
-  return [x/l, y/l, z/l];
-}
+        /* ---------- geometry helpers ---------- */
+        function mstEdges(rows, XYZ) {
+          const m = rows.length;
+          if (m < 2) return [];
+          const px = (i) => [XYZ[3 * i], XYZ[3 * i + 1], XYZ[3 * i + 2]];
+          const P = rows.map(px);
+          const inT = new Uint8Array(m),
+            dist = new Float64Array(m).fill(1e9),
+            par = new Int32Array(m).fill(0);
+          const d2 = (a, b) => {
+            const dx = a[0] - b[0],
+              dy = a[1] - b[1],
+              dz = a[2] - b[2];
+            return dx * dx + dy * dy + dz * dz;
+          };
+          inT[0] = 1;
+          for (let j = 1; j < m; j++) dist[j] = d2(P[0], P[j]);
+          const out = [];
+          for (let k = 1; k < m; k++) {
+            let bi = -1,
+              bd = 1e9;
+            for (let j = 0; j < m; j++)
+              if (!inT[j] && dist[j] < bd) {
+                bd = dist[j];
+                bi = j;
+              }
+            if (bi < 0) break;
+            inT[bi] = 1;
+            if (bd < 0.3) out.push([rows[par[bi]], rows[bi]]); // skip edges > ~32° arc
+            for (let j = 0; j < m; j++)
+              if (!inT[j]) {
+                const nd = d2(P[bi], P[j]);
+                if (nd < dist[j]) {
+                  dist[j] = nd;
+                  par[j] = bi;
+                }
+              }
+          }
+          return out;
+        }
+        function centroidOf(rows, XYZ) {
+          let x = 0,
+            y = 0,
+            z = 0;
+          rows.forEach((i) => {
+            x += XYZ[3 * i];
+            y += XYZ[3 * i + 1];
+            z += XYZ[3 * i + 2];
+          });
+          const l = Math.hypot(x, y, z) || 1;
+          return [x / l, y / l, z / l];
+        }
 
-/* ---------- sky ---------- */
-const skies = [];
-const snap = document.getElementById("snap");
-const tip = document.getElementById("tip");
+        /* ---------- sky ---------- */
+        const skies = [];
+        const snap = document.getElementById("snap");
+        const tip = document.getElementById("tip");
 
-function makeSky(view, idx) {
-  const cfg = VC[view.id];
-  const sp = SPACES[view.space || 0];
-  const N = sp.N, XYZ = sp.XYZ, PUB = sp.PUB, SRC = sp.SRC, TITLES = sp.TITLES, urlOf = sp.URL;
-  const sec = document.createElement("section");
-  sec.className = "plate"; sec.id = "s-" + view.id;
-  sec.innerHTML = `
+        function makeSky(view, idx) {
+          const cfg = VC[view.id];
+          const sp = SPACES[view.space || 0];
+          const N = sp.N,
+            XYZ = sp.XYZ,
+            PUB = sp.PUB,
+            SRC = sp.SRC,
+            TITLES = sp.TITLES,
+            urlOf = sp.URL;
+          const sec = document.createElement("section");
+          sec.className = "plate";
+          sec.id = "s-" + view.id;
+          sec.innerHTML = `
     <canvas class="sky"></canvas>
     <div class="plateHead">
       <div class="pl">${cfg.plate}</div><h2>${cfg.title}</h2>
+      <div class="lead">${leadOf(cfg.sub)}</div>
       <div class="sub">${cfg.sub}</div><div class="method">${cfg.method}</div>
       ${cfg.note ? `<div class="note">${cfg.note}</div>` : ""}
     </div>
+    <button class="infoToggle">INFO</button>
     <button class="keyToggle">KEY</button>
+    <div class="info" role="dialog" aria-label="${cfg.title} — about this plate">
+      <button class="close" aria-label="close">✕</button>
+      <div class="sub">${cfg.sub}</div><div class="method">${cfg.method}</div>
+      ${cfg.note ? `<div class="note">${cfg.note}</div>` : ""}
+      <div class="capt">${typeof cfg.real === "function" ? cfg.real(view) : cfg.real}<br>${typeof cfg.simp === "function" ? cfg.simp(view) : cfg.simp}</div>
+    </div>
     <aside class="key">
       <div class="kh">constellations · ${view.clusters.length}</div>
       <div class="rows"></div>
@@ -409,839 +1246,1339 @@ function makeSky(view, idx) {
     </aside>
     <div class="capt">${typeof cfg.real === "function" ? cfg.real(view) : cfg.real}<br>${typeof cfg.simp === "function" ? cfg.simp(view) : cfg.simp}</div>
     <div class="bar">
-      <button class="play" aria-label="play">${RM ? "▸" : "❚❚"}</button>
+      <button class="play" aria-label="play">${ICON_PLAY}</button>
       <input type="range" min="0" max="${view.stops.length - 1}" step="1" value="0">
       <div class="stopLab"></div><div class="count"></div>
     </div>
     <div class="detail"><button class="close">✕</button><div class="body"></div></div>`;
-  snap.appendChild(sec);
+          snap.appendChild(sec);
 
-  const cv = sec.querySelector("canvas.sky"), ctx = cv.getContext("2d");
-  const slider = sec.querySelector("input"), stopLab = sec.querySelector(".stopLab"),
-        countEl = sec.querySelector(".count"), playBtn = sec.querySelector(".play"),
-        keyEl = sec.querySelector(".key"), rowsEl = sec.querySelector(".rows"),
-        khEl = sec.querySelector(".kh"),
-        detailEl = sec.querySelector(".detail"), detailBody = detailEl.querySelector(".body");
+          const cv = sec.querySelector("canvas.sky"),
+            ctx = cv.getContext("2d");
+          const slider = sec.querySelector("input"),
+            stopLab = sec.querySelector(".stopLab"),
+            countEl = sec.querySelector(".count"),
+            playBtn = sec.querySelector(".play"),
+            keyEl = sec.querySelector(".key"),
+            rowsEl = sec.querySelector(".rows"),
+            khEl = sec.querySelector(".kh"),
+            detailEl = sec.querySelector(".detail"),
+            detailBody = detailEl.querySelector(".body");
 
-  /* framed views: each stop is an independently clustered week — only that
+          /* framed views: each stop is an independently clustered week — only that
      week's clusters are highlighted, everything else falls back to dust */
-  const FRAMED = view.clusters.length > 0 && view.clusters[0].fr !== undefined;
-  /* precompute membership + reveal stops */
-  const memberOf = new Int16Array(N).fill(-1);
-  view.members.forEach(i => { memberOf[i] = -2; });
-  const stopDays = view.stops.map(s => Math.round((Date.parse(s + "T00:00:00Z") - BASE_MS) / 864e5));
-  const pubStop = new Int16Array(N);
-  if (!FRAMED) for (let i = 0; i < N; i++) {
-    let s = 0;
-    while (s < stopDays.length - 1 && PUB[i] > stopDays[s]) s++;
-    pubStop[i] = s;
-  }
-  /* framed views assign each member its cluster's week below, not its pub date */
-  /* one stop at a time: only the current stop's documents are lit — earlier ones
+          const FRAMED =
+            view.clusters.length > 0 && view.clusters[0].fr !== undefined;
+          /* precompute membership + reveal stops */
+          const memberOf = new Int16Array(N).fill(-1);
+          view.members.forEach((i) => {
+            memberOf[i] = -2;
+          });
+          const stopDays = view.stops.map((s) =>
+            Math.round((Date.parse(s + "T00:00:00Z") - BASE_MS) / 864e5),
+          );
+          const pubStop = new Int16Array(N);
+          if (!FRAMED)
+            for (let i = 0; i < N; i++) {
+              let s = 0;
+              while (s < stopDays.length - 1 && PUB[i] > stopDays[s]) s++;
+              pubStop[i] = s;
+            }
+          /* framed views assign each member its cluster's week below, not its pub date */
+          /* one stop at a time: only the current stop's documents are lit — earlier ones
      fall back to dust rather than accumulating (framed views are always so) */
-  const STOP_ONLY = FRAMED || view.id === "social" || view.id === "arxiv";
-  /* the research sky keeps the whole six months on the sphere as grey dust and
+          const STOP_ONLY =
+            FRAMED || view.id === "social" || view.id === "arxiv";
+          /* the research sky keeps the whole six months on the sphere as grey dust and
      lights one month inside it, so the shape of the corpus never changes and
      the month is read against it. The weekly plates instead reveal forward
      through a trailing window, where later documents are not yet on the sky. */
-  const BACKDROP = view.id === "arxiv";
-  const HEAVY = view.members.length > 4000;
-  /* dust visibility: sparse skies get a stronger presence — on framed views the
+          const BACKDROP = view.id === "arxiv";
+          const HEAVY = view.members.length > 4000;
+          /* dust visibility: sparse skies get a stronger presence — on framed views the
      dust IS the shared window map every week is positioned on */
-  /* on the backdrop sky the dust is no longer leftovers — it is the corpus, and
+          /* on the backdrop sky the dust is no longer leftovers — it is the corpus, and
      the only thing giving the lit month something to be read against */
-  const DUST_A = BACKDROP ? [0.07, 0.155] : [0.08, 0.18];
-  const DUST_S = view.id === "arxiv" ? 1.3 : 1.6;
-  const dShow = i => view.stopUnit === "month" ? fmtD(pubDayISO(PUB[i]), "moShort") : fmtD(pubDayISO(PUB[i]));
-  /* heavy skies: at most SPRITE_CAP bloom sprites per stop (deterministic pick) */
-  const spriteOK = new Uint8Array(N);
-  if (HEAVY) {
-    /* only one stop is ever lit now, so the budget buys blooms for one month
+          const DUST_A = BACKDROP ? [0.07, 0.155] : [0.08, 0.18];
+          const DUST_S = view.id === "arxiv" ? 1.3 : 1.6;
+          const dShow = (i) =>
+            view.stopUnit === "month"
+              ? fmtD(pubDayISO(PUB[i]), "moShort")
+              : fmtD(pubDayISO(PUB[i]));
+          /* heavy skies: at most SPRITE_CAP bloom sprites per stop (deterministic pick) */
+          const spriteOK = new Uint8Array(N);
+          if (HEAVY) {
+            /* only one stop is ever lit now, so the budget buys blooms for one month
        rather than a whole accumulated sky */
-    const SPRITE_CAP = 2200, perStop = new Int32Array(view.stops.length);
-    view.members.forEach(i => {
-      if (memberOf[i] >= 0 && perStop[pubStop[i]]++ < SPRITE_CAP) spriteOK[i] = 1;
-    });
-  }
-  /* per-view color scale: meta = name-gap ramp, social = size heat, arxiv = that month's activity heat */
-  /* activity reads as a rate — papers per weekday-equivalent day — so the two
+            const SPRITE_CAP = 2200,
+              perStop = new Int32Array(view.stops.length);
+            view.members.forEach((i) => {
+              if (memberOf[i] >= 0 && perStop[pubStop[i]]++ < SPRITE_CAP)
+                spriteOK[i] = 1;
+            });
+          }
+          /* per-view color scale: meta = name-gap ramp, social = size heat, arxiv = that month's activity heat */
+          /* activity reads as a rate — papers per weekday-equivalent day — so the two
      clipped months at the ends of the window (Feb starts on the 4th, Aug stops
      on the 3rd) are measured on the same footing as the full ones. Without it
      August sat at 6% of the May peak on volume alone; on rate it is 71%. */
-  const dayEq = view.dayEq || view.stops.map(() => 1);
-  const rateOf = (c, s) => c.wk[s] / dayEq[s];
-  const rateMax = Math.max(1e-9,
-    ...view.clusters.map(c => Math.max(...c.wk.map((_, s) => rateOf(c, s)))));
-  const actT = v => Math.round(Math.sqrt(Math.min(1, v / rateMax)) * 12) / 12; // 12-bucket, keeps sprite cache small
-  /* size heat is normalised inside each week and log-scaled: cluster sizes are
+          const dayEq = view.dayEq || view.stops.map(() => 1);
+          const rateOf = (c, s) => c.wk[s] / dayEq[s];
+          const rateMax = Math.max(
+            1e-9,
+            ...view.clusters.map((c) =>
+              Math.max(...c.wk.map((_, s) => rateOf(c, s))),
+            ),
+          );
+          const actT = (v) =>
+            Math.round(Math.sqrt(Math.min(1, v / rateMax)) * 12) / 12; // 12-bucket, keeps sprite cache small
+          /* size heat is normalised inside each week and log-scaled: cluster sizes are
      long-tailed, so one absolute ramp across all weeks paints a single red
      constellation and leaves the rest white. Each frame now runs the full ramp
      — its smallest cluster white, its largest red — at the cost of cross-week
      comparability, which the legend states. */
-  const szRange = view.stops.map(() => [Infinity, 0]);
-  view.clusters.forEach(c => {
-    const b = szRange[FRAMED ? c.fr : 0];
-    b[0] = Math.min(b[0], c.size); b[1] = Math.max(b[1], c.size);
-  });
-  const szT = c => {
-    const [lo, hi] = szRange[FRAMED ? c.fr : 0];
-    return hi > lo ? (Math.log(c.size) - Math.log(lo)) / (Math.log(hi) - Math.log(lo)) : 0.5;
-  };
-  const clusterRGB = (c, stop) =>
-    view.id === "meta" ? rampRGB(GAP, c.gap)
-    : view.id === "arxiv" ? rampRGB(HEAT, actT(rateOf(c, stop)))
-    : rampRGB(HEAT, szT(c));
-  const clusters = view.clusters.map((c, k) => {
-    c.rows.forEach(i => { memberOf[i] = k; if (FRAMED) pubStop[i] = c.fr; });
-    const cen = centroidOf(c.rows, XYZ);
-    let alpha = c.rows[0], bd = -2;
-    c.rows.forEach(i => {
-      const d = XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
-      if (d > bd) { bd = d; alpha = i; }
-    });
-    const rgb = clusterRGB(c, 0);
-    const dotc = i => XYZ[3*i]*cen[0] + XYZ[3*i+1]*cen[1] + XYZ[3*i+2]*cen[2];
-    const eRows = HEAVY ? [...c.rows].sort((a, b) => dotc(b) - dotc(a)).slice(0, 60) : c.rows;
-    return { ...c, k, cen, alpha, rgb,
-      hex: `rgb(${rgb})`,
-      spr: spriteFor(rgb),
-      sprF: spriteFocusFor(rgb),
-      stopRgb: view.id === "arxiv" ? view.stops.map((_, s) => rampRGB(HEAT, actT(rateOf(c, s)))) : null,
-      edges: mstEdges(eRows, XYZ),
-      short: view.id === "meta" && c.panel
-        /* these are the only labels the emergent sky paints — room to spell them out */
-        ? (c.name.length > 46 ? c.name.slice(0, 44).replace(/\s+\S*$/, "") + "…" : c.name)
-        : c.name.split(" · ").slice(0, 2).join(" · ") };
-  });
-  /* label placement order — biggest constellation wins a contested slot */
-  const bySize = [...clusters].sort((a, b) => b.size - a.size);
-  bySize.forEach(c => { c.txt = c.short.toUpperCase(); });
-  const LABEL_CAP = 44;
-  /* constellation lines at rest — brighter where the sky is sparse */
-  const LINE_A = view.id === "arxiv" ? 0.13 : 0.22;
-  /* the emergent sky paints only the synthesized names; TF-IDF keyword names
+          const szRange = view.stops.map(() => [Infinity, 0]);
+          view.clusters.forEach((c) => {
+            const b = szRange[FRAMED ? c.fr : 0];
+            b[0] = Math.min(b[0], c.size);
+            b[1] = Math.max(b[1], c.size);
+          });
+          const szT = (c) => {
+            const [lo, hi] = szRange[FRAMED ? c.fr : 0];
+            return hi > lo
+              ? (Math.log(c.size) - Math.log(lo)) /
+                  (Math.log(hi) - Math.log(lo))
+              : 0.5;
+          };
+          const clusterRGB = (c, stop) =>
+            view.id === "meta"
+              ? rampRGB(GAP, c.gap)
+              : view.id === "arxiv"
+                ? rampRGB(HEAT, actT(rateOf(c, stop)))
+                : rampRGB(HEAT, szT(c));
+          const clusters = view.clusters.map((c, k) => {
+            c.rows.forEach((i) => {
+              memberOf[i] = k;
+              if (FRAMED) pubStop[i] = c.fr;
+            });
+            const cen = centroidOf(c.rows, XYZ);
+            let alpha = c.rows[0],
+              bd = -2;
+            c.rows.forEach((i) => {
+              const d =
+                XYZ[3 * i] * cen[0] +
+                XYZ[3 * i + 1] * cen[1] +
+                XYZ[3 * i + 2] * cen[2];
+              if (d > bd) {
+                bd = d;
+                alpha = i;
+              }
+            });
+            const rgb = clusterRGB(c, 0);
+            const dotc = (i) =>
+              XYZ[3 * i] * cen[0] +
+              XYZ[3 * i + 1] * cen[1] +
+              XYZ[3 * i + 2] * cen[2];
+            const eRows = HEAVY
+              ? [...c.rows].sort((a, b) => dotc(b) - dotc(a)).slice(0, 60)
+              : c.rows;
+            return {
+              ...c,
+              k,
+              cen,
+              alpha,
+              rgb,
+              hex: `rgb(${rgb})`,
+              spr: spriteFor(rgb),
+              sprF: spriteFocusFor(rgb),
+              stopRgb:
+                view.id === "arxiv"
+                  ? view.stops.map((_, s) => rampRGB(HEAT, actT(rateOf(c, s))))
+                  : null,
+              edges: mstEdges(eRows, XYZ),
+              short:
+                view.id === "meta" && c.panel
+                  ? /* these are the only labels the emergent sky paints — room to spell them out */
+                    c.name.length > 46
+                    ? c.name.slice(0, 44).replace(/\s+\S*$/, "") + "…"
+                    : c.name
+                  : c.name.split(" · ").slice(0, 2).join(" · "),
+            };
+          });
+          /* label placement order — biggest constellation wins a contested slot */
+          const bySize = [...clusters].sort((a, b) => b.size - a.size);
+          bySize.forEach((c) => {
+            c.txt = c.short.toUpperCase();
+          });
+          const LABEL_CAP = 44;
+          /* constellation lines at rest — brighter where the sky is sparse */
+          const LINE_A = view.id === "arxiv" ? 0.13 : 0.22;
+          /* the emergent sky paints only the synthesized names; TF-IDF keyword names
      live in the key and the tooltip, not on the sphere */
-  const NAMED_LABELS_ONLY = view.id === "meta";
-  /* per-stop member counts */
-  const stopTotals = view.stops.map((_, s) => {
-    let on = 0, fresh = 0;
-    view.members.forEach(i => { if (pubStop[i] <= s) on++; if (pubStop[i] === s) fresh++; });
-    return [on, fresh];
-  });
-  const frCounts = FRAMED
-    ? view.stops.map((_, s) => clusters.reduce((n, c) => n + (c.fr === s), 0)) : null;
-  /* the stop's own unclustered documents, drawn neutral-pale above the dust */
-  const stopNoise = FRAMED ? view.noiseRows
-    : STOP_ONLY ? view.stops.map((_, s) => {
-        const a = [];
-        for (let i = 0; i < N; i++) if (memberOf[i] === -1 && pubStop[i] === s) a.push(i);
-        return a;
-      }) : null;
-  /* framed views — per-doc render state for the current stop: position always
+          const NAMED_LABELS_ONLY = view.id === "meta";
+          /* per-stop member counts */
+          const stopTotals = view.stops.map((_, s) => {
+            let on = 0,
+              fresh = 0;
+            view.members.forEach((i) => {
+              if (pubStop[i] <= s) on++;
+              if (pubStop[i] === s) fresh++;
+            });
+            return [on, fresh];
+          });
+          const frCounts = FRAMED
+            ? view.stops.map((_, s) =>
+                clusters.reduce((n, c) => n + (c.fr === s), 0),
+              )
+            : null;
+          /* the stop's own unclustered documents, drawn neutral-pale above the dust */
+          const stopNoise = FRAMED
+            ? view.noiseRows
+            : STOP_ONLY
+              ? view.stops.map((_, s) => {
+                  const a = [];
+                  for (let i = 0; i < N; i++)
+                    if (memberOf[i] === -1 && pubStop[i] === s) a.push(i);
+                  return a;
+                })
+              : null;
+          /* framed views — per-doc render state for the current stop: position always
      from the shared window projection, colour ONLY from this week's clustering.
      0 outside this week's trailing window (hidden) · 1 window dust ·
      2 this week's unclustered (neutral) · 3 this week's clustered */
-  const frState = FRAMED ? new Uint8Array(N) : null;
-  function applyFrameState() {
-    frState.fill(0);
-    const [lo, hi] = view.wins[st.stop];
-    frState.fill(1, lo, hi + 1);
-    view.noiseRows[st.stop].forEach(i => { frState[i] = 2; });
-    clusters.forEach(c => {
-      if (c.fr === st.stop) c.rows.forEach(i => { frState[i] = 3; });
-    });
-  }
+          const frState = FRAMED ? new Uint8Array(N) : null;
+          function applyFrameState() {
+            frState.fill(0);
+            const [lo, hi] = view.wins[st.stop];
+            frState.fill(1, lo, hi + 1);
+            view.noiseRows[st.stop].forEach((i) => {
+              frState[i] = 2;
+            });
+            clusters.forEach((c) => {
+              if (c.fr === st.stop)
+                c.rows.forEach((i) => {
+                  frState[i] = 3;
+                });
+            });
+          }
 
-  /* home pose: open facing this view's member centroid */
-  const mc = centroidOf(view.members, XYZ);
-  const homeTheta = Math.atan2(-mc[0], mc[2]);
-  const homePhi = Math.max(-0.9, Math.min(0.9, Math.atan2(mc[1], Math.hypot(mc[0], mc[2]))));
-  const st = { theta: homeTheta, phi: homePhi, spin: 0, t: 0,
-    /* the reveal never starts on its own — the play button and the slider are
-       the only things that move it */
-    stop: RM ? view.stops.length - 1 : 0, playing: false, playAcc: 0,
-    hover: -1, focus: -1, drag: null, idleAt: 0,
-    fTheta: null, fPhi: null, ease: 0 };
-  let W = 0, H = 0, R = 0, cx0 = 0, cy0 = 0, bg = null;
-  const SX = new Float32Array(N), SY = new Float32Array(N), SZ = new Float32Array(N);
+          /* home pose: open facing this view's member centroid */
+          const mc = centroidOf(view.members, XYZ);
+          const homeTheta = Math.atan2(-mc[0], mc[2]);
+          const homePhi = Math.max(
+            -0.9,
+            Math.min(0.9, Math.atan2(mc[1], Math.hypot(mc[0], mc[2]))),
+          );
+          const st = {
+            theta: homeTheta,
+            phi: homePhi,
+            spin: 0,
+            t: 0,
+            /* the reveal plays through once on its own the first time the plate comes
+       on screen (autoplayOnce, from the plate observer); after that only the
+       play button and the slider move it. reduced motion starts on the last stop */
+            stop: RM ? view.stops.length - 1 : 0,
+            playing: false,
+            playAcc: 0,
+            autoDone: false,
+            hover: -1,
+            focus: -1,
+            drag: null,
+            idleAt: 0,
+            fTheta: null,
+            fPhi: null,
+            ease: 0,
+          };
+          let W = 0,
+            H = 0,
+            R = 0,
+            cx0 = 0,
+            cy0 = 0,
+            bg = null;
+          const SX = new Float32Array(N),
+            SY = new Float32Array(N),
+            SZ = new Float32Array(N);
 
-  function resize() {
-    const r = sec.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
-    if (!r.width) return;
-    W = Math.round(r.width); H = Math.round(r.height);
-    cv.width = W * dpr; cv.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const keyW = W > 980 ? 330 : 0;
-    R = Math.min((W - keyW) * 0.42, H * 0.365);
-    /* the sphere is usually height-limited, so it is far narrower than the band
+          function resize() {
+            const r = sec.getBoundingClientRect(),
+              dpr = Math.min(2, devicePixelRatio || 1);
+            if (!r.width) return;
+            W = Math.round(r.width);
+            H = Math.round(r.height);
+            cv.width = W * dpr;
+            cv.height = H * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            const keyW = W > 980 ? 330 : 0;
+            R = Math.min((W - keyW) * 0.42, H * 0.365);
+            /* the sphere is usually height-limited, so it is far narrower than the band
        left of the key. Centre it on the page and only slide it left when the
        key would actually be in the way — reserving a flat 330px at every width
        shifted it off-centre by the same pixels on a laptop as on a wide screen,
        which is a much larger share of a laptop's width and read as lopsided. */
-    /* the armillary rings and their tick marks reach past R, so clear on that */
-    cx0 = Math.min(W / 2, W - keyW - R * 1.18 - 16); cy0 = H * 0.52;
-    bg = ctx.createRadialGradient(cx0, cy0, R * 0.2, cx0, cy0, Math.max(W, H) * 0.85);
-    bg.addColorStop(0, "#0d0f17"); bg.addColorStop(0.55, "#080a10"); bg.addColorStop(1, C.deep);
-  }
+            /* the armillary rings and their tick marks reach past R, so clear on that */
+            cx0 = Math.min(W / 2, W - keyW - R * 1.18 - 16);
+            cy0 = H * 0.52;
+            bg = ctx.createRadialGradient(
+              cx0,
+              cy0,
+              R * 0.2,
+              cx0,
+              cy0,
+              Math.max(W, H) * 0.85,
+            );
+            bg.addColorStop(0, "#0d0f17");
+            bg.addColorStop(0.55, "#080a10");
+            bg.addColorStop(1, C.deep);
+          }
 
-  /* rotation of the star sphere (rings stay fixed) */
-  function project() {
-    const th = st.theta + st.spin, ph = st.phi;
-    const cT = Math.cos(th), sT = Math.sin(th), cP = Math.cos(ph), sP = Math.sin(ph);
-    for (let i = 0; i < N; i++) {
-      const x = XYZ[3*i], y = XYZ[3*i+1], z = XYZ[3*i+2];
-      const x1 = x * cT + z * sT, z1 = -x * sT + z * cT;
-      const y2 = y * cP - z1 * sP, z2 = y * sP + z1 * cP;
-      SX[i] = cx0 + x1 * R; SY[i] = cy0 - y2 * R; SZ[i] = z2;
-    }
-  }
-  function projectVec(v) {
-    const th = st.theta + st.spin, ph = st.phi;
-    const cT = Math.cos(th), sT = Math.sin(th), cP = Math.cos(ph), sP = Math.sin(ph);
-    const x1 = v[0] * cT + v[2] * sT, z1 = -v[0] * sT + v[2] * cT;
-    const y2 = v[1] * cP - z1 * sP, z2 = v[1] * sP + z1 * cP;
-    return [cx0 + x1 * R, cy0 - y2 * R, z2];
-  }
+          /* rotation of the star sphere (rings stay fixed) */
+          function project() {
+            const th = st.theta + st.spin,
+              ph = st.phi;
+            const cT = Math.cos(th),
+              sT = Math.sin(th),
+              cP = Math.cos(ph),
+              sP = Math.sin(ph);
+            for (let i = 0; i < N; i++) {
+              const x = XYZ[3 * i],
+                y = XYZ[3 * i + 1],
+                z = XYZ[3 * i + 2];
+              const x1 = x * cT + z * sT,
+                z1 = -x * sT + z * cT;
+              const y2 = y * cP - z1 * sP,
+                z2 = y * sP + z1 * cP;
+              SX[i] = cx0 + x1 * R;
+              SY[i] = cy0 - y2 * R;
+              SZ[i] = z2;
+            }
+          }
+          function projectVec(v) {
+            const th = st.theta + st.spin,
+              ph = st.phi;
+            const cT = Math.cos(th),
+              sT = Math.sin(th),
+              cP = Math.cos(ph),
+              sP = Math.sin(ph);
+            const x1 = v[0] * cT + v[2] * sT,
+              z1 = -v[0] * sT + v[2] * cT;
+            const y2 = v[1] * cP - z1 * sP,
+              z2 = v[1] * sP + z1 * cP;
+            return [cx0 + x1 * R, cy0 - y2 * R, z2];
+          }
 
-  /* armillary rings: fixed instrument frame around the turning sky */
-  const TILT = 0.32;
-  function ringPts(nx, ny, nz, rad) {
-    let ux = -ny, uy = nx, uz = 0;
-    const ul = Math.hypot(ux, uy, uz) || 1; ux /= ul; uy /= ul;
-    const vx = ny * uz - nz * uy, vy = nz * ux - nx * uz, vz = nx * uy - ny * ux;
-    const pts = [];
-    for (let a = 0; a <= 128; a++) {
-      const t = a / 128 * Math.PI * 2, c = Math.cos(t), s = Math.sin(t);
-      const x = rad * (ux * c + vx * s), y = rad * (uy * c + vy * s), z = rad * (uz * c + vz * s);
-      pts.push([cx0 + x * R, cy0 - y * R, z]);
-    }
-    return pts;
-  }
-  const cosT = Math.cos(TILT), sinT = Math.sin(TILT);
-  const AXES = {
-    eq: [sinT * 0.4, cosT, sinT * 0.9],
-    ecl: [sinT * 0.4 + 0.38, cosT - 0.1, sinT * 0.9],
-    mer: [cosT, -sinT * 0.35, 0.28],
-  };
-  Object.values(AXES).forEach(v => { const l = Math.hypot(...v); v[0]/=l; v[1]/=l; v[2]/=l; });
-  const RINGS = [
-    { n: AXES.eq, r: 1.055, w: 1.4, ticks: true },
-    { n: AXES.eq, r: 1.10, w: 1.0, ticks: false },
-    { n: AXES.ecl, r: 1.135, w: 0.8, ticks: false },
-    { n: AXES.mer, r: 1.08, w: 0.8, ticks: false },
-  ];
-  function drawRings(front) {
-    ctx.lineCap = "round";
-    RINGS.forEach(rg => {
-      const pts = ringPts(...rg.n, rg.r);
-      ctx.strokeStyle = front ? "rgba(201,133,0,0.5)" : "rgba(201,133,0,0.14)";
-      ctx.lineWidth = rg.w;
-      ctx.beginPath();
-      let pen = false;
-      pts.forEach(p => {
-        const ok = front ? p[2] >= 0 : p[2] < 0;
-        if (ok) { pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); pen = true; }
-        else pen = false;
-      });
-      ctx.stroke();
-      if (rg.ticks) {
-        const inner = ringPts(...rg.n, rg.r), outer = ringPts(...rg.n, rg.r + 0.045);
-        ctx.strokeStyle = front ? "rgba(237,161,0,0.55)" : "rgba(237,161,0,0.15)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        for (let a = 0; a < 128; a += 4) {
-          const ok = front ? inner[a][2] >= 0 : inner[a][2] < 0;
-          if (!ok) continue;
-          ctx.moveTo(inner[a][0], inner[a][1]); ctx.lineTo(outer[a][0], outer[a][1]);
-        }
-        ctx.stroke();
-      }
-    });
-    if (front) {  /* polar axis + finials */
-      const [ax, ay, az] = AXES.eq;
-      const top = [cx0 + ax * R * 1.22, cy0 - ay * R * 1.22], bot = [cx0 - ax * R * 1.22, cy0 + ay * R * 1.22];
-      ctx.strokeStyle = "rgba(138,132,120,0.35)"; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(bot[0], bot[1]); ctx.stroke();
-      ctx.fillStyle = "rgba(237,161,0,0.8)";
-      [top, bot].forEach(p => {
-        ctx.beginPath();
-        ctx.moveTo(p[0], p[1] - 4); ctx.lineTo(p[0] + 3, p[1]); ctx.lineTo(p[0], p[1] + 4); ctx.lineTo(p[0] - 3, p[1]);
-        ctx.closePath(); ctx.fill();
-      });
-    }
-  }
+          /* armillary rings: fixed instrument frame around the turning sky */
+          const TILT = 0.32;
+          function ringPts(nx, ny, nz, rad) {
+            let ux = -ny,
+              uy = nx,
+              uz = 0;
+            const ul = Math.hypot(ux, uy, uz) || 1;
+            ux /= ul;
+            uy /= ul;
+            const vx = ny * uz - nz * uy,
+              vy = nz * ux - nx * uz,
+              vz = nx * uy - ny * ux;
+            const pts = [];
+            for (let a = 0; a <= 128; a++) {
+              const t = (a / 128) * Math.PI * 2,
+                c = Math.cos(t),
+                s = Math.sin(t);
+              const x = rad * (ux * c + vx * s),
+                y = rad * (uy * c + vy * s),
+                z = rad * (uz * c + vz * s);
+              pts.push([cx0 + x * R, cy0 - y * R, z]);
+            }
+            return pts;
+          }
+          const cosT = Math.cos(TILT),
+            sinT = Math.sin(TILT);
+          const AXES = {
+            eq: [sinT * 0.4, cosT, sinT * 0.9],
+            ecl: [sinT * 0.4 + 0.38, cosT - 0.1, sinT * 0.9],
+            mer: [cosT, -sinT * 0.35, 0.28],
+          };
+          Object.values(AXES).forEach((v) => {
+            const l = Math.hypot(...v);
+            v[0] /= l;
+            v[1] /= l;
+            v[2] /= l;
+          });
+          const RINGS = [
+            { n: AXES.eq, r: 1.055, w: 1.4, ticks: true },
+            { n: AXES.eq, r: 1.1, w: 1.0, ticks: false },
+            { n: AXES.ecl, r: 1.135, w: 0.8, ticks: false },
+            { n: AXES.mer, r: 1.08, w: 0.8, ticks: false },
+          ];
+          function drawRings(front) {
+            ctx.lineCap = "round";
+            RINGS.forEach((rg) => {
+              const pts = ringPts(...rg.n, rg.r);
+              ctx.strokeStyle = front
+                ? "rgba(201,133,0,0.5)"
+                : "rgba(201,133,0,0.14)";
+              ctx.lineWidth = rg.w;
+              ctx.beginPath();
+              let pen = false;
+              pts.forEach((p) => {
+                const ok = front ? p[2] >= 0 : p[2] < 0;
+                if (ok) {
+                  pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]);
+                  pen = true;
+                } else pen = false;
+              });
+              ctx.stroke();
+              if (rg.ticks) {
+                const inner = ringPts(...rg.n, rg.r),
+                  outer = ringPts(...rg.n, rg.r + 0.045);
+                ctx.strokeStyle = front
+                  ? "rgba(237,161,0,0.55)"
+                  : "rgba(237,161,0,0.15)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                for (let a = 0; a < 128; a += 4) {
+                  const ok = front ? inner[a][2] >= 0 : inner[a][2] < 0;
+                  if (!ok) continue;
+                  ctx.moveTo(inner[a][0], inner[a][1]);
+                  ctx.lineTo(outer[a][0], outer[a][1]);
+                }
+                ctx.stroke();
+              }
+            });
+            if (front) {
+              /* polar axis + finials */
+              const [ax, ay, az] = AXES.eq;
+              const top = [cx0 + ax * R * 1.22, cy0 - ay * R * 1.22],
+                bot = [cx0 - ax * R * 1.22, cy0 + ay * R * 1.22];
+              ctx.strokeStyle = "rgba(138,132,120,0.35)";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(top[0], top[1]);
+              ctx.lineTo(bot[0], bot[1]);
+              ctx.stroke();
+              ctx.fillStyle = "rgba(237,161,0,0.8)";
+              [top, bot].forEach((p) => {
+                ctx.beginPath();
+                ctx.moveTo(p[0], p[1] - 4);
+                ctx.lineTo(p[0] + 3, p[1]);
+                ctx.lineTo(p[0], p[1] + 4);
+                ctx.lineTo(p[0] - 3, p[1]);
+                ctx.closePath();
+                ctx.fill();
+              });
+            }
+          }
 
-  function render() {
-    if (!W) resize();
-    if (!W) return;
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-    project();
-    drawRings(false);
+          function render() {
+            if (!W) resize();
+            if (!W) return;
+            ctx.globalCompositeOperation = "source-over";
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, W, H);
+            project();
+            drawRings(false);
 
-    /* corpus dust — one path per bucket, not one fill per star; on framed
+            /* corpus dust — one path per bucket, not one fill per star; on framed
        views the dust is the trailing window minus this week's clusters */
-    /* earlier stops fall back to dust; the current stop is drawn by the passes
+            /* earlier stops fall back to dust; the current stop is drawn by the passes
        below, later stops are not on the sky yet — except on the backdrop view,
        where every other month, past and future, is part of the grey field */
-    const dusty = FRAMED ? (i => frState[i] === 1)
-      : BACKDROP ? (i => pubStop[i] !== st.stop)
-      : STOP_ONLY ? (i => pubStop[i] < st.stop)
-      : (i => memberOf[i] === -1);
-    ctx.fillStyle = `rgba(168,178,212,${DUST_A[0]})`;
-    ctx.beginPath();
-    for (let i = 0; i < N; i++) if (dusty(i) && SZ[i] < 0) ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
-    ctx.fill();
-    ctx.fillStyle = `rgba(168,178,212,${DUST_A[1]})`;
-    ctx.beginPath();
-    for (let i = 0; i < N; i++) if (dusty(i) && SZ[i] >= 0) ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
-    ctx.fill();
+            const dusty = FRAMED
+              ? (i) => frState[i] === 1
+              : BACKDROP
+                ? (i) => pubStop[i] !== st.stop
+                : STOP_ONLY
+                  ? (i) => pubStop[i] < st.stop
+                  : (i) => memberOf[i] === -1;
+            ctx.fillStyle = `rgba(168,178,212,${DUST_A[0]})`;
+            ctx.beginPath();
+            for (let i = 0; i < N; i++)
+              if (dusty(i) && SZ[i] < 0) ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
+            ctx.fill();
+            ctx.fillStyle = `rgba(168,178,212,${DUST_A[1]})`;
+            ctx.beginPath();
+            for (let i = 0; i < N; i++)
+              if (dusty(i) && SZ[i] >= 0)
+                ctx.rect(SX[i], SY[i], DUST_S, DUST_S);
+            ctx.fill();
 
-    const hl = st.focus >= 0 ? st.focus : st.hover;
+            const hl = st.focus >= 0 ? st.focus : st.hover;
 
-    /* member stars */
-    ctx.globalCompositeOperation = "lighter";
-    const s0 = st.stop;
-    if (STOP_ONLY) {
-      /* this stop's unclustered documents: neutral, brighter than the dust */
-      const dimN = hl >= 0 ? 0.3 : 1;
-      for (const i of stopNoise[s0]) {
-        const sc = SZ[i] >= 0 ? 1 : 0.5;
-        ctx.globalAlpha = (SZ[i] >= 0 ? 0.55 : 0.16) * dimN;
-        ctx.drawImage(SPR.pale, SX[i] - 2.4 * sc, SY[i] - 2.4 * sc, 4.8 * sc, 4.8 * sc);
-      }
-      ctx.globalAlpha = 1;
-    }
-    if (!HEAVY) {
-      /* constellations carry a strong bloom at rest; selection then reads from
+            /* member stars */
+            ctx.globalCompositeOperation = "lighter";
+            const s0 = st.stop;
+            if (STOP_ONLY) {
+              /* this stop's unclustered documents: neutral, brighter than the dust */
+              const dimN = hl >= 0 ? 0.3 : 1;
+              for (const i of stopNoise[s0]) {
+                const sc = SZ[i] >= 0 ? 1 : 0.5;
+                ctx.globalAlpha = (SZ[i] >= 0 ? 0.55 : 0.16) * dimN;
+                ctx.drawImage(
+                  SPR.pale,
+                  SX[i] - 2.4 * sc,
+                  SY[i] - 2.4 * sc,
+                  4.8 * sc,
+                  4.8 * sc,
+                );
+              }
+              ctx.globalAlpha = 1;
+            }
+            if (!HEAVY) {
+              /* constellations carry a strong bloom at rest; selection then reads from
          the extra size, the hotter sprite, the halo — and everything else dimming */
-      const GLOWF = view.id === "arxiv" ? 1 : 1.5;
-      for (let m = 0; m < view.members.length; m++) {
-        const i = view.members[m], ps = pubStop[i];
-        if (STOP_ONLY ? ps !== s0 : ps > s0) continue;
-        const k = memberOf[i];
-        const z = SZ[i];
-        const fresh = ps === s0;
-        const ageF = fresh ? 1 : Math.max(0.34, 1 - 0.055 * (s0 - ps));
-        const depthF = z >= 0 ? 0.82 + 0.18 * z : 0.3;
-        const focused = hl >= 0 && k === hl;
-        const dimF = hl >= 0 && !focused ? 0.22 : 1;
-        const tw = fresh && !RM ? 0.88 + 0.22 * Math.sin(st.t * 2.6 + i * 1.7) : 1;
-        const sz = (fresh ? 5.2 : 3.4) * (z >= 0 ? 1 : 0.65) * tw * GLOWF * (focused ? 1.7 : 1);
-        ctx.globalAlpha = Math.min(1, (focused ? 1.35 : 1.05) * ageF * depthF * dimF);
-        ctx.drawImage(focused ? clusters[k].sprF : k >= 0 ? clusters[k].spr : SPR.pale,
-          SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
-      }
-      ctx.globalAlpha = 1;
-      /* focused constellation: one soft halo behind its stars */
-      if (hl >= 0) {
-        const hc = clusters[hl], hp = projectVec(hc.cen);
-        if (hp[2] > 0) {
-          const hr = R * 0.34;
-          ctx.globalAlpha = 0.38 * hp[2];
-          ctx.drawImage(hc.sprF, hp[0] - hr, hp[1] - hr, hr * 2, hr * 2);
-          ctx.globalAlpha = 1;
-        }
-      }
-    } else {
-      /* tens of thousands of stars: flat pixels for the mass, blooms only
+              const GLOWF = view.id === "arxiv" ? 1 : 1.5;
+              for (let m = 0; m < view.members.length; m++) {
+                const i = view.members[m],
+                  ps = pubStop[i];
+                if (STOP_ONLY ? ps !== s0 : ps > s0) continue;
+                const k = memberOf[i];
+                const z = SZ[i];
+                const fresh = ps === s0;
+                const ageF = fresh ? 1 : Math.max(0.34, 1 - 0.055 * (s0 - ps));
+                const depthF = z >= 0 ? 0.82 + 0.18 * z : 0.3;
+                const focused = hl >= 0 && k === hl;
+                const dimF = hl >= 0 && !focused ? 0.22 : 1;
+                const tw =
+                  fresh && !RM
+                    ? 0.88 + 0.22 * Math.sin(st.t * 2.6 + i * 1.7)
+                    : 1;
+                const sz =
+                  (fresh ? 5.2 : 3.4) *
+                  (z >= 0 ? 1 : 0.65) *
+                  tw *
+                  GLOWF *
+                  (focused ? 1.7 : 1);
+                ctx.globalAlpha = Math.min(
+                  1,
+                  (focused ? 1.35 : 1.05) * ageF * depthF * dimF,
+                );
+                ctx.drawImage(
+                  focused
+                    ? clusters[k].sprF
+                    : k >= 0
+                      ? clusters[k].spr
+                      : SPR.pale,
+                  SX[i] - sz,
+                  SY[i] - sz,
+                  sz * 2,
+                  sz * 2,
+                );
+              }
+              ctx.globalAlpha = 1;
+              /* focused constellation: one soft halo behind its stars */
+              if (hl >= 0) {
+                const hc = clusters[hl],
+                  hp = projectVec(hc.cen);
+                if (hp[2] > 0) {
+                  const hr = R * 0.34;
+                  ctx.globalAlpha = 0.38 * hp[2];
+                  ctx.drawImage(
+                    hc.sprF,
+                    hp[0] - hr,
+                    hp[1] - hr,
+                    hr * 2,
+                    hr * 2,
+                  );
+                  ctx.globalAlpha = 1;
+                }
+              }
+            } else {
+              /* tens of thousands of stars: flat pixels for the mass, blooms only
          where they matter (this stop's named-cluster papers, highlight).
          Every pass is batched by constellation colour — otherwise the mass is
          drawn in one flat gold and a red month reads white. The composite is
          "lighter", so drawing colour-major instead of back-to-front is
          equivalent; the alphas below carry the depth and recency order. */
-      const dimAll = hl >= 0;
-      for (const b of flatBatch) {
-        const idx = b.idx;
-        /* on a one-month-at-a-time sky the other months are already drawn, in
+              const dimAll = hl >= 0;
+              for (const b of flatBatch) {
+                const idx = b.idx;
+                /* on a one-month-at-a-time sky the other months are already drawn, in
            grey, by the dust pass — only a cumulative reveal paints them here */
-        if (!STOP_ONLY) {
-          /* already published, behind the sphere */
-          ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.06 : 0.16})`;
-          ctx.beginPath();
-          for (let m = 0; m < idx.length; m++) {
-            const i = idx[m];
-            if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
-            ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
-          }
-          ctx.fill();
-          /* already published, facing us */
-          ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.11 : 0.44})`;
-          ctx.beginPath();
-          for (let m = 0; m < idx.length; m++) {
-            const i = idx[m];
-            if (pubStop[i] >= s0 || SZ[i] < 0) continue;
-            ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
-          }
-          ctx.fill();
-        }
-        /* this stop's papers: capped sprite budget, bright pixels for the rest */
-        ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.16 : 0.78})`;
-        ctx.beginPath();
-        for (let m = 0; m < idx.length; m++) {
-          const i = idx[m];
-          if (pubStop[i] !== s0) continue;
-          if (memberOf[i] >= 0 && spriteOK[i] && !dimAll) continue;
-          const sc = SZ[i] >= 0 ? 1 : 0.3;
-          ctx.rect(SX[i] - 1.2 * sc, SY[i] - 1.2 * sc, 2.4 * sc, 2.4 * sc);
-        }
-        ctx.fill();
-      }
-      if (!dimAll) for (let m = 0; m < view.members.length; m++) {
-        const i = view.members[m];
-        if (pubStop[i] !== s0 || memberOf[i] < 0 || !spriteOK[i]) continue;
-        const z = SZ[i];
-        const tw = RM ? 1 : 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7);
-        const sz = 3.6 * (z >= 0 ? 1 : 0.6) * tw;
-        ctx.globalAlpha = Math.min(1, 0.92 * (z >= 0 ? 0.8 + 0.2 * z : 0.22));
-        ctx.drawImage(clusters[memberOf[i]].spr, SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
-      }
-      ctx.globalAlpha = 1;
-      if (hl >= 0) {
-        const c = clusters[hl];
-        for (const i of c.rows) {
-          /* the backdrop sky already holds every month, so a focused
+                if (!STOP_ONLY) {
+                  /* already published, behind the sphere */
+                  ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.06 : 0.16})`;
+                  ctx.beginPath();
+                  for (let m = 0; m < idx.length; m++) {
+                    const i = idx[m];
+                    if (pubStop[i] >= s0 || SZ[i] >= 0) continue;
+                    ctx.rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6);
+                  }
+                  ctx.fill();
+                  /* already published, facing us */
+                  ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.11 : 0.44})`;
+                  ctx.beginPath();
+                  for (let m = 0; m < idx.length; m++) {
+                    const i = idx[m];
+                    if (pubStop[i] >= s0 || SZ[i] < 0) continue;
+                    ctx.rect(SX[i] - 0.9, SY[i] - 0.9, 1.9, 1.9);
+                  }
+                  ctx.fill();
+                }
+                /* this stop's papers: capped sprite budget, bright pixels for the rest */
+                ctx.fillStyle = `rgba(${b.rgb},${dimAll ? 0.16 : 0.78})`;
+                ctx.beginPath();
+                for (let m = 0; m < idx.length; m++) {
+                  const i = idx[m];
+                  if (pubStop[i] !== s0) continue;
+                  if (memberOf[i] >= 0 && spriteOK[i] && !dimAll) continue;
+                  const sc = SZ[i] >= 0 ? 1 : 0.3;
+                  ctx.rect(
+                    SX[i] - 1.2 * sc,
+                    SY[i] - 1.2 * sc,
+                    2.4 * sc,
+                    2.4 * sc,
+                  );
+                }
+                ctx.fill();
+              }
+              if (!dimAll)
+                for (let m = 0; m < view.members.length; m++) {
+                  const i = view.members[m];
+                  if (pubStop[i] !== s0 || memberOf[i] < 0 || !spriteOK[i])
+                    continue;
+                  const z = SZ[i];
+                  const tw = RM
+                    ? 1
+                    : 0.85 + 0.25 * Math.sin(st.t * 2.6 + i * 1.7);
+                  const sz = 3.6 * (z >= 0 ? 1 : 0.6) * tw;
+                  ctx.globalAlpha = Math.min(
+                    1,
+                    0.92 * (z >= 0 ? 0.8 + 0.2 * z : 0.22),
+                  );
+                  ctx.drawImage(
+                    clusters[memberOf[i]].spr,
+                    SX[i] - sz,
+                    SY[i] - sz,
+                    sz * 2,
+                    sz * 2,
+                  );
+                }
+              ctx.globalAlpha = 1;
+              if (hl >= 0) {
+                const c = clusters[hl];
+                for (const i of c.rows) {
+                  /* the backdrop sky already holds every month, so a focused
              constellation shows its whole extent — this month bright, the
              others dim — instead of stopping at the current stop */
-          if (!BACKDROP && pubStop[i] > s0) continue;
-          const z = SZ[i], fresh = pubStop[i] === s0;
-          const sz = (fresh ? 4.6 : 3.0) * (z >= 0 ? 1 : 0.65);
-          ctx.globalAlpha = Math.min(1, (fresh ? 0.95 : 0.6) * (z >= 0 ? 1 : 0.3));
-          ctx.drawImage(c.spr, SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
-        }
-        ctx.globalAlpha = 1;
-      }
-    }
+                  if (!BACKDROP && pubStop[i] > s0) continue;
+                  const z = SZ[i],
+                    fresh = pubStop[i] === s0;
+                  const sz = (fresh ? 4.6 : 3.0) * (z >= 0 ? 1 : 0.65);
+                  ctx.globalAlpha = Math.min(
+                    1,
+                    (fresh ? 0.95 : 0.6) * (z >= 0 ? 1 : 0.3),
+                  );
+                  ctx.drawImage(c.spr, SX[i] - sz, SY[i] - sz, sz * 2, sz * 2);
+                }
+                ctx.globalAlpha = 1;
+              }
+            }
 
-    /* constellation lines — batched by colour so a 680-constellation sky
+            /* constellation lines — batched by colour so a 680-constellation sky
        costs a handful of strokes per frame, not one per cluster */
-    const lineBuckets = new Map();
-    clusters.forEach(c => {
-      if (FRAMED && c.fr !== s0) return;
-      if (c.k === hl) return;                    // highlighted one drawn on top
-      let arr = lineBuckets.get(c.rgb);
-      if (!arr) lineBuckets.set(c.rgb, arr = []);
-      arr.push(c);
-    });
-    ctx.lineWidth = 0.8;
-    lineBuckets.forEach((cs, rgb) => {
-      ctx.strokeStyle = `rgba(${rgb},${LINE_A})`;
-      ctx.beginPath();
-      for (const c of cs) for (const [a, b] of c.edges) {
-        if (STOP_ONLY ? (pubStop[a] !== s0 || pubStop[b] !== s0)
-                      : (pubStop[a] > s0 || pubStop[b] > s0)) continue;
-        if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
-        ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[b], SY[b]);
-      }
-      ctx.stroke();
-    });
-    if (hl >= 0 && !(FRAMED && clusters[hl].fr !== s0)) {
-      const c = clusters[hl];
-      ctx.strokeStyle = `rgba(${c.rgb},0.42)`;
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      for (const [a, b] of c.edges) {
-        if (STOP_ONLY ? (pubStop[a] !== s0 || pubStop[b] !== s0)
-                      : (pubStop[a] > s0 || pubStop[b] > s0)) continue;
-        if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
-        ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[b], SY[b]);
-      }
-      ctx.stroke();
-    }
+            const lineBuckets = new Map();
+            clusters.forEach((c) => {
+              if (FRAMED && c.fr !== s0) return;
+              if (c.k === hl) return; // highlighted one drawn on top
+              let arr = lineBuckets.get(c.rgb);
+              if (!arr) lineBuckets.set(c.rgb, (arr = []));
+              arr.push(c);
+            });
+            ctx.lineWidth = 0.8;
+            lineBuckets.forEach((cs, rgb) => {
+              ctx.strokeStyle = `rgba(${rgb},${LINE_A})`;
+              ctx.beginPath();
+              for (const c of cs)
+                for (const [a, b] of c.edges) {
+                  if (
+                    STOP_ONLY
+                      ? pubStop[a] !== s0 || pubStop[b] !== s0
+                      : pubStop[a] > s0 || pubStop[b] > s0
+                  )
+                    continue;
+                  if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
+                  ctx.moveTo(SX[a], SY[a]);
+                  ctx.lineTo(SX[b], SY[b]);
+                }
+              ctx.stroke();
+            });
+            if (hl >= 0 && !(FRAMED && clusters[hl].fr !== s0)) {
+              const c = clusters[hl];
+              ctx.strokeStyle = `rgba(${c.rgb},0.42)`;
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              for (const [a, b] of c.edges) {
+                if (
+                  STOP_ONLY
+                    ? pubStop[a] !== s0 || pubStop[b] !== s0
+                    : pubStop[a] > s0 || pubStop[b] > s0
+                )
+                  continue;
+                if (SZ[a] < 0.02 || SZ[b] < 0.02) continue;
+                ctx.moveTo(SX[a], SY[a]);
+                ctx.lineTo(SX[b], SY[b]);
+              }
+              ctx.stroke();
+            }
 
-    /* diffraction spikes on each constellation's alpha star */
-    ctx.strokeStyle = "rgba(255,244,214,0.5)"; ctx.lineWidth = 0.8;
-    ctx.beginPath();
-    clusters.forEach(c => {
-      if (FRAMED && c.fr !== s0) return;
-      const i = c.alpha;
-      if ((STOP_ONLY ? pubStop[i] !== s0 : pubStop[i] > s0) || SZ[i] < 0.05) return;
-      if (hl >= 0 && c.k !== hl) return;
-      const L = !HEAVY && hl === c.k ? 13 : 8;
-      ctx.moveTo(SX[i] - L, SY[i]); ctx.lineTo(SX[i] + L, SY[i]);
-      ctx.moveTo(SX[i], SY[i] - L); ctx.lineTo(SX[i], SY[i] + L);
-    });
-    ctx.stroke();
-    ctx.globalCompositeOperation = "source-over";
+            /* diffraction spikes on each constellation's alpha star */
+            ctx.strokeStyle = "rgba(255,244,214,0.5)";
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            clusters.forEach((c) => {
+              if (FRAMED && c.fr !== s0) return;
+              const i = c.alpha;
+              if (
+                (STOP_ONLY ? pubStop[i] !== s0 : pubStop[i] > s0) ||
+                SZ[i] < 0.05
+              )
+                return;
+              if (hl >= 0 && c.k !== hl) return;
+              const L = !HEAVY && hl === c.k ? 13 : 8;
+              ctx.moveTo(SX[i] - L, SY[i]);
+              ctx.lineTo(SX[i] + L, SY[i]);
+              ctx.moveTo(SX[i], SY[i] - L);
+              ctx.lineTo(SX[i], SY[i] + L);
+            });
+            ctx.stroke();
+            ctx.globalCompositeOperation = "source-over";
 
-    /* constellation labels, collision-culled, biggest first */
-    ctx.font = "10px ui-sans-serif, system-ui, sans-serif";
-    ctx.letterSpacing = "0.12em";
-    ctx.textAlign = "center";
-    const placed = [];
-    for (const c of bySize) {
-      if (FRAMED && c.fr !== s0) continue;
-      if (NAMED_LABELS_ONLY && !c.panel) continue;  // raw keyword names stay in the key
-      if (placed.length >= LABEL_CAP) break;      // the sky can only hold so many
-      const p = projectVec(c.cen);
-      if (p[2] < 0.18) continue;
-      let vis = 0;
-      for (const i of c.rows) if (STOP_ONLY ? pubStop[i] === s0 : pubStop[i] <= s0) { if (++vis > 1) break; }
-      if (vis < 2) continue;
-      const txt = c.txt;
-      if (c.txtW === undefined) c.txtW = ctx.measureText(txt).width;  // font is fixed
-      const w = c.txtW;
-      const bx = { x0: p[0] - w/2 - 4, x1: p[0] + w/2 + 4, y0: p[1] - 18, y1: p[1] - 2 };
-      if (placed.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0)) continue;
-      placed.push(bx);
-      const on = hl === c.k;
-      ctx.fillStyle = "rgba(5,6,12,0.55)";
-      ctx.fillRect(bx.x0, bx.y0 + 2, bx.x1 - bx.x0, 13);
-      ctx.fillStyle = on ? C.ink : `rgba(${c.rgb},0.82)`;
-      ctx.fillText(txt, p[0], p[1] - 7);
-    }
-    ctx.letterSpacing = "0em";
+            /* constellation labels, collision-culled, biggest first */
+            ctx.font = "10px ui-sans-serif, system-ui, sans-serif";
+            ctx.letterSpacing = "0.12em";
+            ctx.textAlign = "center";
+            const placed = [];
+            for (const c of bySize) {
+              if (FRAMED && c.fr !== s0) continue;
+              if (NAMED_LABELS_ONLY && !c.panel) continue; // raw keyword names stay in the key
+              if (placed.length >= LABEL_CAP) break; // the sky can only hold so many
+              const p = projectVec(c.cen);
+              if (p[2] < 0.18) continue;
+              let vis = 0;
+              for (const i of c.rows)
+                if (STOP_ONLY ? pubStop[i] === s0 : pubStop[i] <= s0) {
+                  if (++vis > 1) break;
+                }
+              if (vis < 2) continue;
+              const txt = c.txt;
+              if (c.txtW === undefined) c.txtW = ctx.measureText(txt).width; // font is fixed
+              const w = c.txtW;
+              const bx = {
+                x0: p[0] - w / 2 - 4,
+                x1: p[0] + w / 2 + 4,
+                y0: p[1] - 18,
+                y1: p[1] - 2,
+              };
+              if (
+                placed.some(
+                  (o) =>
+                    bx.x0 < o.x1 &&
+                    bx.x1 > o.x0 &&
+                    bx.y0 < o.y1 &&
+                    bx.y1 > o.y0,
+                )
+              )
+                continue;
+              placed.push(bx);
+              const on = hl === c.k;
+              ctx.fillStyle = "rgba(5,6,12,0.55)";
+              ctx.fillRect(bx.x0, bx.y0 + 2, bx.x1 - bx.x0, 13);
+              ctx.fillStyle = on ? C.ink : `rgba(${c.rgb},0.82)`;
+              ctx.fillText(txt, p[0], p[1] - 7);
+            }
+            ctx.letterSpacing = "0em";
 
-    drawRings(true);
-  }
+            drawRings(true);
+          }
 
-  /* ---------- state advance ---------- */
-  /* month-activity recolor (arxiv): sprites, lines, labels, key dots and sparks
+          /* ---------- state advance ---------- */
+          /* month-activity recolor (arxiv): sprites, lines, labels, key dots and sparks
      all read the mutated cluster fields */
-  function applyStopColors() {
-    if (!clusters.length || !clusters[0].stopRgb) return;
-    let moved = false;
-    clusters.forEach(c => {
-      const rgb = c.stopRgb[st.stop];
-      if (rgb === c.rgb) return;
-      moved = true;
-      c.rgb = rgb; c.hex = `rgb(${rgb})`;
-      c.spr = spriteFor(rgb); c.sprF = spriteFocusFor(rgb);
-      if (c.dotEl) {
-        c.dotEl.style.background = c.hex;
-        c.dotEl.style.boxShadow = `0 0 6px rgba(${rgb},0.8)`;
-      }
-    });
-    if (moved && HEAVY) buildFlatBatch();
-  }
-  /* the flat-pixel mass, grouped by the colour its constellation carries at this
+          function applyStopColors() {
+            if (!clusters.length || !clusters[0].stopRgb) return;
+            let moved = false;
+            clusters.forEach((c) => {
+              const rgb = c.stopRgb[st.stop];
+              if (rgb === c.rgb) return;
+              moved = true;
+              c.rgb = rgb;
+              c.hex = `rgb(${rgb})`;
+              c.spr = spriteFor(rgb);
+              c.sprF = spriteFocusFor(rgb);
+              if (c.dotEl) {
+                c.dotEl.style.background = c.hex;
+                c.dotEl.style.boxShadow = `0 0 6px rgba(${rgb},0.8)`;
+              }
+            });
+            if (moved && HEAVY) buildFlatBatch();
+          }
+          /* the flat-pixel mass, grouped by the colour its constellation carries at this
      stop — the activity ramp quantizes to a dozen shades, so this is a dozen
      fills per pass rather than one per star */
-  let flatBatch = [];
-  function buildFlatBatch() {
-    const by = new Map();
-    for (let m = 0; m < view.members.length; m++) {
-      const i = view.members[m], k = memberOf[i];
-      const rgb = k >= 0 ? clusters[k].rgb : RGB.pale;
-      let a = by.get(rgb);
-      if (!a) by.set(rgb, a = []);
-      a.push(i);
-    }
-    flatBatch = [...by].map(([rgb, a]) => ({ rgb, idx: Int32Array.from(a) }));
-  }
-  if (HEAVY) buildFlatBatch();
-  function setStop(s, fromSlider) {
-    st.stop = Math.max(0, Math.min(view.stops.length - 1, s));
-    if (!fromSlider) slider.value = st.stop;
-    const iso = view.stops[st.stop], nStops = view.stops.length;
-    stopLab.textContent = (view.stopUnit === "week"
-      ? `week ending ${fmtD(iso)} · ${st.stop + 1}/${nStops}`
-      : view.stopUnit === "month"
-      ? `${fmtD(iso, "mo")} · ${st.stop + 1}/${nStops}`
-      : `${fmtD(iso, "wd")} · day ${st.stop + 1}/${nStops}`)
-      + (view.partialLast && st.stop === nStops - 1 ? " · partial" : "");
-    const [on, fresh] = stopTotals[st.stop];
-    if (FRAMED) {
-      applyFrameState();
-      if (st.focus >= 0 && clusters[st.focus].fr !== st.stop) unfocus();
-      rowsEl.querySelectorAll(".row").forEach(r => {
-        r.style.display = clusters[+r.dataset.k].fr === st.stop ? "" : "none";
-      });
-      khEl.textContent = `constellations · ${frCounts[st.stop]}`;
-    } else if (STOP_ONLY) {
-      /* every cluster belongs to the week; fade the ones with nothing today */
-      rowsEl.querySelectorAll(".row").forEach(r => {
-        r.classList.toggle("off", !view.clusters[+r.dataset.k].wk[st.stop]);
-      });
-    }
-    if (STOP_ONLY) {
-      const unit = view.stopUnit === "day" && !FRAMED ? "today" : `this ${view.stopUnit}`;
-      /* on the framed sky the pale field is "not named by the panel", which is
+          let flatBatch = [];
+          function buildFlatBatch() {
+            const by = new Map();
+            for (let m = 0; m < view.members.length; m++) {
+              const i = view.members[m],
+                k = memberOf[i];
+              const rgb = k >= 0 ? clusters[k].rgb : RGB.pale;
+              let a = by.get(rgb);
+              if (!a) by.set(rgb, (a = []));
+              a.push(i);
+            }
+            flatBatch = [...by].map(([rgb, a]) => ({
+              rgb,
+              idx: Int32Array.from(a),
+            }));
+          }
+          if (HEAVY) buildFlatBatch();
+          function stopText(s) {
+            const iso = view.stops[s],
+              nStops = view.stops.length;
+            return (
+              (view.stopUnit === "week"
+                ? `week ending ${fmtD(iso)} · ${s + 1}/${nStops}`
+                : view.stopUnit === "month"
+                  ? `${fmtD(iso, "mo")} · ${s + 1}/${nStops}`
+                  : `${fmtD(iso, "wd")} · day ${s + 1}/${nStops}`) +
+              (view.partialLast && s === nStops - 1 ? " · partial" : "")
+            );
+          }
+          function countText(s) {
+            const [on, fresh] = stopTotals[s];
+            if (STOP_ONLY) {
+              const unit =
+                view.stopUnit === "day" && !FRAMED
+                  ? "today"
+                  : `this ${view.stopUnit}`;
+              /* on the framed sky the pale field is "not named by the panel", which is
          not the same claim as "not clustered" */
-      const [lit, rest] = view.id === "meta" ? ["in named clusters", "unnamed"]
-                                             : ["clustered", "unclustered"];
-      countEl.textContent =
-        `${nf(fresh)} ${lit} · ${nf(stopNoise[st.stop].length)} ${rest} ${unit}`;
-    } else {
-      countEl.textContent = `${nf(on)} on sky · +${nf(fresh)} new`;
-    }
-    applyStopColors();
-    drawSparks();
-  }
-  function setPlaying(p) {
-    st.playing = p && !RM;
-    playBtn.textContent = st.playing ? "❚❚" : "▸";
-    st.playAcc = 0;
-  }
-  function tick(dt) {
-    st.t += dt;
-    if (!st.drag && st.focus < 0 && !RM && st.t - st.idleAt > 2.5) st.spin += dt * 0.05;
-    if (st.fTheta !== null) {
-      st.ease = Math.min(1, st.ease + dt / 0.7);
-      const e = 1 - Math.pow(1 - st.ease, 3);
-      st.theta = st.eTheta0 + (st.fTheta - st.eTheta0) * e;
-      st.phi = st.ePhi0 + (st.fPhi - st.ePhi0) * e;
-      if (st.ease >= 1) st.fTheta = null;
-    }
-    if (st.playing) {
-      st.playAcc += dt;
-      if (st.playAcc > 1.6) {
-        st.playAcc = 0;
-        if (st.stop < view.stops.length - 1) setStop(st.stop + 1);
-        else setPlaying(false);
-      }
-    }
-  }
+              const [lit, rest] =
+                view.id === "meta"
+                  ? ["in named clusters", "unnamed"]
+                  : ["clustered", "unclustered"];
+              return `${nf(fresh)} ${lit} · ${nf(stopNoise[s].length)} ${rest} ${unit}`;
+            }
+            return `${nf(on)} on sky · +${nf(fresh)} new`;
+          }
+          /* both readouts get a fixed width — the longest text any stop produces, in ch
+     (the font is monospace) — so the transport bar never changes size and the
+     play button never drifts as the weeks advance */
+          const longest = (f) =>
+            Math.max(...view.stops.map((_, s) => f(s).length));
+          stopLab.style.width = `${longest(stopText)}ch`;
+          countEl.style.width = `${longest(countText)}ch`;
+          function setStop(s, fromSlider) {
+            st.stop = Math.max(0, Math.min(view.stops.length - 1, s));
+            if (!fromSlider) slider.value = st.stop;
+            stopLab.textContent = stopText(st.stop);
+            countEl.textContent = countText(st.stop);
+            if (FRAMED) {
+              applyFrameState();
+              if (st.focus >= 0 && clusters[st.focus].fr !== st.stop) unfocus();
+              rowsEl.querySelectorAll(".row").forEach((r) => {
+                r.style.display =
+                  clusters[+r.dataset.k].fr === st.stop ? "" : "none";
+              });
+              khEl.textContent = `constellations · ${frCounts[st.stop]}`;
+            } else if (STOP_ONLY) {
+              /* every cluster belongs to the week; fade the ones with nothing today */
+              rowsEl.querySelectorAll(".row").forEach((r) => {
+                r.classList.toggle(
+                  "off",
+                  !view.clusters[+r.dataset.k].wk[st.stop],
+                );
+              });
+            }
+            applyStopColors();
+            drawSparks();
+          }
+          function setPlaying(p) {
+            st.playing = p && !RM;
+            playBtn.innerHTML = st.playing ? ICON_PAUSE : ICON_PLAY;
+            playBtn.setAttribute("aria-label", st.playing ? "pause" : "play");
+            st.playAcc = 0;
+          }
+          function tick(dt) {
+            st.t += dt;
+            if (!st.drag && st.focus < 0 && !RM && st.t - st.idleAt > 2.5)
+              st.spin += dt * 0.05;
+            if (st.fTheta !== null) {
+              st.ease = Math.min(1, st.ease + dt / 0.7);
+              const e = 1 - Math.pow(1 - st.ease, 3);
+              st.theta = st.eTheta0 + (st.fTheta - st.eTheta0) * e;
+              st.phi = st.ePhi0 + (st.fPhi - st.ePhi0) * e;
+              if (st.ease >= 1) st.fTheta = null;
+            }
+            if (st.playing) {
+              st.playAcc += dt;
+              if (st.playAcc > 1.6) {
+                st.playAcc = 0;
+                if (st.stop < view.stops.length - 1) setStop(st.stop + 1);
+                else setPlaying(false);
+              }
+            }
+          }
 
-  /* ---------- key panel ---------- */
-  const sparks = [];
-  view.clusters.forEach((c, k) => {
-    const row = document.createElement("div");
-    row.className = "row"; row.dataset.k = k;
-    const cl = clusters[k];
-    const chip = view.id === "meta" ? `<span class="chip ${c.band}">${c.band}</span>` : "";
-    row.innerHTML = `<span class="dot" style="background:${cl.hex};box-shadow:0 0 6px rgba(${cl.rgb},0.8)"></span>
+          /* ---------- key panel ---------- */
+          const sparks = [];
+          view.clusters.forEach((c, k) => {
+            const row = document.createElement("div");
+            row.className = "row";
+            row.dataset.k = k;
+            const cl = clusters[k];
+            const chip =
+              view.id === "meta"
+                ? `<span class="chip ${c.band}">${c.band}</span>`
+                : "";
+            row.innerHTML = `<span class="dot" style="background:${cl.hex};box-shadow:0 0 6px rgba(${cl.rgb},0.8)"></span>
       <div class="nm">${chip}${c.name}</div>
       <div class="rt"><span class="n">${c.size}</span><canvas class="spark" width="92" height="28"></canvas></div>`;
-    rowsEl.appendChild(row);
-    cl.dotEl = row.querySelector(".dot");
-    /* the bars are rates too, so the sparkline and the dot tell one story */
-    sparks.push([row.querySelector(".spark"), c.wk.map((_, s) => rateOf(c, s)), cl]);
-    row.addEventListener("mouseenter", () => { st.hover = k; markRows(); });
-    row.addEventListener("mouseleave", () => { st.hover = -1; markRows(); });
-    row.addEventListener("click", () => focusCluster(k));
-  });
-  function markRows() {
-    const hl = st.focus >= 0 ? st.focus : st.hover;
-    rowsEl.querySelectorAll(".row").forEach(r => r.classList.toggle("hl", +r.dataset.k === hl));
-  }
-  function drawSparks() {
-    sparks.forEach(([scv, wk, cl]) => {
-      const g = scv.getContext("2d");
-      g.clearRect(0, 0, 92, 28);
-      const mx = Math.max(1, ...wk), bw = 92 / wk.length;
-      wk.forEach((v, j) => {
-        const h = Math.max(v ? 3 : 1, v / mx * 24);
-        g.fillStyle = j === st.stop ? cl.hex : j < st.stop ? `rgba(${cl.rgb},0.45)` : "rgba(138,132,120,0.25)";
-        g.fillRect(j * bw + 1, 28 - h, Math.max(1.5, bw - 2), h);
-      });
-    });
-  }
+            rowsEl.appendChild(row);
+            cl.dotEl = row.querySelector(".dot");
+            /* the bars are rates too, so the sparkline and the dot tell one story */
+            sparks.push([
+              row.querySelector(".spark"),
+              c.wk.map((_, s) => rateOf(c, s)),
+              cl,
+            ]);
+            row.addEventListener("mouseenter", () => {
+              st.hover = k;
+              markRows();
+            });
+            row.addEventListener("mouseleave", () => {
+              st.hover = -1;
+              markRows();
+            });
+            row.addEventListener("click", () => focusCluster(k));
+          });
+          function markRows() {
+            const hl = st.focus >= 0 ? st.focus : st.hover;
+            rowsEl
+              .querySelectorAll(".row")
+              .forEach((r) => r.classList.toggle("hl", +r.dataset.k === hl));
+          }
+          function drawSparks() {
+            sparks.forEach(([scv, wk, cl]) => {
+              const g = scv.getContext("2d");
+              g.clearRect(0, 0, 92, 28);
+              const mx = Math.max(1, ...wk),
+                bw = 92 / wk.length;
+              wk.forEach((v, j) => {
+                const h = Math.max(v ? 3 : 1, (v / mx) * 24);
+                g.fillStyle =
+                  j === st.stop
+                    ? cl.hex
+                    : j < st.stop
+                      ? `rgba(${cl.rgb},0.45)`
+                      : "rgba(138,132,120,0.25)";
+                g.fillRect(j * bw + 1, 28 - h, Math.max(1.5, bw - 2), h);
+              });
+            });
+          }
 
-  function focusCluster(k, pick = -1) {
-    st.focus = k;
-    const c = clusters[k];
-    st.eTheta0 = st.theta + st.spin; st.spin = 0; st.ePhi0 = st.phi; st.ease = 0;
-    const [x, y, z] = c.cen, h = Math.hypot(x, z);
-    let tt = Math.atan2(-x, z);
-    const cur = ((st.eTheta0 % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-    st.eTheta0 = cur;
-    let dlt = tt - cur;
-    while (dlt > Math.PI) dlt -= 2 * Math.PI;
-    while (dlt < -Math.PI) dlt += 2 * Math.PI;
-    st.fTheta = cur + dlt;
-    st.fPhi = Math.atan2(y, h);
-    markRows();
-    const src = view.id === "meta"
-      ? `<div class="dm"><span class="chip ${c.band}">${c.band}</span> name gap ${c.gap} = semantic ${c.sem} − lexical ${c.lex} · ${c.size} documents</div>
+          function focusCluster(k, pick = -1) {
+            st.focus = k;
+            const c = clusters[k];
+            st.eTheta0 = st.theta + st.spin;
+            st.spin = 0;
+            st.ePhi0 = st.phi;
+            st.ease = 0;
+            const [x, y, z] = c.cen,
+              h = Math.hypot(x, z);
+            let tt = Math.atan2(-x, z);
+            const cur =
+              ((st.eTheta0 % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+            st.eTheta0 = cur;
+            let dlt = tt - cur;
+            while (dlt > Math.PI) dlt -= 2 * Math.PI;
+            while (dlt < -Math.PI) dlt += 2 * Math.PI;
+            st.fTheta = cur + dlt;
+            st.fPhi = Math.atan2(y, h);
+            markRows();
+            const src =
+              view.id === "meta"
+                ? `<div class="dm"><span class="chip ${c.band}">${c.band}</span> name gap ${c.gap} = semantic ${c.sem} − lexical ${c.lex} · ${c.size} documents</div>
          ${c.grok ? `<div class="dh">what these documents are</div>${mdHTML(c.grok)}` : ""}
          <div class="dh">the metaconcept — Fable synthesis</div>
          ${mdHTML(c.attractor || c.excerpt)}
          <div class="dm">read by ${c.panel.join(" · ")} → synthesized by Claude Fable</div>`
-      : `<div class="dm">${c.size} documents · raw TF-IDF name</div>`;
-    /* the document you clicked leads the list, then the cluster's most recent */
-    const rest = [...c.rows].sort((a, b) => PUB[b] - PUB[a]).filter(i => i !== pick);
-    const listed = (pick >= 0 ? [pick] : []).concat(rest).slice(0, pick >= 0 ? 4 : 3);
-    const docLine = i => {
-      const u = urlOf(i), meta = `${SRC_NAME[SRC[i]]}, ${dShow(i)}`;
-      const t = `<em>${esc(TITLES[i])}</em>`;
-      return (u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${t}</a>` : t)
-        + ` — ${meta}` + (i === pick ? " · the star you clicked" : "");
-    };
-    detailBody.innerHTML = `<div class="dn">${c.name}</div>${src}` +
-      `<div class="dt">${listed.map(docLine).join("<br>")}</div>`;
-    detailEl.classList.add("on");
-  }
-  function unfocus() {
-    if (st.focus < 0) return;
-    st.focus = -1; st.fTheta = null; st.idleAt = st.t;
-    detailEl.classList.remove("on"); markRows();
-  }
-  detailEl.querySelector(".close").addEventListener("click", unfocus);
+                : `<div class="dm">${c.size} documents · raw TF-IDF name</div>`;
+            /* the document you clicked leads the list, then the cluster's most recent */
+            const rest = [...c.rows]
+              .sort((a, b) => PUB[b] - PUB[a])
+              .filter((i) => i !== pick);
+            const listed = (pick >= 0 ? [pick] : [])
+              .concat(rest)
+              .slice(0, pick >= 0 ? 4 : 3);
+            const docLine = (i) => {
+              const u = urlOf(i),
+                meta = `${SRC_NAME[SRC[i]]}, ${dShow(i)}`;
+              const t = `<em>${esc(TITLES[i])}</em>`;
+              return (
+                (u
+                  ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${t}</a>`
+                  : t) +
+                ` — ${meta}` +
+                (i === pick ? " · the star you clicked" : "")
+              );
+            };
+            detailBody.innerHTML =
+              `<div class="dn">${c.name}</div>${src}` +
+              `<div class="dt">${listed.map(docLine).join("<br>")}</div>`;
+            detailEl.classList.add("on");
+          }
+          function unfocus() {
+            if (st.focus < 0) return;
+            st.focus = -1;
+            st.fTheta = null;
+            st.idleAt = st.t;
+            detailEl.classList.remove("on");
+            markRows();
+          }
+          detailEl.querySelector(".close").addEventListener("click", unfocus);
 
-  /* ---------- pointer ---------- */
-  let moved = false;
-  cv.addEventListener("pointerdown", e => {
-    st.drag = { x: e.clientX, y: e.clientY }; moved = false;
-    st.theta += st.spin; st.spin = 0; st.fTheta = null;
-    cv.classList.add("drag"); cv.setPointerCapture(e.pointerId);
-  });
-  cv.addEventListener("pointermove", e => {
-    if (st.drag) {
-      const dx = e.clientX - st.drag.x, dy = e.clientY - st.drag.y;
-      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
-      st.theta += dx * 0.005;
-      st.phi = Math.max(-1.25, Math.min(1.25, st.phi + dy * 0.005));
-      st.drag = { x: e.clientX, y: e.clientY };
-      st.idleAt = st.t;
-      return;
-    }
-    /* hover tooltip */
-    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
-    let bi = -1, bd = 100;
-    for (const i of view.members) {
-      if ((STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) || SZ[i] < 0) continue;
-      const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
-      if (d < bd) { bd = d; bi = i; }
-    }
-    if (bi >= 0) {
-      tip.style.display = "block";
-      tip.style.left = Math.min(innerWidth - 310, e.clientX + 14) + "px";
-      tip.style.top = (e.clientY + 12) + "px";
-      tip.innerHTML = `${esc(TITLES[bi])}<div class="ts">${SRC_NAME[SRC[bi]]} · ${dShow(bi)}${memberOf[bi] >= 0 ? " · " + clusters[memberOf[bi]].short : ""}</div>`;
-    } else tip.style.display = "none";
-  });
-  cv.addEventListener("pointerup", e => {
-    cv.classList.remove("drag");
-    const wasDrag = moved; st.drag = null; st.idleAt = st.t;
-    if (wasDrag) return;
-    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
-    let bi = -1, bd = 120;
-    for (const i of view.members) {
-      if ((STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) || SZ[i] < 0) continue;
-      const dx = SX[i] - mx, dy = SY[i] - my, d = dx * dx + dy * dy;
-      if (d < bd) { bd = d; bi = i; }
-    }
-    if (bi >= 0 && memberOf[bi] >= 0) focusCluster(memberOf[bi], bi);
-    else unfocus();
-  });
-  cv.addEventListener("pointerleave", () => { tip.style.display = "none"; });
+          /* ---------- pointer ---------- */
+          let moved = false;
+          /* on a touch screen the canvas fills the whole plate, so a drag has to mean
+     either "turn the globe" or "scroll to the next plate". A touch that starts
+     on the sphere turns it, freely, like a mouse drag; one that starts in the
+     empty sky around it scrolls the page as usual. */
+          function onGlobe(p) {
+            const r = cv.getBoundingClientRect(),
+              dx = p.clientX - r.left - cx0,
+              dy = p.clientY - r.top - cy0;
+            return dx * dx + dy * dy <= R * 1.08 * (R * 1.08);
+          }
+          /* blocking the touch's default is what keeps the browser from claiming it as
+     a scroll (it must be non-passive to be allowed to) */
+          cv.addEventListener(
+            "touchstart",
+            (e) => {
+              if (e.touches.length === 1 && onGlobe(e.touches[0]))
+                e.preventDefault();
+            },
+            { passive: false },
+          );
+          cv.addEventListener("pointerdown", (e) => {
+            moved = false;
+            if (e.pointerType === "touch" && !onGlobe(e))
+              return; /* a page scroll, not a turn */
+            /* touching the globe hands control to the reader: stop the playthrough */
+            setPlaying(false);
+            st.drag = { x: e.clientX, y: e.clientY };
+            st.theta += st.spin;
+            st.spin = 0;
+            st.fTheta = null;
+            cv.classList.add("drag");
+            cv.setPointerCapture(e.pointerId);
+          });
+          cv.addEventListener("pointermove", (e) => {
+            if (st.drag) {
+              const dx = e.clientX - st.drag.x,
+                dy = e.clientY - st.drag.y;
+              if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+              st.theta += dx * 0.005;
+              st.phi = Math.max(-1.25, Math.min(1.25, st.phi + dy * 0.005));
+              st.drag = { x: e.clientX, y: e.clientY };
+              st.idleAt = st.t;
+              return;
+            }
+            /* hover tooltip */
+            const r = cv.getBoundingClientRect(),
+              mx = e.clientX - r.left,
+              my = e.clientY - r.top;
+            let bi = -1,
+              bd = 100;
+            for (const i of view.members) {
+              if (
+                (STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) ||
+                SZ[i] < 0
+              )
+                continue;
+              const dx = SX[i] - mx,
+                dy = SY[i] - my,
+                d = dx * dx + dy * dy;
+              if (d < bd) {
+                bd = d;
+                bi = i;
+              }
+            }
+            if (bi >= 0) {
+              tip.style.display = "block";
+              tip.style.left =
+                Math.min(innerWidth - 310, e.clientX + 14) + "px";
+              tip.style.top = e.clientY + 12 + "px";
+              tip.innerHTML = `${esc(TITLES[bi])}<div class="ts">${SRC_NAME[SRC[bi]]} · ${dShow(bi)}${memberOf[bi] >= 0 ? " · " + clusters[memberOf[bi]].short : ""}</div>`;
+            } else tip.style.display = "none";
+          });
+          cv.addEventListener("pointerup", (e) => {
+            cv.classList.remove("drag");
+            const wasDrag = moved;
+            st.drag = null;
+            st.idleAt = st.t;
+            if (wasDrag) return;
+            const r = cv.getBoundingClientRect(),
+              mx = e.clientX - r.left,
+              my = e.clientY - r.top;
+            let bi = -1,
+              bd = 120;
+            for (const i of view.members) {
+              if (
+                (STOP_ONLY ? pubStop[i] !== st.stop : pubStop[i] > st.stop) ||
+                SZ[i] < 0
+              )
+                continue;
+              const dx = SX[i] - mx,
+                dy = SY[i] - my,
+                d = dx * dx + dy * dy;
+              if (d < bd) {
+                bd = d;
+                bi = i;
+              }
+            }
+            if (bi >= 0 && memberOf[bi] >= 0) focusCluster(memberOf[bi], bi);
+            else unfocus();
+          });
+          /* the browser took the touch over (a scroll, a system gesture): end the drag,
+     or the globe stays "held" and never resumes its slow spin */
+          cv.addEventListener("pointercancel", () => {
+            cv.classList.remove("drag");
+            st.drag = null;
+            st.idleAt = st.t;
+          });
+          cv.addEventListener("pointerleave", () => {
+            tip.style.display = "none";
+          });
 
-  slider.addEventListener("input", () => { setPlaying(false); setStop(+slider.value, true); });
-  playBtn.addEventListener("click", () => {
-    if (!st.playing && st.stop >= view.stops.length - 1) setStop(0);
-    setPlaying(!st.playing);
-  });
-  sec.querySelector(".keyToggle").addEventListener("click", () => keyEl.classList.toggle("open"));
+          slider.addEventListener("input", () => {
+            setPlaying(false);
+            setStop(+slider.value, true);
+          });
+          playBtn.addEventListener("click", () => {
+            if (!st.playing && st.stop >= view.stops.length - 1) setStop(0);
+            setPlaying(!st.playing);
+          });
+          /* phone: KEY and INFO open panels in the same spot, so opening one closes the
+     other; INFO also closes on ✕ or on a tap anywhere outside it */
+          const infoEl = sec.querySelector(".info"),
+            infoBtn = sec.querySelector(".infoToggle"),
+            keyBtn = sec.querySelector(".keyToggle");
+          keyBtn.addEventListener("click", () => {
+            infoEl.classList.remove("open");
+            keyEl.classList.toggle("open");
+          });
+          infoBtn.addEventListener("click", () => {
+            keyEl.classList.remove("open");
+            infoEl.classList.toggle("open");
+          });
+          infoEl
+            .querySelector(".close")
+            .addEventListener("click", () => infoEl.classList.remove("open"));
+          document.addEventListener("pointerdown", (e) => {
+            if (
+              infoEl.classList.contains("open") &&
+              !infoEl.contains(e.target) &&
+              e.target !== infoBtn
+            )
+              infoEl.classList.remove("open");
+          });
 
-  setStop(st.stop); setPlaying(st.playing && !RM);
-  const sky = { id: view.id, sec, resize, render, tick, st, setStop, setPlaying, view, unfocus,
-    home: [homeTheta, homePhi] };
-  skies.push(sky);
-  return sky;
-}
+          setStop(st.stop);
+          setPlaying(st.playing && !RM);
+          /* once per page load: play from the first stop to the last. leaving the plate
+     mid-play just pauses it (only the active plate ticks), so it resumes on return */
+          function autoplayOnce() {
+            if (!AUTOPLAY || st.autoDone) return;
+            st.autoDone = true;
+            setStop(0);
+            setPlaying(true);
+          }
+          const sky = {
+            id: view.id,
+            sec,
+            resize,
+            render,
+            tick,
+            st,
+            setStop,
+            setPlaying,
+            autoplayOnce,
+            view,
+            unfocus,
+            home: [homeTheta, homePhi],
+          };
+          skies.push(sky);
+          return sky;
+        }
 
-snap.innerHTML = "";
-DATA.views.forEach((v, i) => makeSky(v, i));
+        snap.innerHTML = "";
+        DATA.views.forEach((v, i) => makeSky(v, i));
 
-/* ---------- dots nav + activation ---------- */
-const dots = document.getElementById("dots");
-skies.forEach((s, i) => {
-  const b = document.createElement("button");
-  /* the numeral turns three anonymous dots into a pager: three plates, you are here */
-  b.textContent = VC[s.id].plate.replace(/^PLATE\s*/, "");
-  b.title = VC[s.id].plate + " — " + VC[s.id].title;
-  b.addEventListener("click", () => s.sec.scrollIntoView({ behavior: "smooth" }));
-  dots.appendChild(b);
-});
-/* the scroll cue: animates until the reader has actually moved between plates,
+        /* ---------- dots nav + activation ---------- */
+        const dots = document.getElementById("dots");
+        skies.forEach((s, i) => {
+          const b = document.createElement("button");
+          /* the numeral turns three anonymous dots into a pager: three plates, you are here */
+          b.textContent = VC[s.id].plate.replace(/^PLATE\s*/, "");
+          b.title = VC[s.id].plate + " — " + VC[s.id].title;
+          b.addEventListener("click", () =>
+            s.sec.scrollIntoView({ behavior: "smooth" }),
+          );
+          dots.appendChild(b);
+        });
+        /* the scroll cue: animates until the reader has actually moved between plates,
    and doubles as the control for doing so */
-const cue = document.createElement("button");
-cue.className = "cue hint";
-cue.innerHTML = "&#9662;";
-const hintLab = document.createElement("span");
-hintLab.className = "hintLab";
-hintLab.textContent = "scroll";
-dots.append(cue, hintLab);
-/* which plate is on screen, read off the scroll position: the plates are equal
+        const cue = document.createElement("button");
+        cue.className = "cue hint";
+        cue.innerHTML = "&#9662;";
+        const hintLab = document.createElement("span");
+        hintLab.className = "hintLab";
+        hintLab.textContent = "scroll";
+        dots.append(cue, hintLab);
+        /* which plate is on screen, read off the scroll position: the plates are equal
    full-height snap sections, so this is exact, and it keeps the cue correct
    even when the observer below coalesces several crossings into one callback */
-const curPlate = () => Math.max(0, Math.min(skies.length - 1,
-  Math.round(snap.scrollTop / Math.max(1, snap.clientHeight))));
-function aimCue() {
-  const i = curPlate(), last = i === skies.length - 1;
-  cue.classList.toggle("up", last);
-  const lab = last ? "Back to the first plate" : "Next plate — " + VC[skies[i + 1].id].title;
-  cue.title = lab; cue.setAttribute("aria-label", lab);
-  if (i > 0) { cue.classList.remove("hint"); hintLab.style.opacity = 0; }
-}
-cue.addEventListener("click", () => {
-  const i = curPlate();
-  skies[i >= skies.length - 1 ? 0 : i + 1].sec.scrollIntoView({ behavior: "smooth" });
-});
-snap.addEventListener("scroll", aimCue, { passive: true });
-let active = skies[0];
-const io = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (e.isIntersecting && e.intersectionRatio > 0.5) {
-      active = skies.find(s => s.sec === e.target) || active;
-      dots.querySelectorAll("button:not(.cue)").forEach((b, i) => b.classList.toggle("on", skies[i] === active));
-      aimCue();
-    }
-  });
-}, { root: snap, threshold: [0.55] });
-skies.forEach(s => io.observe(s.sec));
-dots.querySelector("button").classList.add("on");
-aimCue();
+        const curPlate = () =>
+          Math.max(
+            0,
+            Math.min(
+              skies.length - 1,
+              Math.round(snap.scrollTop / Math.max(1, snap.clientHeight)),
+            ),
+          );
+        function aimCue() {
+          const i = curPlate(),
+            last = i === skies.length - 1;
+          cue.classList.toggle("up", last);
+          const lab = last
+            ? "Back to the first plate"
+            : "Next plate — " + VC[skies[i + 1].id].title;
+          cue.title = lab;
+          cue.setAttribute("aria-label", lab);
+          if (i > 0) {
+            cue.classList.remove("hint");
+            hintLab.style.opacity = 0;
+          }
+        }
+        cue.addEventListener("click", () => {
+          const i = curPlate();
+          skies[i >= skies.length - 1 ? 0 : i + 1].sec.scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+        snap.addEventListener("scroll", aimCue, { passive: true });
+        let active = skies[0];
+        const io = new IntersectionObserver(
+          (es) => {
+            es.forEach((e) => {
+              if (e.isIntersecting && e.intersectionRatio > 0.5) {
+                active = skies.find((s) => s.sec === e.target) || active;
+                active.autoplayOnce();
+                dots
+                  .querySelectorAll("button:not(.cue)")
+                  .forEach((b, i) =>
+                    b.classList.toggle("on", skies[i] === active),
+                  );
+                aimCue();
+              }
+            });
+          },
+          { root: snap, threshold: [0.55] },
+        );
+        skies.forEach((s) => io.observe(s.sec));
+        dots.querySelector("button").classList.add("on");
+        aimCue();
 
-addEventListener("keydown", e => {
-  if (e.key === "Escape") active.unfocus();
-  if (e.key === "ArrowRight") { active.setPlaying(false); active.setStop(active.st.stop + 1); }
-  if (e.key === "ArrowLeft") { active.setPlaying(false); active.setStop(active.st.stop - 1); }
-});
-addEventListener("resize", () => skies.forEach(s => { s.resize(); s.render(); }));
-/* the window resize event misses layout changes that do not come from the
+        addEventListener("keydown", (e) => {
+          if (e.key === "Escape") active.unfocus();
+          if (e.key === "ArrowRight") {
+            active.setPlaying(false);
+            active.setStop(active.st.stop + 1);
+          }
+          if (e.key === "ArrowLeft") {
+            active.setPlaying(false);
+            active.setStop(active.st.stop - 1);
+          }
+        });
+        addEventListener("resize", () =>
+          skies.forEach((s) => {
+            s.resize();
+            s.render();
+          }),
+        );
+        /* the window resize event misses layout changes that do not come from the
    window: a scrollbar appearing, a monitor swap that re-lays-out before firing.
    Observing the sections themselves catches every one. */
-if (self.ResizeObserver) {
-  const ro = new ResizeObserver(es => es.forEach(e => {
-    const s = skies.find(k => k.sec === e.target);
-    if (s) { s.resize(); s.render(); }
-  }));
-  skies.forEach(s => ro.observe(s.sec));
-}
+        if (self.ResizeObserver) {
+          const ro = new ResizeObserver((es) =>
+            es.forEach((e) => {
+              const s = skies.find((k) => k.sec === e.target);
+              if (s) {
+                s.resize();
+                s.render();
+              }
+            }),
+          );
+          skies.forEach((s) => ro.observe(s.sec));
+        }
 
-/* ---------- loop ---------- */
-let last = performance.now();
-function loop(now) {
-  const dt = Math.min(0.05, (now - last) / 1000); last = now;
-  if (!document.hidden && active) { active.tick(dt); active.render(); }
-  requestAnimationFrame(loop);
-}
-skies.forEach(s => { s.resize(); s.render(); });
-if (!REC) requestAnimationFrame(loop);
+        /* ---------- loop ---------- */
+        let last = performance.now();
+        function loop(now) {
+          const dt = Math.min(0.05, (now - last) / 1000);
+          last = now;
+          if (!document.hidden && active) {
+            active.tick(dt);
+            active.render();
+          }
+          requestAnimationFrame(loop);
+        }
+        skies.forEach((s) => {
+          s.resize();
+          s.render();
+        });
+        if (!REC) requestAnimationFrame(loop);
 
-/* ---------- deterministic record hook ---------- */
-if (REC) {
-  document.getElementById("noo").classList.add("rec");
-  let dt = 1 / 24, recT = 0;
-  window.__rec = {
-    init(fps) { dt = 1 / fps; recT = 0; this.view(active.id); },
-    view(id) {
-      active = skies.find(s => s.id === id) || active;
-      active.sec.scrollIntoView({ behavior: "instant" });
-      recT = 0;
-      active.st.theta = active.home[0]; active.st.phi = active.home[1];
-      active.st.spin = 0; active.st.t = 0;
-      active.setPlaying(false); active.setStop(0);
-      const stops = active.view.stops.length;
-      this.total = stops * 1.8 + 5;
-      active.resize(); active.render();
-    },
-    frame() {
-      recT += dt;
-      const stops = active.view.stops.length;
-      active.st.t = recT; active.st.spin = recT * 0.05;
-      active.setStop(Math.min(stops - 1, Math.floor(recT / 1.8)));
-      active.render();
-      return recT;
-    },
-    total: 0,
-  };
-}
-})();
-</script>
-
-</body>
+        /* ---------- deterministic record hook ---------- */
+        if (REC) {
+          document.getElementById("noo").classList.add("rec");
+          let dt = 1 / 24,
+            recT = 0;
+          window.__rec = {
+            init(fps) {
+              dt = 1 / fps;
+              recT = 0;
+              this.view(active.id);
+            },
+            view(id) {
+              active = skies.find((s) => s.id === id) || active;
+              active.sec.scrollIntoView({ behavior: "instant" });
+              recT = 0;
+              active.st.theta = active.home[0];
+              active.st.phi = active.home[1];
+              active.st.spin = 0;
+              active.st.t = 0;
+              active.setPlaying(false);
+              active.setStop(0);
+              const stops = active.view.stops.length;
+              this.total = stops * 1.8 + 5;
+              active.resize();
+              active.render();
+            },
+            frame() {
+              recT += dt;
+              const stops = active.view.stops.length;
+              active.st.t = recT;
+              active.st.spin = recT * 0.05;
+              active.setStop(Math.min(stops - 1, Math.floor(recT / 1.8)));
+              active.render();
+              return recT;
+            },
+            total: 0,
+          };
+        }
+      })();
+    </script>
+  </body>
 </html>
